@@ -1,0 +1,12 @@
+<div id="cdms_header_dev">
+  <div style="float:left">
+     <img src="sssmh_header.png">
+  </div>
+  <div style="float:left">
+      <% if user_signed_in?%>
+        Welcome <%=current_user.email%>
+
+        <%= link_to "Sign Out",destroy_user_session_path,method: :delete%>
+      <%end%>
+  </div>
+</div>
