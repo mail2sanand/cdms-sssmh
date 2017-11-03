@@ -1,0 +1,136 @@
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+    <script>
+        $(function() {
+            $("#datepicker").datepicker();
+        });
+
+        $("#investigation_visit_calendar_icon").click(function() {
+            console.log("dffdf dfd fd fd ");
+            $('#datepicker').datepicker("show");
+        });
+
+        $("#datepicker").change(function() {
+
+            var dateTypeVar = $('#datepicker').datepicker('getDate');
+            var selected_visit = $.datepicker.formatDate('M d, yy', dateTypeVar);
+            $('#investigation_details_visit').val(dateTypeVar);
+            $('#investigation_visit_date_0').html(selected_visit);
+        });
+
+        var visit_date_div = $('#date_row_div');
+        visit_date_div.append($('<div/>')
+            .attr("id","investigation_visit_date_0")
+            .attr("style","margin-left:20px;padding-left:10px;margin-top:4px;border:0px dotted red;height:auto;")
+            .append(
+                $('<span/>')
+                    .text("Select New Visit")
+            )
+        );
+
+
+    </script>
+<%end%>
+
+<%all_investigations = get_investigations_from_helper%>
+
+<div id="investigation_details_for_patient_div" style="position:relative;height:72vh;border:0px solid green;width:100%;margin-left:0px;float:left;">
+
+  <div id="investigation_details_left_block" style="float: left;width:28%;border-right: 1px solid red;height: auto;">
+
+    <div id="header_date_block" style="height: 8vh;border: 0px solid darkviolet;border-bottom:1px solid darkviolet">
+
+      <div id="header_block" style="height:5vh;border:0px solid yellow;">
+        <div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;border-right:0px solid green;height:5vh;">
+          <div style="border-bottom:1px solid green;height: 3vh;"><b>Investigation</b></div>
+
+          <!--<div style="margin-left:0px;border:0px dotted green;height:2vh;margin-top:5px;">-->
+            <!--<b>Date Of Visit</b>-->
+          <!--</div>-->
+        </div>
+
+        <div id="investigation_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width: 63%;border-right:0px solid green;height:4.1vh;">
+          <!--<div id="investigation_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
+          <div id="new_visit_calendar" style="width:100%;height:4.1vh;border:0px solid green;border-bottom:1px solid green;" >
+            <!--<input type="hidden" name="investigation_details[patient_visit]" value="0">-->
+            <div style="margin-left:20px;width:65%;float:left;height:auto;border:0px solid green;">
+              <select id="patient_visits_select_id" onchange="changeVisitOption(this.value,'investigation');">
+                <option value="-1" selected>Select a Visit</option>
+                <option value="0">New Visit</option>
+              </select>
+            </div>
+
+            <div id="new_visit_calendar" style="border:0px solid green;height:auto;float:left;margin-left:2px;" align="left">
+              <i style="display:none;" class="fa fa-calendar" id="investigation_visit_calendar_icon" title="Select Date of Visit"></i>
+              <input size="1" type="text" id="datepicker" style="visibility:hidden;">
+            </div>
+          </div>
+
+          <div id="date_row_div" style="height:2vh;width:100%;border:0px solid red;">
+            <!--<div id="visit_date" style="margin-left:60px;padding-left:40px;margin-top:0px;float:left;width:25%;border:1px dotted green;height:auto;"></div>-->
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="ailment_mid_divs" id="investigation_details_div" style="height:62vh;overflow-y:auto;border:0px solid red;width:95%">
+
+      <%all_investigations.each do|each_investigation|%>
+          <div id="examination_header_<%=each_investigation.code%>" style="margin-left:10px;height:4.5vh;width:100%;border-bottom:1px dotted green;" align="left">
+
+            <div style="margin-left:5px;margin-top:5px;width:37%;float:left;border-right:0px solid green;border:0px dotted green;height:3vh;">
+              <%=each_investigation.name%>
+            </div>
+
+            <div align="center" style="margin-left:5px;margin-top:5px;float:left;width:53%;border:0px solid red;border-bottom:0px dotted green;height:3vh;">
+              <%input_size = 15%>
+              <%if each_investigation.parameter_length %>
+                  <%case each_investigation.parameter_length%>
+              <%when "medium"%>
+                      <%input_size = 20%>
+                  <%else%>
+                      <%input_size = 30%>
+                  <%end%>
+              <%end%>
+
+              <input style="display:none;" type="text" size="<%=input_size%>" id="input_investigation_details_<%=each_investigation.code%>" name="investigation_details[<%=each_investigation.code%>]"/>
+              <span style="padding-left: 0px;" id="span_investigation_details_<%=each_investigation.code%>"> - </span>
+              <%if(each_investigation.units)%>
+                  <%=each_investigation.units%>
+              <%end%>
+            </div>
+
+          </div>
+      <%end%>
+
+    </div>
+
+  </div>
+
+  <div id="investigation_details_right_block" style="float: left;width: 71%;border: 0px solid red;">
+
+    <div style="margin-left:6px;margin-top:12px;/* float:left; */width: 98%;border-right:0px solid green;border-bottom:1px solid green;height:2.9vh;" align="center">
+      <b>History of Investigation Details</b>
+    </div>
+    <div id="seperate_investigation_details_div_block" style="height:auto;width:98%;border: 0px solid darkviolet;overflow-x: auto;">
+      <div id="seperate_investigation_details_div" style="border: 1px solid green;height:auto;"></div>
+    </div>
+
+  </div>
+
+  <!--<div class="ailment_mid_divs" id="investigation_header" style="height:5vh;width:100%;margin-bottom:5px;" align="center">-->
+
+
+    <!--&lt;!&ndash;<div style="margin-left:22px;margin-top:5px;float:left;width:20%;border-right:0px solid green;border-bottom:1px solid green;height:4vh;"><b>Past 2</b></div>&ndash;&gt;-->
+  <!--</div>-->
+
+  <input type="hidden" id="investigation_details_visit" name="investigation_details[visit]">
+
+
+
+
+</div>

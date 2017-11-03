@@ -1,0 +1,55 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <link href="assets/jsgrid-theme.min.css" rel="stylesheet" />
+    <link href="assets/jsgrid.min.css" rel="stylesheet" />
+    <link href="assets/jquery-ui.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+      /*.jsgrid-grid-header{*/
+        /*overflow-x: scroll;*/
+        /*overflow-y: scroll;*/
+        /*!*min-height: 30vh;*!*/
+      /*}*/
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+    <script src="assets/jquery-ui.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+          loadPatientsForSearch($('#patients_list_block_div'));
+      })
+
+    </script>
+
+<% end %>
+
+<div align="left" id="patient_search_crud_div">
+  <div >
+    <div id="patient_search_div">
+      <i class="fa fa-search" id="patient_search_icon" title="Search Patients"></i>
+        <input id="patient_search_box" type="text" name="patient_search" size="25px" onfocus="$('#patient_search_icon').hide();" onblur="$('#patient_search_icon').show();" placeholder="       Search Patient..."/>
+    </div>
+
+    <div id="patient_crud_div">
+      <i class="fa fa-plus" id="new_patient_icon" title="New Patient Registration" style="margin-right:10px;" onclick="loadNewPatientRegistrationPage();"></i>
+      <!--<i class="fa fa-edit" id="edit_patient_icon" title="Edit Patients" disabled="true"></i>-->
+      <!--<i class="fa fa-remove" id="delete_patient_icon" title="Delete Patients" disabled="true"></i>-->
+    </div>
+  </div>
+
+  <br><br><br><br>
+
+  <div id="patients_list_block_parent_div">
+    <div id="patients_list_block_div">
+    </div>
+  </div>
+
+</div>
+
+
+

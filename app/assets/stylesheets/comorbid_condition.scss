@@ -1,0 +1,35 @@
+// Place all the styles related to the comorbid_condition controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+//.x-tree-icon-leaf, .x-tree-icon-text::before {
+//  font: normal normal normal 14px/1 "FontAwesome";
+//  display: inline-block;
+//  color: #5fa2dd;
+//}
+//
+//.x-tree-icon-leaf::before, .x-tree-icon-text::before {
+//  content: "\f06c\00a0";
+//  font-size: 1em;
+//  position: relative;
+//  top: -1px;
+//}
+
+.x-remove-icon, .x-remove-icon-text::before {
+  //font-size: 18px;
+  //font: "FontAwesome";
+  font: normal normal normal 14px/1 "FontAwesome";
+  display: inline-block;
+  color: #5fa2dd;
+}
+
+.x-remove-icon::before, .x-remove-icon-text::before {
+  content: "\f00d\00a0";
+  font-size: 1.5em;
+  position: relative;
+  top: 2px;
+}
+
+img.x-remove-icon { display: none; }
+
+//img.x-tree-icon-leaf { display: none; }

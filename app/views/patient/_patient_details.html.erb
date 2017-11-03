@@ -1,0 +1,75 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <!--<link href="assets/jsgrid-theme.min.css" rel="stylesheet" />-->
+    <!--<link href="assets/jsgrid.min.css" rel="stylesheet" />-->
+
+    <style type="text/css">
+      /*.jsgrid-grid-header{*/
+      /*overflow-x: scroll;*/
+      /*overflow-y: scroll;*/
+      /*!*min-height: 30vh;*!*/
+      /*}*/
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+    <script>
+        $( "#patient_detail_main" ).tabs();
+
+        $(document).ready(function(){
+            loadVillages();
+            loadAilments();
+            loadCoMorbidConditions();
+            loadHabits();
+            loadNonEditEmptyTemplates();
+//            setDialogueDiv();
+        })
+
+    </script>
+
+<% end %>
+
+<div id="patient_detail_main_header">
+  <div id="patient_detail_info_and_options">
+    <div id="patient_detail_info" style="float:left;">
+      Please Select a Patient from the Left Panel
+    </div>
+    <!--<div id="patient_detail_options" style="float:right;display:none;">-->
+    <div id="patient_detail_options" style="float:right;display:none;">
+      <i class="fa fa-edit" id="edit_patient_icon" title="Edit Patient Details" onclick="editPatientDetailsPage();"></i>
+      <i class="fa fa-remove" id="delete_patient_icon" title="Delete Patient Details" onclick="deletePatientDetailsPage();"></i>
+      <i class="fa fa-print" id="print_patient_icon" title="Print Patient Details" onclick="printPatientDetailsPage();"></i>
+    </div>
+    <div id="ailment_options" style="float:right;padding-right:20px;" class="sssmh_combo_small slate">
+      <!--<div id="ailment_combo">-->
+      <select id="ailment_combo_select_id" style="">
+        <option value="0">Add an Ailment</option>
+      </select>
+      <i class="fa fa-medkit" id="add_ailment_icon" title="Add Ailment" onclick="add_new_ailment($('#ailment_combo_select_id')[0].value);"></i>
+      <!--</div>-->
+    </div>
+
+    <div id="patient_dialogue_box"></div>
+  </div>
+  <form name="patientDetailsForm" id="patientDetailsFormId">
+    <div id="patient_detail_main" >
+      <ul>
+        <li><a href="#patient_general_details">General Details</a></li>
+      </ul>
+        <div id="patient_general_details">
+          <%= render "patient_index_template"%>
+        </div>
+      <!--<div id="tabs-3">-->
+        <!--Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.-->
+      <!--</div>-->
+    </div>
+  </form>
+  <div id="submitButtonsBlock" align="right">
+    <input type="hidden" id="patient_id"/>
+    <button value="Save" class="sssmhms_button" type="submit" onclick="checkAndSubmit()">Save</button>ée
+    <button value="Cancel" class="sssmhms_button" onclick="loadNonEditEmptyTemplates();">Cancel</button>
+  </div>
+</div>

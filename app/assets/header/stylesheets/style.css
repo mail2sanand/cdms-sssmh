@@ -1,0 +1,329 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin:0px;
+	padding:0px;
+	border:0px;
+	outline:0px;
+	/*font-size:95%;*/
+    font-size:12px;
+	vertical-align:baseline;
+    font-family: "Open Sans",sans-serif;
+}
+
+ol, ul {
+	list-style:none;
+}
+
+blockquote, q {
+	quotes:none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content:'';
+	content:none;
+}
+
+:focus {
+	outline:0;
+}
+
+ins {
+	text-decoration:none;
+}
+
+del {
+	text-decoration:line-through;
+}
+
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+
+a {
+	text-decoration:none;
+	color:#fff;
+}
+
+#switcher {
+	position:fixed;	
+	width:100%;
+	height:60px;
+	background-color:#222;
+	border:0;
+	padding:0;	
+	z-index:99999;
+}
+
+.center {
+	padding:0px 20px;
+}
+
+#theme_select, #plugin_select {
+	position:relative;
+	display:block;
+	width:205px;
+	height:28px;
+	margin:16px 15px 0 0;
+	background:#333;
+	color:#fff;
+	font-size:12px;
+	line-height:28px;
+	-webkit-border-radius:3px;
+	   -moz-border-radius:3px;
+			border-radius:3px;
+}
+
+#theme_select.active, #plugin_select.active {
+	-webkit-border-bottom-left-radius:0;
+	   -moz-border-radius-bottomright:0;
+			border-bottom-left-radius:0;
+	-webkit-border-bottom-right-radius:0;
+		 -moz-border-radius-bottomleft:0;
+			border-bottom-right-radius:0;	
+}
+
+#theme_select:after, #plugin_select:after,
+#theme_select:before, #plugin_select:before {
+    content:'';
+    position:absolute;
+    display:block;
+    top:50%;
+    right:15px;
+    margin-top:-3px;
+    width:7px;
+    border-bottom:1px solid;
+    border-top:1px solid;
+    -webkit-transform:rotate(-45deg);
+    		transform:rotate(-45deg);
+    -webkit-transform-origin:100% 0;
+   		 	transform-origin:100% 0;
+    
+}
+
+#theme_select:before, #plugin_select:before {
+    -webkit-transform:rotate(45deg);
+    		transform:rotate(45deg);
+    -webkit-transform-origin:0 0;
+    		transform-origin:0 0;
+}
+
+#theme_select span, #plugin_select span {
+	display:block;
+	width:180px;
+	font-weight:bold;
+	overflow:hidden; 
+	text-overflow:ellipsis;	
+	white-space:nowrap;
+}
+
+#theme_list {
+	float:left;
+	position:relative;
+}
+
+#theme_list a {
+	padding-left:15px;
+}
+
+.dropdown {
+	width:230px;
+	height:312px;	
+	overflow-x:hidden;
+	overflow-y:scroll;
+}
+
+.dropdown .rollbar-path-vertical { 
+	width:6px;
+}
+
+/* List */
+.center ul.dd-list {
+	display:none;
+	position:absolute;
+	z-index:500;
+	width:220px;
+	margin-top:1px;
+}
+
+.center ul.dd-list li {
+	display:inline;
+	float:left;
+	position:relative;
+	background:#333;
+	cursor:pointer;
+	-webkit-transition:all .3s;
+	   -moz-transition:all .3s;
+			transition:all .3s;
+}
+
+.center ul.dd-list,
+.center ul.dd-list li:last-child {
+	-webkit-border-bottom-left-radius:3px;
+		-moz-border-radius-bottomleft:3px;
+			border-bottom-left-radius:3px;
+	-webkit-border-bottom-right-radius:3px;
+		-moz-border-radius-bottomright:3px;
+			border-bottom-right-radius:3px;
+}
+
+.center ul.dd-list li a {
+	float:left;
+	display:block;
+	padding:7px 14px !important;
+	min-width:192px;
+	font-size:12px;	
+	color:#fff;
+	font-weight:bold;
+}
+
+.center ul.dd-list li a span.themetitle {
+	float:left;
+	line-height:18px;
+}
+
+.center ul.dd-list li a span.css,
+.center ul.dd-list li a span.html,
+.center ul.dd-list li a span.html5,
+.center ul.dd-list li a span.jq,
+.center ul.dd-list li a span.php,
+.center ul.dd-list li a span.wp {
+	float:right;	
+	font-size:10px;
+	line-height:10px;
+	font-weight:normal;
+	height:10px;
+	background:#555;
+	color:#ccc;	
+	padding:4px;
+	text-align:center;
+	text-transform:uppercase;
+	-webkit-border-radius:3px;
+	   -moz-border-radius:3px;
+			border-radius:3px;
+}
+
+/* List hover */
+.center ul.dd-list li:hover,
+.center ul.dd-list li.active {
+	background-color:#111;
+}
+
+.center ul.dd-list li:hover a,
+.center ul.dd-list li:hover a span,
+.center ul.dd-list li.active a,
+.center ul.dd-list li.active a span {
+	color:#fff;
+}
+
+.center ul.dd-list li a:hover span.css,
+.center ul.dd-list li.active span.css 		{background:#dc2f76;}
+
+.center ul.dd-list li a:hover span.html,
+.center ul.dd-list li.active span.html 		{background:#e44d26;}
+
+.center ul.dd-list li a:hover span.html5,
+.center ul.dd-list li.active span.html5 	{background:#e44d26;}
+
+.center ul.dd-list li a:hover span.jq,
+.center ul.dd-list li.active span.jq 		{background:#1e800f;}
+
+.center ul.dd-list li a:hover span.php,
+.center ul.dd-list li.active span.php 		{background:#6212cf;}
+
+.center ul.dd-list li a:hover span.wp,
+.center ul.dd-list li.active span.wp 		{background:#22769b;}
+
+/* Purchase */
+.purchase {
+	float:right;
+	margin-top:23px;
+	height:14px;
+	padding-right:15px;
+	border-right:1px solid #333;
+}
+
+/* Remove frame */
+.remove-frame {
+	float:right;
+	display:table-cell;
+	vertical-align:middle;
+	margin:23px 0 0 15px;
+}
+
+.purchase a,
+.remove-frame a {
+	display:block;
+	color:#acacac;	
+	font-size:14px;
+	line-height:14px;
+	-webkit-transition:all .3s;
+	   -moz-transition:all .3s;
+			transition:all .3s;
+}
+
+.purchase a:hover,
+.remove-frame a:hover {
+	color:#fff;
+}
+
+#iframe, #preview-window-wrapper {
+	width:100%;
+	height:100%;
+	border:none;
+	display:block;
+	margin:60px auto 0px;
+	max-width:100%;
+}
+
+#themescreenshot {
+	position:absolute;
+	z-index:999;
+	display:none;
+	background:transparent;
+	height:300px;
+	width:590px;
+	border:none;
+	left:225px;	
+	top:65px;
+}
+
+#themescreenshot > img {
+	-webkit-border-radius:3px;
+	   -moz-border-radius:3px;
+			border-radius:3px;
+}
+
+#logo {
+	float:left;
+	width:210px;
+	height:50px;
+	margin:0;
+	padding:5px 0;
+}
+
+.separator {
+	float:left;
+	width:1px;
+	height:60px;
+	margin:0px 15px;
+	background:#333;	
+}
+
+.align-right {
+	float:right;	
+}
+
+/* Responsive */
+@media only screen and (min-width:0px) and (max-width:959px) {
+	#theme_list, 
+	.separator.for-logo {
+		display:none !important;
+	}
+}
+
+@media only screen and (min-width:0px) and (max-width:479px) {
+	.purchase, 
+	.separator.for-purchase {
+		display:none !important;
+	}
+}

@@ -1,0 +1,41 @@
+<%comorbid_conditions = get_comorbid_conditions_from_helper%>
+
+<div id="co_morbid_condition_details_for_patient_div" style="height:45vh;border:1px solid green;width:90%;">
+
+  <div class="ailment_mid_divs" id="co_morbid_condition_header" style="height:2vh;width:100%">
+    <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Co-Morbid Condition</b></div>
+    <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Comment</b></div>
+  </div>
+
+  <div class="ailment_mid_divs" id="comorbid_condition_details_div" style="height:42vh;overflow-y:auto;border:0px solid red;width:100%">
+    <%comorbid_conditions.each do|each_comorbid_condition|%>
+        <div id="co_morbid_condition_header" style="height:4vh;width:100%;">
+          <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;"><%=each_comorbid_condition.name%></div>
+          <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
+            <input style="display:none;" type="text" size="30" id="input_cmc_<%=each_comorbid_condition.code%>" name="cmc[<%=each_comorbid_condition.id%>_<%=each_comorbid_condition.code%>]" />
+            <span id="span_cmc_<%=each_comorbid_condition.code%>"> - </span>
+          </div>
+        </div>
+    <%end%>
+  </div>
+
+</div>
+
+<!--<div id="co_morbid_condition_details_for_patient" style="height:24vh;float:left;padding:0 20px 0 20px;border:0px solid red;width:70%;">-->
+  <!--<div class="ailment_mid_divs" id="co_morbid_condition_header" style="height:2vh;width:100%">-->
+    <!--<div style="margin-left:14px;margin-top:5px;float:left;width:30%;border:1px solid yellow;height:2vh;"><b>Co-Morbid Condition</b></div>-->
+    <!--<div style="margin-left:22px;margin-top:5px;float:left;width:61%;border:1px solid yellow;height:2vh;"><b>Comment</b></div>-->
+  <!--</div>-->
+  <!--<div id="co_mo´rbid_condition_details" style="width:95%;height:21vh;overflow-y:auto;border:1px solid white;" align=""></div>-->
+<!--</div>-->
+
+<!--<div id="" style="height:3vh;float:right;border:0px solid red;" >-->
+  <!--<div id="co_morbid_condition_options" class="sssmh_combo_small slate" style="height:3vh;padding-right:20px;border:0px solid red;" >-->
+    <!--&lt;!&ndash;<div id="ailment_combo">&ndash;&gt;-->
+    <!--<select id="co_morbid_condition_option_id" style="">-->
+      <!--<option value="0">Add a Co-morbid Condition</option>-->
+    <!--</select>-->
+    <!--<i style="cursor:pointer;font-size:15px;margin-left:5px;" class="fa fa-plus-circle" id="add_ailment_icon" title="Add Ailment" onclick="add_new_comorbid_condition($('#co_morbid_condition_option_id')[0],$('#co_morbid_condition_details'));"></i>-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <!--</div>-->
+<!--</div>-->

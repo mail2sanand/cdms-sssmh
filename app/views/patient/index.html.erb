@@ -1,0 +1,35 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <link href="assets/jsgrid-theme.min.css" rel="stylesheet" />
+    <link href="assets/jsgrid.min.css" rel="stylesheet" />
+    <link href="assets/jquery-ui.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+      .jsgrid-grid-header{
+        overflow-x: scroll;
+        overflow-y: scroll;
+        /*min-height: 30vh;*/
+      }
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <script src="assets/jsgrid.min.js"></script>
+    <script src="assets/jquery-ui.min.js"></script>
+    <script src="assets/jsgrid-date.js"></script>
+
+    <script>
+    </script>
+
+<% end %>
+
+<div id="patients_top" >&nbsp;</div>
+<div id="main_patients_div" style="">
+  <div id="list_search_patients_div">
+    <%= render "list_search_patients"%>
+  </div>
+  <div id="patients_details_div">
+    <%= render "patient_details"%>
+  </div>
+</div>

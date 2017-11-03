@@ -1,12 +1,493 @@
-<div id="cdms_header_dev">
-  <div style="float:left">
-     <img src="sssmh_header.png">
-  </div>
-  <div style="float:left">
-      <% if user_signed_in?%>
-        Welcome <%=current_user.email%>
+<script>
+    var api;
 
-        <%= link_to "Sign Out",destroy_user_session_path,method: :delete%>
-      <%end%>
+    $(document).ready(function() {
+        api = $(".smartmenu").smartMenu({
+            responsive:"switch-margin"
+        });
+    });
+</script>
+
+<script type="text/javascript" src="assets/javascripts/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="assets/javascripts/switcher.js"></script>
+<script type="text/javascript" src="assets/javascripts/jquery.rollbar.js"></script>
+<script type="text/javascript" src="assets/javascripts/imagepreview.js"></script>
+<script type="text/javascript" src="assets/javascripts/smartmenu.js"></script>
+<script src="assets/jquery-ui.min.js"></script>
+<script src="assets/jquery-migrate.js"></script>
+
+
+<link rel="stylesheet" href="assets/stylesheets/style.css">
+<link rel="stylesheet" href="assets/stylesheets/aqua.css">
+<link rel="stylesheet" href="assets/stylesheets/font-awesome.min.css">
+<link rel="stylesheet" href="assets/stylesheets/jquery.rollbar.css">
+<link rel="stylesheet" href="assets/stylesheets/smartmenu.css">
+<link href="assets/jquery-ui.min.css" rel="stylesheet" />
+
+<div id="cdms_header_dev" >
+  <div align="center">
+     <img src="/assets/sssmh_header.png">
+  </div>
+  <div id="links_welcome" align="center">
+    <div id="links" style="padding-left: 25px;padding-bottom: 6px;padding-top: 2px;">
+    <% if user_signed_in?%>
+        <ul class="smartmenu">
+            <!-- Responsive toggle -->
+            <li class="sm-responsive-toggle">
+              <span>Menu</span>
+            </li>
+
+            <!-- Simple item -->
+            <li class="sm-active" style="">
+              <a href="/"><i class="fa fa-home"></i>Home</a>
+            </li>
+            <li class="sm-content-full">
+              <a href="/villages"><i class="fa fa-map"></i>Villages</a>
+            </li>
+            <li class="sm-content-full">
+              <a href="/patients"><i class="fa fa-address-book"></i>Patients</a>
+            </li>
+            <li class="sm-content-full">
+              <a href="/reports"><i class="fa fa-list-alt"></i>Reports</a>
+            </li>
+            <li class="sm-right-item" style="">
+              <a rel="nofollow" data-method="delete" href="/users/sign_out"><i class="fa fa-sign-out"></i>Sign Out</a>
+            </li>
+            <li class="sm-right-item" style="">
+              <a href="/account_profile"><i class="fa fa-hdd-o"></i>Account Profile</a>
+            </li>
+
+
+            <!--
+                <!-- Flyout / Start
+                <li>
+                  <a>Flyout<i class="sm-caret fa fa-angle-down"></i></a>
+
+                  <ul sm-size="200">
+
+                    <li>
+                      <a><i class="sm-caret fa fa-angle-right"></i>Flyout Right</a>
+
+                      <ul sm-size="200">
+
+                        <li><a><i class="fa fa-picture-o"></i><i class="sm-caret fa fa-angle-right"></i>Birds</a>
+                          <ul sm-size="200">
+                            <li><a href="#">Eagles</a></li>
+                            <li><a href="#">Pelicans</a></li>
+                            <li><a href="#">Storks</a></li>
+                          </ul>
+                        </li>
+
+                        <li><a><i class="fa fa-plane"></i><i class="sm-caret fa fa-angle-right"></i>Aircraft</a>
+                          <ul sm-size="200">
+                            <li><a href="#">Planes</a></li>
+                            <li><a href="#">Helicopters</a></li>
+                            <li><a href="#">Air Balloon</a></li>
+                            <li><a href="#">Rotorcraft</a></li>
+                          </ul>
+                        </li>
+
+                        <li><a><i class="fa fa-star-o"></i><i class="sm-caret fa fa-angle-right"></i>Super Heroes</a>
+                          <ul sm-size="200">
+                            <li><a href="#">Ironman</a></li>
+                            <li><a href="#">Superman</a></li>
+                            <li><a href="#">Batman</a></li>
+                          </ul>
+                        </li>
+
+                        <li><a><i class="fa fa-paper-plane"></i><i class="sm-caret fa fa-angle-right"></i>Dirigibles</a>
+                          <ul sm-size="200">
+                            <li><a href="#">Zeppelins</a></li>
+                            <li><a href="#">Blimps</a></li>
+                          </ul>
+                        </li>
+
+                      </ul>
+
+                    </li>
+
+                    <li>
+                      <a>Flyout Left<i class="sm-caret fa fa-angle-left"></i></a>
+
+                      <ul class="sm-drop-left" sm-size="200">
+
+                        <li><a href="#">Washington</a></li>
+                        <li><a href="#">San Francisco</a></li>
+                        <li><a href="#">New York</a></li>
+
+                      </ul>
+
+                    </li>
+
+                    <li><a href="#">No Flyout</a></li>
+                  </ul>
+
+                </li>
+                <!-- Flyout / End
+
+                <!-- Mega Menu / Start
+                <li class="sm-content-full sm-grid">
+                  <a href="#">Mega Menu<i class="sm-caret fa fa-angle-down"></i></a>
+
+                  <div class="sm-custom-bg">
+
+                    <div class="sm-row">
+
+                      <div class="sm-col c-2">
+                        <p><span class="sm-title">Standard</span></p>
+                        <ul class="sm-submenu">
+                          <li><a href="#">Football</a></li>
+                          <li><a href="#">Basketball</a></li>
+                          <li><a href="#">Baseball</a></li>
+                          <li><a href="#">Hockey</a></li>
+                          <li><a href="#">Soccer</a></li>
+                        </ul>
+                      </div>
+
+                      <div class="sm-col c-2">
+                        <p><span class="sm-title">Descriptions</span></p>
+                        <ul class="sm-submenu">
+                          <li>
+                            <a href="#">
+                              <span>Suicide Squad</span>
+                              <span class="sm-submenu-description">David Ayer</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <span>The Jungle Book</span>
+                              <span class="sm-submenu-description">Jon Favreau</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <span>Doctor Strange</span>
+                              <span class="sm-submenu-description">Scott Derrickson</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <span>La La Land</span>
+                              <span class="sm-submenu-description">Damien Chazelle</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="sm-col c-3">
+                        <p><span class="sm-title">Images + Descriptions</span></p>
+                        <ul class="sm-submenu">
+                          <li>
+                            <a href="#" class="sm-submenu-with-image">
+                              <img src="assets/chart.png" width="40" height="40" />
+                              <span class="sm-submenu-title">Line Chart</span>
+                              <span class="sm-submenu-description">Mauris vel tempus eros</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" class="sm-submenu-with-image">
+                              <img src="assets/documents.png" width="40" height="40" />
+                              <span class="sm-submenu-title">Documents</span>
+                              <span class="sm-submenu-description">Quisque scelerisque dui</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" class="sm-submenu-with-image">
+                              <img src="assets/office.png" width="40" height="40" />
+                              <span class="sm-submenu-title">Office Building</span>
+                              <span class="sm-submenu-description">Etiam velit libero luctus</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="sm-col c-2">
+                        <p><span class="sm-title">Icons</span></p>
+                        <ul class="sm-submenu">
+                          <li>
+                            <a href="#"><i class="sm-icon fa fa-flask"></i> Flask</a>
+                          </li>
+                          <li>
+                            <a href="#"><i class="sm-icon fa fa-paper-plane"></i> Plane</a>
+                          </li>
+                          <li>
+                            <a href="#"><i class="sm-icon fa fa-desktop"></i> Desktop</a>
+                          </li>
+                          <li>
+                            <a href="#"><i class="sm-icon fa fa-briefcase"></i> Briefcase</a>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="sm-col c-3">
+                        <p><span class="sm-title">Custom</span></p>
+                        <div class="sm-description">
+                          This column can contain whatever you like! Add text, images or HTML.
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </li>
+                <!-- Mega Menu / End
+
+                <!-- Grid / Start
+                <li class="sm-content-full sm-grid">
+                  <a>Grid<i class="sm-caret fa fa-angle-down"></i></a>
+
+                  <div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-11"><div class="sm-grid-wrapper">
+                        <center>Eleven</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-10"><div class="sm-grid-wrapper">
+                        <center>Ten</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-3"><div class="sm-grid-wrapper">
+                        <center>Three</center>
+                      </div></div>
+                      <div class="sm-col c-9"><div class="sm-grid-wrapper">
+                        <center>Nine</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-8"><div class="sm-grid-wrapper">
+                        <center>Eight</center>
+                      </div></div>
+                      <div class="sm-col c-4"><div class="sm-grid-wrapper">
+                        <center>Four</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-5"><div class="sm-grid-wrapper">
+                        <center>Five</center>
+                      </div></div>
+                      <div class="sm-col c-7"><div class="sm-grid-wrapper">
+                        <center>Seven</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-4"><div class="sm-grid-wrapper">
+                        <center>Four</center>
+                      </div></div>
+                      <div class="sm-col c-4"><div class="sm-grid-wrapper">
+                        <center>Four</center>
+                      </div></div>
+                      <div class="sm-col c-4"><div class="sm-grid-wrapper">
+                        <center>Four</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                      <div class="sm-col c-7"><div class="sm-grid-wrapper">
+                        <center>Seven</center>
+                      </div></div>
+                      <div class="sm-col c-3"><div class="sm-grid-wrapper">
+                        <center>Three</center>
+                      </div></div>
+                    </div>
+
+                    <div class="sm-row">
+                      <div class="sm-col c-4"><div class="sm-grid-wrapper">
+                        <center>Four</center>
+                      </div></div>
+                      <div class="sm-col c-1"><div class="sm-grid-wrapper">
+                        <center>One</center>
+                      </div></div>
+                      <div class="sm-col c-5"><div class="sm-grid-wrapper">
+                        <center>Five</center>
+                      </div></div>
+                      <div class="sm-col c-2"><div class="sm-grid-wrapper">
+                        <center>Two</center>
+                      </div></div>
+                    </div>
+
+                  </div>
+
+                </li>
+                <!-- Grid / End
+
+                <!-- Gallery / Start
+                <li class="sm-content-full sm-grid">
+                  <a href="#">Gallery<i class="sm-caret fa fa-angle-down"></i></a>
+
+                  <div>
+
+                    <div class="sm-row">
+
+                      <div class="sm-col c-4">
+                        <span class="sm-title">Chicago Tower Skydeck</span>
+                        <a href="#"><img class="sm-image" src="assets/chicago.jpg" /></a>
+                        <p>Duis vel turpis nibh. Nulla nec augue quis lacus luctus varius a sed est. Sed sed augue commodo.</p>
+                      </div>
+
+                      <div class="sm-col c-4">
+                        <span class="sm-title">New York from Rockefeller</span>
+                        <a href="#"><img class="sm-image" src="assets/new_york.jpg" /></a>
+                        <p>Nunc tincidunt tempus est. Morbi iaculis, ex a lacinia sagittis, magna ante dictum purus.</p>
+                      </div>
+
+                      <div class="sm-col c-4">
+                        <span class="sm-title">San Francisco on Evening</span>
+                        <a href="#"><img class="sm-image" src="assets/san_francisco.jpg" /></a>
+                        <p>Vestibulum maximus, lectus sit amet dapibus interdum, mollis elit, quis tincidunt enim leo ut metus.</p>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </li>
+                <!-- Gallery / End
+
+                <!-- Contact / Start
+                <li class="sm-content-full sm-grid">
+                  <a href="#">Contact<i class="sm-caret fa fa-angle-down"></i></a>
+
+                  <div class="sm-no-space">
+
+                    <div class="sm-row">
+                      <div class="sm-col c-5 sm-no-space">
+                        <div class="sm-map-canvas" data-lat="37.800976" data-lng="-122.428502" data-address="1650 Lombard Street, San Francisco, CA 94123‎" data-zoom="12"></div>
+                      </div>
+
+                      <div class="sm-col c-7 sm-space-20">
+                        <h4>Contact Form</h4>
+                        <p>Add custom content to your menu to completely customize its contents.</p>
+
+                        <form action="" class="sm-contact-form">
+                          <p>
+                            <input type="text" name="your-name" size="40" placeholder="Name" />
+                          </p>
+                          <p>
+                            <input type="email" name="your-email" size="40" placeholder="E-mail Address" />
+                          </p>
+                          <p>
+                            <textarea name="your-message" cols="40" rows="10" placeholder="Message"></textarea>
+                          </p>
+                          <p>
+                            <input type="submit" value="Send" /><br>
+                          </p>
+                        </form>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </li>
+                <!-- Contact / End
+            -->
+
+            <!--
+
+                <!-- Search
+                <li class="sm-search sm-right-item">
+                  <form action="">
+                    <input id="search-txt" name="search" type="search">
+                    <label for="search-txt" class="fa fa-search"></label>
+                  </form>
+                </li>
+
+                <!-- Social
+                <li class="sm-right-item sm-social googleplus">
+                  <a href="http://plus.google.com/"><i class="sm-single-icon fa fa-google-plus"></i></a>
+                </li>
+
+                <li class="sm-right-item sm-social facebook">
+                  <a href="http://www.facebook.com/"><i class="sm-single-icon fa fa-facebook"></i></a>
+                </li>
+
+                <li class="sm-right-item sm-social twitter">
+                  <a href="https://twitter.com/AthenaStudio87"><i class="sm-single-icon fa fa-twitter"></i></a>
+                </li>
+
+            -->
+
+        <div id="welcome_message">
+            Welcome <%=current_user.email%>
+        </div>
+      </ul>
+    <%end%>
   </div>
 </div>

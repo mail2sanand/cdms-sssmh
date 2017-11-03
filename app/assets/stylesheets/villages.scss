@@ -1,0 +1,35 @@
+// Place all the styles related to the villages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#villages_grid{
+  height:100%;
+  overflow-x: hidden;
+  width: 80%;
+  margin-top: 15px;
+}
+
+.jsgrid-grid-header{
+  width: 95%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  overflow: hidden;
+}
+
+.jsgrid-grid-body{
+  height: 450px;
+  width: 95%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  overflow: hidden;
+}
+
+#villages_top{
+  margin-top: 20px;
+  font-size: 15px;
+  width: 95%;
+  padding-left: 10px;
+  text-align: left;
+  color: #888;
+  font-weight: bold;
+}

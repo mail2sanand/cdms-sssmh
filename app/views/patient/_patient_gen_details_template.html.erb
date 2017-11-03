@@ -1,0 +1,163 @@
+<div id="patient_gen_details_left_div" style="height:35vh;padding-left:5px;">
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Name
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_name" type="text" placeholder="Name Of The Patient" name="pgd[name]"/>
+      <span id="span_pgd_name">Name Of The Patient</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Date Of Birth
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_age" type="text" placeholder="MMM-YYYY" name="pgd[age]"/>
+      <span id="span_pgd_age">Age Of the Patient</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Gender
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:35px;" class="patient_details_input" align="left">
+      <div class="sssmh_combo slate" style="height:20px;">
+        <select id="input_pgd_gender" name="pgd[gender]" style="margin-left: 12px;">
+          <option value="1" checked>Male</option>
+          <option value="2">Female</option>
+        </select>
+        <span id="span_pgd_gender">Gender (M / F)</span>
+      </div>
+      <!--<input type="text" placeholder="Name Of The Patient"  name="gender"/>-->
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;" class="patient_details_label">
+      Alive
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;padding-top:2px;" class="patient_details_input" align="left">
+      <input type="checkbox" id="input_pgd_alive" name="pgd[alive]" checked="true" style="display:none;">
+      <span id="span_pgd_alive">Alive</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Contact Number
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_contact" type="text" placeholder="Contact Number" name="pgd[contact]"/>
+      <span id="span_pgd_contact">Contact Number</span>
+    </div>
+  </div>
+
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Annual Income
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_annualIncome" type="text" placeholder="Annual Income" name="pgd[annualIncome]"/>
+      <span id="span_pgd_annualIncome">Annual Income</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Village
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:35px;vertical-align: middle;padding-top: 3px;" class="patient_details_input" align="left">
+      <div class="sssmh_combo slate" style="height:20px;">
+        <select id="input_pgd_village_id" name="pgd[village_id]" style="margin-left: 12px;">
+          <option value="0">Choose a Village </option>
+        </select>
+        <span id="span_pgd_village_id">Village Name</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div id="patient_gen_details_right_div" style="height:35vh;">
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      CD No.
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_cdno" type="text" placeholder="CD Number" name="pgd[cdno]"/>
+      <span id="span_pgd_cdno">CD Number</span>
+    </div>
+  </div>
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      SSSMHMS Id. No.
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_sssmhIdNo" type="text" placeholder="SSSMHMS Id. Number" name="pgd[sssmhIdNo]"/>
+      <span id="span_pgd_sssmhIdNo">SSSMHMS Id. Number</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Aadhaar No.
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_aadharNo" type="text" placeholder="Aadhaar Number" name="pgd[aadharNo]"/>
+      <span id="span_pgd_aadharNo">Aadhaar Number</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Photo
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <!--<label class="fileContainer">-->
+      <!--Click here to trigger the file uploader!&hellip;-->
+      <input id="input_pgd_photo" type="file" placeholder="Select Photo ... " style="padding-left:19px;" name="pgd[photo]"/>
+      <!--</label>-->
+      <span id="span_pgd_photo">
+              <img id="span_pgd_photo_src" src="/assets/no_photo_available.jpg" width="130px;" height="160px;">
+            </span>
+    </div>
+  </div>
+
+</div>

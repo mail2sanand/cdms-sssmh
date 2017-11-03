@@ -1,0 +1,24 @@
+class CreatePatients < ActiveRecord::Migration[5.1]
+  def change
+    create_table :patients do |t|
+      t.string :name
+      t.integer :age
+      t.integer :gender
+
+      t.string :contact
+      t.string :cdno
+      t.string :sssmhIdNo
+      t.string :aadharNo
+
+      t.integer :dateOfBirth
+      t.string :annualIncome
+
+      t.integer :alive
+
+      t.references :village, foreign_key: true
+      # t.references :ailment, foreign_key: true
+
+      t.timestamps
+    end
+  end
+end

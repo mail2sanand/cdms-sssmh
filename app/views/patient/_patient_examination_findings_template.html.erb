@@ -1,0 +1,34 @@
+<%all_examinations = get_examinations_from_helper%>
+
+<div id="examination_details_for_patient_div" style="height:48vh;border:1px solid green;width:86%;margin-left:50px;">
+
+  <div class="ailment_mid_divs" id="examination_header" style="height:2vh;width:100%" align="center">
+    <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Examination</b></div>
+    <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Findings</b></div>
+  </div>
+
+  <div class="ailment_mid_divs" id="examination_details_div" style="height:44vh;overflow-y:auto;border:0px solid red;width:95%">
+    <%all_examinations.each do|each_examination|%>
+        <div id="examination_header" style="height:4vh;width:100%;" align="left">
+          <div style="margin-left:14px;padding-left:70px;margin-top:5px;float:left;width:22%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;"><%=each_examination.name%></div>
+          <div style="margin-left:20px;padding-left:130px;margin-top:5px;float:left;width:46%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
+
+            <%case each_examination.parameter_length%>
+              <%when "small"%>
+                <input style="display:none;" type="text" size="15" id="input_examination_findings_<%=each_examination.code%>" name="examination_findings[<%=each_examination.id%>_<%=each_examination.code%>]"/>
+              <%when "medium"%>
+                <input style="display:none;" type="text" size="20" id="input_examination_findings_<%=each_examination.code%>" name="examination_findings[<%=each_examination.id%>_<%=each_examination.code%>]"/>
+              <%else%>
+                <input style="display:none;" type="text" size="30" id="input_examination_findings_<%=each_examination.code%>" name="examination_findings[<%=each_examination.id%>_<%=each_examination.code%>]"/>
+            <%end%>
+            <span id="span_examination_findings_<%=each_examination.code%>"> - </span>
+
+            <%if(each_examination.units)%>
+              <%=each_examination.units%>
+            <%end%>
+          </div>
+        </div>
+    <%end%>
+  </div>
+
+</div>

@@ -1,0 +1,198 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <link href="assets/jsgrid-theme.min.css" rel="stylesheet" />
+    <link href="assets/jsgrid.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <script src="assets/jsgrid.min.js"></script>
+
+    <script>
+        $(function(){
+
+            $.ajax({
+                type:"GET",
+                url:"/get_parent_villages"
+            }).done(function(parentVillages){
+                parentVillages.unshift({id: 0, name: ""});
+
+                $('#villages_grid').jsGrid({
+                    height: "100%",
+                    width: "100%",
+                    filtering: true,
+                    inserting: true,
+                    editing: true,
+                    sorting: true,
+                    selecting: true,
+                    paging: true,
+                    autoload: true,
+                    pageSize: 15,
+                    pageButtonCount: 5,
+                    deleteConfirm: "Do you really want to delete the Village ?",
+                    controller: {
+                        loadData: function(filter) {
+                            return $.ajax({
+                                type: "GET",
+                                url: "/get_all_villages.json",
+                                data: filter
+                            });
+                        },
+                        insertItem: function(item) {
+                            return $.ajax({
+                                type: "POST",
+                                url: "/villages",
+                                data: item,
+                                success: function(){
+                                    console.log("Data successfully inserted");
+                                },
+                                error: function(){
+                                    console.log("Data could not be inserted");
+                                },
+                                complete: function(item){
+                                    console.log("Callback successful"+Object.keys(item) );
+                                }
+                            });
+                        },
+                        updateItem: function(item) {
+                            return $.ajax({
+                                type: "PUT",
+                                url: "/villages/" + item.id,
+                                data: item
+                            });
+                        },
+                        deleteItem: function(item) {
+                            return $.ajax({
+                                type: "DELETE",
+                                url: "/villages/" + item.id
+                            });
+                        }
+                    },
+                    fields: [
+                        {
+                            headerTemplate: function() {
+                                return $("<button>").attr({type: 'button', value: 'Delete',class: 'jsgrid-button jsgrid-delete-button'})
+                                    .on("click", function () {
+                                        deleteSelectedItems();
+                                    });
+                            },
+                            itemTemplate: function(_, item) {
+                                return $("<input>").attr("type", "checkbox")
+                                    .prop("checked", $.inArray(item, selectedItems) > -1)
+                                    .on("change", function () {
+                                        $(this).is(":checked") ? selectItem(item) : unselectItem(item);
+                                    });
+                            },
+                            align: "center",
+                            width: 50
+                        },
+                        { name: "id", title: "Id",type: "number", width: 30 , filtering: false,align:"center", inserting: false, editing: false},
+                        { name: "name", title: "Village Name",type: "text", width: 150 , filtering: false,align:"center"
+                            ,validate:{
+                                validator:"required",
+                                message:"Village Name is Necessary"
+                            }
+                        },
+                        { name: "volunteerName", title: "Volunteer Name",type: "text", width: 150 , filtering: false,align:"center"
+                        },
+                        { name: "volunteerMobileNumber", title: "Volunteer Contact",type: "text", width: 150 , filtering: false,align:"center" },
+                        { name: "xcord", type: "text", width: 150 , filtering: false,align:"center" },
+                        { name: "ycord", type: "text", width: 150 , filtering: false,align:"center" },
+                        { name: "displayOrder", type: "number", width: 150 , filtering: false,align:"center"
+                            ,validate:{
+                                validator:"required",
+                                message:"The Display Order is Necessary"
+                            }
+                        },
+                        {
+                            name:"parent_village_id",
+                            title:"Parent Village",
+                            align:"center",
+                            width:150,
+                            filtering:true,
+                            type:"select",
+                            items:parentVillages,
+                            valueField:"id",
+                            textField:"name"
+                        },
+                        { type: "control" }
+                    ]
+                    ,onError:function(args){
+                        console.log(args);
+                    },
+                    onItemInserted:function(args){
+                    },
+                    finishDelete:function(deletedItem, deletedItemIndex) {
+                        reset;
+                    },
+                    rowClick:function(args){
+                        return false;
+                    },
+                    rowDoubleClick:function(args){
+                        this.editItem($(args.event.target).closest("tr"));//                    this.editItem(args.item);
+                    }
+                });
+
+            });
+
+
+            var selectedItems = [];
+
+            var selectItem = function(item) {
+                selectedItems.push(item.id);
+            };
+
+            var unselectItem = function(item) {
+                selectedItems = $.grep(selectedItems, function(i) {
+                    return i !== item.id;
+                });
+            };
+
+            var deleteSelectedItems = function() {
+                if(!selectedItems.length || !confirm("Are you sure?"))
+                    return;
+
+//                deleteClientsFromDb(selectedItems);
+                $.ajax({
+                    type: "POST",
+                    url: "/delete_villages/",
+                    data: {'village_ids': selectedItems},
+                    success:function(message){
+                        console.log(message);
+                        var $grid = $("#villages_grid");
+                        $grid.jsGrid("option", "pageIndex", 1);
+                        $grid.jsGrid("loadData");
+
+//                      This block is to delete the records on the browser side without loading the grid.
+//                        finishDelete: function(deletedItem, deletedItemIndex) {
+//                            var grid = this._grid;
+//                            grid.option("data").splice(deletedItemIndex, 1);
+//                            grid.reset();
+//                        }
+                    },
+                    error:function(){
+                        alert("It seems there is some issue. Pleaase check the logs for the issue...");
+                    }
+                });
+
+                selectedItems = [];
+            };
+
+        });
+
+        //{ name: "married", type: "checkbox", title: "Is Married", filtering: false, sorting: false },
+        /*
+         { name: "volunteerName", type: "text", width: 150 , filtering: false },
+         { name: "volunteerMobileNumber", type: "text", width: 150 , filtering: false },
+         { name: "xcord", type: "text", width: 150 , filtering: false },
+         { name: "ycord", type: "text", width: 150 , filtering: false },
+        * */
+    </script>
+
+<% end %>
+
+<div id="villages_top">All Villages:</div>
+<div id="villages_grid"></div>

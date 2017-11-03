@@ -1,0 +1,52 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <!--<link href="assets/jsgrid-theme.min.css" rel="stylesheet" />-->
+    <!--<link href="assets/jsgrid.min.css" rel="stylesheet" />-->
+    <!--<link href="assets/jquery-ui.min.css" rel="stylesheet" />-->
+
+    <style type="text/css">
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jquery-ui.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+
+    <script>
+//        $('#patient_age_datepicker').datepicker({
+//            inline: true,
+//            autoSize:true
+////            maxHeight:550px
+//        });´
+    </script>
+
+
+
+<% end %>
+
+
+<input type="hidden" id="operation_mode" value="empty"/>
+<input type="hidden" id="patientname"/>
+<input type="hidden" name="pgd[id]" id="input_pgd_id"/>
+
+  <div id="patient_gen_details_main_div" align="left" >
+    <div id="patient_gen_details_div" class="fieldset ninety_percent_width" style="height:42vh;">
+      <h1><span>Patient General Details</span></h1>
+      <%= render "patient_gen_details_template" %>
+    </div>
+
+    <div id="patient_history" class="fieldset ninety_percent_width" style="height:100vh;">
+      <h1><span>Patient History</span></h1>
+      <%= render "patient_history_template" %>
+    </div>
+    <div id="patient_examination_findings" class="fieldset ninety_percent_width" style="height:50vh;">
+      <h1><span>Examination Findings</span></h1>
+      <%= render "patient_examination_findings_template" %>
+    </div>
+    <div id="patient_investigation_details" class="fieldset ninety_percent_width" style="height:74vh;width: 98%">
+      <h1><span>Investigation Details</span></h1>
+      <%= render "patient_investigation_details_template" %>
+    </div>
+  </div>

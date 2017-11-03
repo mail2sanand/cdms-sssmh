@@ -1,0 +1,32 @@
+<%all_habits = get_all_habits_from_helper%>
+
+<div id="habit_details_for_patient_div" style="height:43vh;border:1px solid green;width:90%;">
+
+  <div class="ailment_mid_divs" id="habit_header" style="height:2vh;width:100%">
+    <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Habit</b></div>
+    <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Comment</b></div>
+  </div>
+
+  <div class="ailment_mid_divs" id="habit_details_div" style="height:40vh;overflow-y:auto;border:0px solid red;width:100%">
+    <%all_habits.each do|each_habit|%>
+        <div id="habit_header" style="height:4vh;width:100%;">
+          <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;"><%=each_habit.name%></div>
+          <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
+            <input style="display:none;" type="text" size="30" id="input_habits_<%=each_habit.code%>" name="habits[<%=each_habit.id%>_<%=each_habit.code%>]"/>
+            <span id="span_habits_<%=each_habit.code%>"> - </span>
+          </div>
+        </div>
+    <%end%>
+  </div>
+
+</div>
+
+
+<!--<div id="habits_options" style="height:3vh;float:right;padding-right:20px;border:0px solid red;" class="sssmh_combo_small slate">-->
+  <!--&lt;!&ndash;<div id="ailment_combo">&ndash;&gt;-->
+  <!--<select id="habits_option_id" style="">-->
+    <!--<option value="0">Add a Patient Habit</option>-->
+  <!--</select>-->
+  <!--<i style="cursor:pointer;font-size:15px;margin-left:5px;" class="fa fa-plus-circle" id="add_ailment_icon" title="Add Ailment" onclick="add_new_ailment($('#habits_option_id')[0].value);"></i>-->
+  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->

@@ -1,3 +1,165 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.full_background{
+  color: red;
+  font-family: arial;
+  font-size: 12px;
+  font-weight: 100;
+  //border: 1px solid;
+  //border-color: red;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans",sans-serif;
+  font-size: 13px;
+}
+
+html{
+  height: 100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background: #dadfed;
+  background-repeat:no-repeat;
+  //background: -webkit-linear-gradient( top, #DDD8E6, #BDC1CD);
+  //background: -moz-linear-gradient( top, #DDD8E6, #BDC1CD);
+  //background: -ms-linear-gradient( top, #DDD8E6, #BDC1CD);
+  //background: -o-linear-gradient( top, #DDD8E6, #BDC1CD);
+  //background: linear-gradient( top, #DDD8E6, #BDC1CD);
+}
+
+.main_body{
+  width: 93%;
+  color: green;
+  border: 1px solid;
+  border-color: slategray;
+  border-radius: 15px;
+  min-height: 75vh;
+  font-family: "Open Sans",sans-serif;
+  /*
+  min-height: 70%;
+  min-height: -webkit-calc(100% - 300px);
+  min-height: -moz-calc(100% - 300px);
+  min-height: calc(100% - 300px);
+  */
+}
+
+.sssmhms_button {
+  padding: 5px 20px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px #999;
+}
+
+.sssmhms_button:hover {background-color: #3e8e41}
+
+.sssmhms_button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.sssmh_combo{
+  //background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+  //height: 29px;
+  //overflow: hidden;
+  //width: 240px;
+}
+
+.sssmh_combo select {
+  //background: transparent;
+  border: none;
+  font-size: 14px;
+  height: 27px;
+  //padding: 5px; /* If you add too much padding here, the options won't show in IE */
+  width: 155px;
+}
+
+.sssmh_combo input {
+  //background: transparent;
+  border: none;
+  font-size: 14px;
+  height: 27px;
+  //padding: 5px; /* If you add too much padding here, the options won't show in IE */
+  width: 155px;
+}
+
+.sssmh_combo.slate {
+  font-family: "Open Sans",sans-serif;
+  font-size: 1em;
+  //background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+  //height: 34px;
+  width: 100px;
+}
+
+.sssmh_combo_small input {
+  //background: transparent;
+  border: none;
+  font-size: 14px;
+  height: 27px;
+  //padding: 5px; /* If you add too much padding here, the options won't show in IE */
+  //width: 155px;
+}
+
+.sssmh_combo_small.slate {
+  font-family: "Open Sans",sans-serif;
+  font-size: .9em;
+  //background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+  //height: 34px;
+  //width: 50px;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.fileContainer {
+  //overflow: hidden;
+  position: relative;
+}
+
+.fileContainer [type=file] {
+  cursor: inherit;
+  display: inline;
+  //font-size: 999px;
+  filter: alpha(opacity=0);
+  min-height: 100%;
+  min-width: 100%;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  top: 0;
+}
+
+/* CSS Block for Patient Other Details mid Divs */
+
+.ailment_mid_divs div{
+  //height:3vh;
+}
+
+/* END OF CSS Block .........*/
+
+
+
+
+
+
+
+
+
+
+

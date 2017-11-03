@@ -1,0 +1,110 @@
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+    <script>
+        $(function() {
+            $("#datepicker").datepicker();
+        });
+
+        $("#visit_calendar_icon").click(function() {
+            console.log("dffdf dfd fd fd ");
+            $('#datepicker').datepicker("show");
+        });
+
+        $("#datepicker").change(function() {
+
+            var dateTypeVar = $('#datepicker').datepicker('getDate');
+            var selected_visit = $.datepicker.formatDate('M d, yy', dateTypeVar);
+            $('#investigation_details_visit').val(dateTypeVar);
+            $('#visit_date_0').html(selected_visit);
+        });
+
+        var visit_date_div = $('#date_row_div');
+        visit_date_div.append($('<div/>')
+            .attr("id","visit_date_0")
+            .attr("style","margin-left:20px;padding-left:10px;margin-top:0px;float:left;width:15%;border:0px dotted red;height:auto;")
+            .append(
+                $('<span/>')
+                    .text("Select New Visit")
+            )
+        );
+
+
+    </script>
+<%end%>
+
+<%all_investigations = get_investigations_from_helper%>
+
+<div id="investigation_details_for_patient_div" style="position:relative;height:72vh;border:1px solid green;width:95%;margin-left:20px;float:left;">
+  <div class="ailment_mid_divs" id="investigation_header" style="height:5vh;width:100%;margin-bottom:5px;" align="center">
+    <div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;width:15%;border-right:0px solid green;border-bottom:1px solid green;height:3vh;">
+      <b>Investigation</b>
+    </div>
+
+    <div id="investigation_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width:20%;border-right:0px solid green;border-bottom:1px solid green;height:4.1vh;">
+    <!--<div id="investigation_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
+        <div id="new_visit_calendar" style="width:100%;height:auto;border:0px solid green;" >
+          <!--<input type="hidden" name="investigation_details[patient_visit]" value="0">-->
+          <div style="margin-left:20px;width:65%;float:left;height:auto;border:0px solid green;">
+            <select id="patient_visits_select_id" onchange="changeVisitOption(this.value);">
+              <option value="-1" selected>Select a Visit</option>
+              <option value="0">New Visit</option>
+            </select>
+          </div>
+
+          <div id="new_visit_calendar" style="border:0px solid green;height:auto;float:left;" align="left">
+            <i style="display:none;" class="fa fa-calendar" id="visit_calendar_icon" title="Select Date of Visit"></i>
+            <input size="1" type="text" id="datepicker" style="visibility:hidden;">
+          </div>
+        </div>
+    </div>
+
+    <div style="margin-left:6px;margin-top:12px;float:left;width:55%;border-right:0px solid green;border-bottom:1px solid green;height:3vh;">
+      <b>History of Investigation Details</b>
+    </div>
+    <!--<div style="margin-left:22px;margin-top:5px;float:left;width:20%;border-right:0px solid green;border-bottom:1px solid green;height:4vh;"><b>Past 2</b></div>-->
+  </div>
+
+  <input type="hidden" id="investigation_details_visit" name="investigation_details[visit]">
+
+  <div id="date_row_div" style="height:2vh;width:100%;border-bottom:1px dotted #63aee2;position:absolute;z-index: 10;">
+    <div style="margin-left:10px;padding-left:30px;margin-top:0px;float:left;width:13%;border:0px dotted green;height:2vh;">
+      <b>Date Of Visit</b>
+    </div>
+    <!--<div id="visit_date" style="margin-left:60px;padding-left:40px;margin-top:0px;float:left;width:25%;border:1px dotted green;height:auto;">-->
+      <!--sddsdsds-->
+    <!--</div>-->
+  </div>
+
+  <div class="ailment_mid_divs" id="investigation_details_div" style="height:62vh;overflow-y:auto;border:0px solid red;width:95%">
+    <%all_investigations.each do|each_investigation|%>
+        <div id="examination_header_<%=each_investigation.code%>" style="margin-left:10px;height:5vh;width:100%;border-bottom:1px dotted green;" align="left">
+
+          <div style="margin-left:20px;padding-left:15px;margin-top:5px;float:left;width:10%;border-right:0px solid green;border-bottom:0px dotted green;height:3vh;">
+            <%=each_investigation.name%>
+          </div>
+
+          <div align="center" style="margin-left:18px;padding-left:20px;margin-top:10px;float:left;width:15%;border-right:0px solid green;border-bottom:0px dotted green;height:3vh;">
+            <%input_size = 15%>
+            <%if each_investigation.parameter_length %>
+              <%case each_investigation.parameter_length%>
+              <%when "medium"%>
+                    <%input_size = 20%>
+              <%else%>
+                    <%input_size = 30%>
+              <%end%>
+            <%end%>
+
+            <input style="display:none;" type="text" size="<%=input_size%>" id="input_investigation_details_<%=each_investigation.code%>" name="investigation_details[<%=each_investigation.code%>]"/>
+            <span style="padding-left: 0px;" id="span_investigation_details_<%=each_investigation.code%>"> - </span>
+            <%if(each_investigation.units)%>
+                <%=each_investigation.units%>
+            <%end%>
+          </div>
+
+          <div align="center" id="no_examination_detail_<%=each_investigation.code%>" style="width:50%;margin-left:25px;padding-left:0px;margin-top:10px;float:left;height:auto;">-</div>
+        </div>
+    <%end%>
+  </div>
+
+</div>
