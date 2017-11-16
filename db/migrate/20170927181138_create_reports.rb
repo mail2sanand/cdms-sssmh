@@ -5,6 +5,7 @@ class CreateReports < ActiveRecord::Migration[5.1]
       t.string :report_type_value
       t.string :report_file_path
 
+      t.references :patient
       t.references :visit
       t.references :ailment
 

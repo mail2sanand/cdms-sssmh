@@ -47,3 +47,26 @@ function removeTab(ailment_tab_id,tabs_id,tabId) {
     $(ailment_tab_id).closest( "li" ).remove();
     // $( "#" + panelId ).remove();
 }
+
+function addCheckbox(addToElementId,checkboxId) {
+    var addToElement = $('#'+addToElementId);
+    addToElement.append('<input type="checkbox" id="' + checkboxId + '"name="' + checkboxId + '" >')
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

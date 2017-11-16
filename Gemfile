@@ -36,6 +36,7 @@ gem 'devise'
 gem 'paperclip'
 gem 'prawn'
 gem 'prawn-table'
+gem 'combine_pdf'
 gem 'pry'
 
 group :development, :test do

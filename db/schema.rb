@@ -146,12 +146,14 @@ ActiveRecord::Schema.define(version: 20170927181138) do
     t.string "report_type"
     t.string "report_type_value"
     t.string "report_file_path"
+    t.bigint "patient_id"
     t.bigint "visit_id"
     t.bigint "ailment_id"
     t.json "report_details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ailment_id"], name: "index_reports_on_ailment_id"
+    t.index ["patient_id"], name: "index_reports_on_patient_id"
     t.index ["visit_id"], name: "index_reports_on_visit_id"
   end
 

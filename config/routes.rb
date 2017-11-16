@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'report/index'
+
   get 'visit/get_patient_visits'
 
   get 'visit/save_patient_visit'
@@ -21,9 +23,14 @@ Rails.application.routes.draw do
 
     delete 'delete_patient/:id', to:'patient#delete_patient'
 
-    # Patient Reports Routes
+  # Reports
+
+    get 'reports', to:'reports#index'
     get 'print_patient_details/:id', to: 'patient#print_patient_details'
-  # END OF Patient Details
+    get 'print_village_review_report/:patient_ids/:village_id', to: 'reports#print_village_review_report'
+    get 'get_all_patients_for_reports/:village_id', to:'reports#get_all_patients_for_reports'
+
+  # END of Reports
 
   # Ailment Details
     resources :ailment

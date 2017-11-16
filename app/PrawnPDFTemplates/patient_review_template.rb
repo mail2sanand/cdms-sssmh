@@ -84,10 +84,29 @@ class PatientReviewTemplate < Prawn::Document
         ]
     ])
 
-    last_but_one_visit = bs_examination_details[bs_examination_details.length-2]
-    last_but_2_visit = bs_examination_details[bs_examination_details.length-3]
-    last_but_3_visit = bs_examination_details[bs_examination_details.length-4]
-    last_but_4_visit = bs_examination_details[bs_examination_details.length-5]
+    empty_visit = {
+        :visit => "",
+        :fbs => "",
+        :ppbs => "",
+        :rbs => "",
+    }
+
+    last_but_one_visit =
+        bs_examination_details[bs_examination_details.length-2] ? bs_examination_details[bs_examination_details.length-2] : empty_visit
+
+    puts "========>> last_but_one_visit : #{last_but_one_visit.inspect}"
+    last_but_2_visit =
+        bs_examination_details[bs_examination_details.length-3] ? bs_examination_details[bs_examination_details.length-3] : empty_visit
+
+    puts "========>> last_but_2_visit : #{last_but_2_visit.inspect}"
+
+    last_but_3_visit =
+        bs_examination_details[bs_examination_details.length-4] ? bs_examination_details[bs_examination_details.length-4] : empty_visit
+    puts "========>> last_but_3_visit : #{last_but_3_visit.inspect}"
+
+    last_but_4_visit =
+        bs_examination_details[bs_examination_details.length-5] ? bs_examination_details[bs_examination_details.length-5] : empty_visit
+    puts "========>> last_but_4_visit : #{last_but_4_visit.inspect}"
 
     patient_four_month_details = ([
       [

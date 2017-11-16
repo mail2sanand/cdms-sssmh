@@ -24,16 +24,12 @@ class PatientController < ApplicationController
   def create
     puts "===================\n"
 
+    params[:pgd][:alive] = ( params[:pgd][:alive] == "on" ? 1 : 0)
     @newPatient = Patient.create(patient_params)
     @@comorbidConditionController.create_comorbid_condition_for_patient(@newPatient,params[:cmc])
     @@habitController.create_habits_for_patient(@newPatient,params[:habits])
     @@examinationFindingsController.create_examination_findings_for_patient(@newPatient,params[:examination_findings])
     # @@investigationDetailsController.
-
-    #
-    # puts "-------------------\n"
-    # puts "Investigation Details : #{params[:investigation_details].inspect}"
-    # InvestigationController.save_investigation_detail_for_patient(@newPatient,params[:investigation_details])
 
     puts "===================\n"
 
@@ -107,6 +103,7 @@ class PatientController < ApplicationController
     # Update the Patient General Details
     params[:pgd][:alive] = ( params[:pgd][:alive] == "on" ? 1 : 0)
     patientForEditing.update(patient_params)
+    patientForEditing.touch
 
     # After update get all the Patient Details
     patientForEditingJson = get_patient_specific_detail(patientId)
@@ -125,28 +122,40 @@ class PatientController < ApplicationController
 
   def print_patient_details
     patient_id = params[:id]
+    patientFile = print_patient_details_internal(patient_id)
 
-    generate_data_for_patient_report(patient_id)
-
-    # # Check if the Patient Details Report is already generated
-    # patientReport = Report.where(:report_type => "patient",
-    #              :report_type_value => patient_id
-    # )
-    #
-    # if(patientReport)
-    #   # Send the Report Details to the PDF generating function
-    # else
-    #   report_details = generate_data_for_patient_report(patient_id)
-    # end
-
-    # send_data patientReviewDoc.render
-    #
-
-    send_file("#{Rails.root}/public/patientDetails/3/ReviewSheets/3_03-11-2017.pdf",
-              type: "application/pdf",
-              disposition: 'inline'
+    send_file(
+        patientFile,
+        type: "application/pdf",
+        disposition: 'inline'
     )
-    #
+
+  end
+
+  def print_patient_details_internal(patient_id)
+    patient = Patient.find(patient_id)
+    patientLastUpdatedTime = patient.updated_at
+
+    # Check if the Patient Details Report is already generated
+    patientReport = Report.where(
+        :report_type => "patient",
+        :report_type_value => patient_id
+    )
+    # puts "=====>> patientReport : #{patientReport.inspect} #{patientReport.length}"
+
+    patientFile = ""
+    if(patientReport.length == 0)
+      patientFile = generate_data_for_patient_report(patient_id)
+    else
+      if(patientReport.updated_at < patientLastUpdatedTime)
+        patientFile = generate_data_for_patient_report(patient_id)
+      else
+        patientFile = patientReport.report_file_path
+      end
+    end
+
+    puts "Comming inside the patientReport Block"
+    patientFile
   end
 
   def generate_data_for_patient_report(patient_id)
@@ -184,12 +193,12 @@ class PatientController < ApplicationController
 
       report_details[:treatment_advised] = latest_visit_examination.examination_details["treatment_advised"]
     else
-      one_month_examination_detail[:weight] = index_visit.where("examinations.code = 'weight'").first.examination_finding
-      one_month_examination_detail[:bp] = index_visit.where("examinations.code = 'bp'").first.examination_finding
-      one_month_examination_detail[:pulse] = index_visit.where("examinations.code = 'pulse'").first.examination_finding
-      one_month_examination_detail[:fbs] = index_visit.where("examinations.code = 'fbs'").first.examination_finding
-      one_month_examination_detail[:ppbs] = index_visit.where("examinations.code = 'ppbs'").first.examination_finding
-      one_month_examination_detail[:rbs] = index_visit.where("examinations.code = 'rbs'").first.examination_finding
+      one_month_examination_detail[:weight] = index_visit.where("examinations.code = 'weight'").first ? index_visit.where("examinations.code = 'weight'").first.examination_finding : ""
+      one_month_examination_detail[:bp] = index_visit.where("examinations.code = 'bp'").first ? index_visit.where("examinations.code = 'bp'").first.examination_finding : ""
+      one_month_examination_detail[:pulse] = index_visit.where("examinations.code = 'pulse'").first ? index_visit.where("examinations.code = 'pulse'").first.examination_finding : ""
+      one_month_examination_detail[:fbs] = index_visit.where("examinations.code = 'fbs'").first ? index_visit.where("examinations.code = 'fbs'").first.examination_finding : ""
+      one_month_examination_detail[:ppbs] = index_visit.where("examinations.code = 'ppbs'").first ? index_visit.where("examinations.code = 'ppbs'").first.examination_finding : ""
+      one_month_examination_detail[:rbs] = index_visit.where("examinations.code = 'rbs'").first ? index_visit.where("examinations.code = 'rbs'").first.examination_finding : ""
     end
 
     report_details[:one_month_examination_detail] = one_month_examination_detail
@@ -211,24 +220,48 @@ class PatientController < ApplicationController
     report_details[:bs_examination_details] = bs_examination_details
 
     createPatientReviewReport(report_details, patient_id)
-
   end
 
   def createPatientReviewReport(report_details, patient_id)
+    # Find if a Review Report exists for this patient
+    patient_report = Report.where(
+        :patient_id => patient_id,
+        :report_type => "patient",
+        :report_type_value => "review"
+    )
+
     # This is the Block to generate the PDF from the patient's Data
     patientReviewDoc = PatientReviewTemplate.new(report_details)
 
     patientFilePath = File.join(Rails.root, "public/patientDetails/#{patient_id}/ReviewSheets")
     FileUtils.mkdir_p(patientFilePath) unless File.exist?(patientFilePath)
 
-    patientReviewDoc.render_file File.join(patientFilePath+"/#{patient_id}_#{Time.now.strftime("%d-%m-%Y")}.pdf")
+    patientFile = File.join(patientFilePath+"/#{patient_id}_#{Time.now.strftime("%d-%m-%Y")}.pdf")
 
+    if(patient_report.length == 0)
+      Report.create({
+          :report_type => "patient",
+          :report_type_value => "review",
+          :report_file_path => patientFile,
+          :patient_id => patient_id,
+          :report_details => report_details
+      })
+    else
+      patient_report.first.update({
+          :report_type => "patient",
+          :report_type_value => "review",
+          :report_file_path => patientFile,
+          :patient_id => patient_id,
+          :report_details => report_details
+      })
+    end
+
+    patientReviewDoc.render_file File.join(patientFilePath+"/#{patient_id}_#{Time.now.strftime("%d-%m-%Y")}.pdf")
+    patientFile
   end
 
   private
   def patient_params
-    # params.require(:patient).permit(:photo)
-
     params[:pgd].permit(:id,:alive,:photo,:name,:age,:gender, :contact, :annualIncome, :village_id, :cdno, :sssmhIdNo, :aadharNo)
   end
 
