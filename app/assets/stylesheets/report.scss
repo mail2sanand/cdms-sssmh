@@ -1,0 +1,41 @@
+// Place all the styles related to the report controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#reports_main div {
+  //height: 56vh;
+  background-color: #dadfed;
+}
+
+#patient_search_box{
+  margin-top: 5px;
+  width: 100%;
+  padding: .5em .5em;
+  size:15;
+}
+
+#patient_search_icon{
+  margin-top: 5px;
+  position: absolute;
+  z-index: 10;
+  padding:5px 10px 5px 5px;
+  font-size:18px;
+}
+
+#patient_search_inside_div{
+  margin-top: 10px;
+  margin-left:15px;
+}
+
+#patient_search_crud_div i{
+  font-size: 18px;
+  padding: 5px;
+  vertical-align: middle;
+}
+
+#patient_search_div{
+  float: left;
+  margin: 2px 0 0 15px;
+  //padding: 5px;
+  //vertical-align: middle;
+}

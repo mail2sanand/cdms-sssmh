@@ -1,0 +1,78 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <!--<link href="assets/jsgrid-theme.min.css" rel="stylesheet" />-->
+    <!--<link href="assets/jsgrid.min.css" rel="stylesheet" />-->
+
+    <style type="text/css">
+      /*.jsgrid-grid-header{*/
+      /*overflow-x: scroll;*/
+      /*overflow-y: scroll;*/
+      /*!*min-height: 30vh;*!*/
+      /*}*/
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+    <script>
+        $(document).ready(function(){
+            loadVillagesForReportsPage();
+            load_and_display_patients_function("all_villages");
+        })
+        
+        function loadVillagesForReportsPage() {
+            simpleComboLoad("/get_all_villages.json",$('#report_select_id'),false);
+        }
+        
+
+    </script>
+
+<% end %>
+
+<div id="village_reports_main_div" style="background-color:#dadfee;">
+  <!-- Populate All Villages Here -->
+  <div style="margin-left:30px;" align="left">
+
+    <div id="villages_buttons_div">
+        <div id="villages_div" style="float:left">
+          Villages :
+          <select id="report_select_id" onchange="changeVillage(this.value);">
+            <option value="-1" selected>Select a Village</option>
+          </select>
+        </div>
+
+      <div id="buttons_div" style="float:right">
+        <i class="fa fa-list-alt" style="font-size: 20px;margin-right: 20px;cursor: pointer;" title="Print Review Report" onclick="printSelectedPatients()"></i>
+      </div>
+    </div>
+
+    <br><br>
+
+    <div id="patients_div"
+       style='border: 1px solid;
+        border-color: slategray;
+        border-radius: 15px;
+        min-height: 60vh;
+        font-family: "Open Sans",sans-serif;' align="center">
+
+      <div id="patient_search_div">
+        <i class="fa fa-search" id="patient_search_icon" title="Search Patients"></i>
+        <input id="patient_search_box" type="text" name="patient_search" size="25" onfocus="$('#patient_search_icon').hide();" onblur="$('#patient_search_icon').show();" placeholder="       Search Patient..."/>
+
+        <div align="left" style="margin-top: 10px;margin-left: 5px;">
+          <b>Select All / None :</b> <input type="checkbox" id="select_all_none" onclick="selectAllNonePatients(this.checked);" checked>
+        </div>
+
+
+        <div id="patients_block_div" style="margin-top:10px;">
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

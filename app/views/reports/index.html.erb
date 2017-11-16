@@ -1,0 +1,57 @@
+<% content_for :head do %>
+    <!-- <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" /> -->
+    <!--<link href="assets/jsgrid-theme.min.css" rel="stylesheet" />-->
+    <!--<link href="assets/jsgrid.min.css" rel="stylesheet" />-->
+
+    <style type="text/css">
+      /*.jsgrid-grid-header{*/
+      /*overflow-x: scroll;*/
+      /*overflow-y: scroll;*/
+      /*!*min-height: 30vh;*!*/
+      /*}*/
+    </style>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <!--<script src="assets/jsgrid.min.js"></script>-->
+    <!--<script src="assets/jsgrid-date.js"></script>-->
+    <script>
+        $( "#reports_main" ).tabs();
+
+        $(document).ready(function(){
+//            loadVillages();
+//            loadAilments();
+//            loadCoMorbidConditions();
+//            loadHabits();
+//            loadNonEditEmptyTemplates();
+////            setDialogueDiv();
+        })
+
+    </script>
+
+<% end %>
+
+<div id="reports_main_header">
+
+  <form name="reportsForm" id="reportsFormId">
+    <div id="reports_main" style="width: 90%;margin-top: 20px;">
+      <ul>
+        <li><a href="#village_reports">Village Reports</a></li>
+        <li><a href="#ailment_reports">Ailment Reports</a></li>
+      </ul>
+      <div id="village_reports">
+        <%= render "village_reports_template", :villages => @villages, :all_patient_details => @all_patient_details%>
+      </div>
+      <div id="ailment_reports">
+        <%= render "ailment_reports_template"%>
+      </div>
+    </div>
+  </form>
+
+  <div id="submitButtonsBlock" align="right">
+    <input type="hidden" id="patient_id"/>
+    <!--<button value="Save" class="sssmhms_button" type="submit" onclick="checkAndSubmit()">Save</button>ée-->
+    <!--<button value="Cancel" class="sssmhms_button" onclick="loadNonEditEmptyTemplates();">Cancel</button>-->
+  </div>
+</div>

@@ -1,0 +1,156 @@
+function load_and_display_patients_function(village_id) {
+    $.ajax({
+        url:'/get_all_patients_for_reports/'+village_id+'.json/',
+        method:"GET",
+        success:function (allPatients) {
+            display_patients_function(allPatients);
+            selectAllPatients();
+            attachClickEventToPatients();
+        }
+    })
+}
+
+function changeVillage(selectedVillage) {
+    removeAllPatientDivs();
+
+    if(selectedVillage == -1){
+        load_and_display_patients_function("all_villages");
+    }else{
+        load_and_display_patients_function(selectedVillage);
+    }
+}
+
+function removeAllPatientDivs() {
+    $('#patients_block_div').empty();
+}
+
+function selectAllNonePatients(select_all_none) {
+    console.log(select_all_none);
+    if(select_all_none){
+        selectAllPatients();
+    }else{
+        unSelectAllPatients();
+    }
+}
+
+function unSelectAllPatients() {
+    $('[id^="patient_checkbox_"]').each(function () {
+        $(this).attr("checked",false);
+    })
+}
+
+function selectAllPatients() {
+    $('[id^="patient_checkbox_"]').each(function () {
+        $(this).attr("checked",true);
+    })
+}
+
+function attachClickEventToPatients() {
+    $('[id^="individual_patient_block_div_"]').click(function () {
+        individualpatientDivClick(this)
+    })
+}
+
+function individualpatientDivClick(element) {
+    var clicked_patient = element.id;
+    var patient_id = clicked_patient.split("patient_id_")[1];
+
+    var clicked_patient_checkbox = $("#patient_checkbox_"+patient_id);
+    clicked_patient_checkbox.attr("checked",!clicked_patient_checkbox.attr("checked"));
+}
+
+function printSelectedPatients() {
+    var selectedPatientsIds = "";
+    $('[id^="patient_checkbox_"]').each(function () {
+        if($(this).attr("checked")){
+            var selected_patient_checkbox = this.id;
+            var selected_patient_id = selected_patient_checkbox.split("patient_checkbox_")[1];
+            selectedPatientsIds = selectedPatientsIds + selected_patient_id + "_";
+        }
+    })
+
+    village_id = $('#report_select_id option:selected').text()
+
+    selectedPatientsIds = selectedPatientsIds.replace(/_(\s+)?$/,'');
+
+    // AJAX request to Print the selected Patients
+    window.open('/print_village_review_report/'+selectedPatientsIds+'/'+village_id, '_blank')
+}
+
+function showAndHideAllPatients(show_village) {
+    if(show_village == 'all'){
+        $('[id^="individual_patient_block_div_"]').each(function () {
+            $(this).show();
+        })
+    }else{
+        $('[id^="individual_patient_block_div_"]').each(function () {
+            individual_patient_div_id = this.id;
+            if(individual_patient_div_id.indexOf(show_village) == -1){
+                $(this).hide();
+            }
+        })
+    }
+}
+
+function display_patients_function(allPatients) {
+    var dm_visit_date_div = $('#patients_block_div');
+    var allPatients_backup = allPatients;
+
+    number_of_rows_to_be_created = Math.ceil(allPatients.length/4)
+
+    for(i=0;i < number_of_rows_to_be_created; i++){
+        // console.log("=========>> "+i+"th time");
+        dm_visit_date_div.append(
+            $('<div/>')
+                .attr('id','patients_block_div_'+i)
+                .attr("style","margin-left:0px;padding-left:0px;margin-top:4px;border:0px dotted green;height:35px;")
+
+        )
+
+        current_patients_block_div = $('#patients_block_div_'+i);
+
+        patient_count = 3
+        patient_start = (i == 0 ? 0 : i*4)
+        patient_end = (i == 0 ? 3 : (i*4+4)-1)
+
+        for(j=patient_start;j <= patient_end;j++){
+            current_patient = allPatients[j];
+
+            if(current_patient){
+                current_patient_id = current_patient.patient_id
+
+                current_patients_block_div.append(
+                    $('<div/>')
+                        .attr('id','individual_patient_block_div_'+j+"_"+current_patient.village_name+"_patient_id_"+current_patient_id)
+                        .attr('class','individual_patient_block_divs')
+                        .attr("style","margin-left:5px;padding-left:15px;margin-top:4px;border:1px dotted red;float:left;width:250px;height:30px;v-align:middle;padding-top:15px;")
+                        .attr('align',"left")
+                        .append(
+                            '<input type="checkbox" id="patient_checkbox_' + current_patient_id + '"name="' + current_patient_id + '" style="margin-right:10px;">'
+                        ).append(
+                            $('<span/>')
+                                .text(current_patient.patient_name)
+                        )
+                )
+            }
+
+        }
+
+    }
+
+//            dm_visit_date_div.append($('<div/>')
+//                .attr("id","dm_visit_date_0")
+//                .attr("align","center")
+//                .attr("style","margin-left:0px;padding-left:0px;margin-top:4px;border:0px dotted red;height:auto;")
+//                .append(
+//                    $('<span/>')
+//                        .text("Select New Visit")
+//                )
+//            );
+
+}
+
+// $('#individual_patient_block_divs').on('click', function (event) {
+//     alert("I am getting triggered");
+// })
+
