@@ -1,1 +1,1 @@
-release: bundle exec pg:reset
+release: pg:reset
