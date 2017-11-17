@@ -1,1 +1,1 @@
-release: bundle exec rake pg:reset
+release: bundle exec pg:reset
