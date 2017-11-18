@@ -1,7 +1,7 @@
 {
   "name": "cdms-sssmh",
   "scripts": {
-    "postdeploy": "bundle exec rake db:seed"
+    "postdeploy": "rake db:seed"
   },
   "env": {
     "LANG": {
