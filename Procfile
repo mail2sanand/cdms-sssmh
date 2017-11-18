@@ -1,3 +1,2 @@
-release: bundle exec db:migrate
-release: bundle exec db:seed
-release: heroku pg:info
+release: bundle exec rake db:migrate
+release: bundle exec rake assets:precompile
