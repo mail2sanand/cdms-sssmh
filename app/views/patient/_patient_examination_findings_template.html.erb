@@ -11,7 +11,7 @@
     <%all_examinations.each do|each_examination|%>
         <div id="examination_header" style="height:4vh;width:100%;" align="left">
           <div style="margin-left:14px;padding-left:70px;margin-top:5px;float:left;width:22%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;"><%=each_examination.name%></div>
-          <div style="margin-left:20px;padding-left:130px;margin-top:5px;float:left;width:46%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
+          <div style="margin-left:20px;padding-left:130px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
 
             <%case each_examination.parameter_length%>
               <%when "small"%>
