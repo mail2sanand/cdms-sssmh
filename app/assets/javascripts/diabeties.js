@@ -23,7 +23,7 @@
     }
 
     function resetDMDetailsNewVisitData() {
-        $('#dm_details_for_patient_div [id^="span_dm_details_"]').each(function (index,eachElement) {
+        $('#dm_details_for_patient_div_parent [id^="span_dm_details_"]').each(function (index,eachElement) {
             // console.log($(eachElement)[0]);
             $(eachElement).html("-");
         })
@@ -47,14 +47,21 @@
 
     function loadEditDMDetailsTemplate() {
         // Hide all the Input Elements
-        $('#dm_details_for_patient_div [id^="input_dm_details_"]').show();
-        $('#dm_details_for_patient_div [id^="span_dm_details_"]').hide();
+        $('#dm_details_for_patient_div_parent [id^="input_dm_details_"]').show();
+        $('#dm_details_for_patient_div_parent [id^="span_dm_details_"]').hide();
     }
 
 
-    function loadNonEditDMDetailsTemplate(patientDMDetails) {
-        $('#dm_details_for_patient_div [id^="input_dm_details_"]').hide();
-        $('#dm_details_for_patient_div [id^="span_dm_details_"]').show();
+    function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
+        $('#dm_details_for_patient_div_parent [id^="input_dm_details_"]').hide();
+        $('#dm_details_for_patient_div_parent [id^="span_dm_details_"]').show();
+
+        patientDMDetails = patientDMAllDetails.examination
+        patientGeneralDetail = patientDMAllDetails.general
+        console.log(patientGeneralDetail);
+
+        $('#span_dm_details_dm_number').html(patientGeneralDetail.ailment_detail_value);
+        $('#input_dm_details_dm_number').val(patientGeneralDetail.ailment_detail_value);
 
         if(patientDMDetails.length != 0){
             var visit_date_div_id = 1;
@@ -70,7 +77,6 @@
             }
 
             var total_width = seperate_dm_details_div_width + extra_width;
-            // console.log(total_width);
 
             $(seperate_dm_details_div).css("width",total_width+"%");
 

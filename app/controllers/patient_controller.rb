@@ -54,7 +54,13 @@ class PatientController < ApplicationController
     patientHabitDetails = PatientHabit.joins(:habit).where(:patient_id => patientId).select("patient_habits.*, habits.code")
     patientExaminationFindingDetails = ExaminationDetail.joins(:examination).where(:patient_id => patientId).select("examination_details.*, examinations.code")
     patientInvestigationDetails = InvestigationDetail.joins(:visit).where(:patient_id => patientId).select("investigation_details.investigation_details, visits.visited_on")
-    patientDMDetails = ExaminationDetail.joins(:visit).where(:patient_id => patientId).select("examination_details.examination_details, visits.visited_on")
+    patientDMDetails = Hash.new
+    patientDMDetails[:examination] = ExaminationDetail.joins(:visit).where(:patient_id => patientId).select("examination_details.examination_details, visits.visited_on")
+    patientDMDetails[:general] = PatientAilmentDetail.find_by(
+      :patient_id => patientId,
+      :ailment_id => Ailment.find_by(:name => "Diabeties").id,
+      :ailment_detail_name => "DM ID"
+    )
 
     patientDetailJson = patientDetail.as_json.merge({
         "photo": patientDetail.photo.url,
@@ -161,6 +167,13 @@ class PatientController < ApplicationController
 
   def generate_data_for_patient_report(patient_id)
     report_details = Hash.new
+
+    report_details[:dm_details] = PatientAilmentDetail.find_by(
+      :patient_id => patient_id,
+      :ailment_id => Ailment.find_by(:name => "Diabeties").id,
+      :ailment_detail_name => "DM ID"
+    )
+
     report_details[:pgd] = Patient.joins(:village).where(:id => patient_id).select("patients.*,villages.name as village_name")
     patient_cmc_details = ComorbidCondition.joins(:ailment).where("patient_id = #{patient_id} and code in ('diabeties','hypertension','cardiac_ailment','cva')").select("code,comorbid_condition_details")
     # binding.pry

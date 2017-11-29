@@ -1,0 +1,2 @@
+class PatientAilmentDetail < ApplicationRecord
+end
