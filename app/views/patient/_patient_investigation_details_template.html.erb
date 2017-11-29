@@ -22,7 +22,7 @@
         var visit_date_div = $('#date_row_div');
         visit_date_div.append($('<div/>')
             .attr("id","investigation_visit_date_0")
-            .attr("style","margin-left:20px;padding-left:10px;margin-top:4px;border:0px dotted red;height:auto;")
+            .attr("style","margin-left:20px;padding-left:10px;margin-right:30px;margin-top:4px;border:0px dotted red;height:auto;")
             .append(
                 $('<span/>')
                     .text("Select New Visit")
@@ -42,19 +42,20 @@
     <div id="header_date_block" style="height: 8vh;border: 0px solid darkviolet;border-bottom:1px solid darkviolet">
 
       <div id="header_block" style="height:5vh;border:0px solid yellow;">
-        <div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;border-right:0px solid green;height:5vh;">
-          <div style="border-bottom:1px solid green;height: 3vh;"><b>Investigation</b></div>
 
-          <!--<div style="margin-left:0px;border:0px dotted green;height:2vh;margin-top:5px;">-->
-            <!--<b>Date Of Visit</b>-->
-          <!--</div>-->
-        </div>
+        <!--<div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;border-right:0px solid green;height:5vh;">-->
+          <!--<div style="border-bottom:1px solid green;height: 3vh;"><b>Investigation</b></div>-->
 
-        <div id="investigation_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width: 63%;border-right:0px solid green;height:4.1vh;">
+          <!--&lt;!&ndash;<div style="margin-left:0px;border:0px dotted green;height:2vh;margin-top:5px;">&ndash;&gt;-->
+            <!--&lt;!&ndash;<b>Date Of Visit</b>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</div>-->
+
+        <div align="right" id="investigation_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width:95%;border-right:0px solid green;height:4.1vh;">
           <!--<div id="investigation_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
           <div id="new_visit_calendar" style="width:100%;height:4.1vh;border:0px solid green;border-bottom:1px solid green;" >
             <!--<input type="hidden" name="investigation_details[patient_visit]" value="0">-->
-            <div style="margin-left:20px;width:65%;float:left;height:auto;border:0px solid green;">
+            <div style="margin-left:20px;width:75%;float:left;height:auto;border:0px solid green;">
               <select id="patient_visits_select_id" onchange="changeVisitOption(this.value,'investigation');">
                 <option value="-1" selected>Select a Visit</option>
                 <option value="0">New Visit</option>
