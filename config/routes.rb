@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     post 'create_patient', to: 'patient#create'
     post 'edit_patient', to:'patient#edit'
 
-    get 'get_all_patients_for_search', to:'patient#get_all_patients_for_search'
+    get 'get_all_patients_for_search/:for_village', to:'patient#get_all_patients_for_search'
 
     get 'get_patient_detail/:id', to:'patient#get_patient_detail'
 

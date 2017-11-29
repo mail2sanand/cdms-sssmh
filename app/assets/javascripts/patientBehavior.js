@@ -32,9 +32,9 @@ function loadHabits() {
     simpleComboLoad("/get_all_habits_for_combo.json",$('#habits_option_id'),false);
 }
 
-function loadPatientsForSearch(loadPatientsDiv){
+function loadPatientsForSearch(loadPatientsDiv,village){
     $.ajax({
-        url:'/get_all_patients_for_search.json',
+        url:'/get_all_patients_for_reports/'+village+'.json',
         method:"GET",
         success:function (allPatients) {
             loadPatientsDiv.empty();
@@ -42,6 +42,17 @@ function loadPatientsForSearch(loadPatientsDiv){
         }
     })
 }
+
+// function loadPatientsForSearch(loadPatientsDiv,village){
+//     $.ajax({
+//         url:'/get_all_patients_for_search/'+village+'.json',
+//         method:"GET",
+//         success:function (allPatients) {
+//             loadPatientsDiv.empty();
+//             initialPopulatePatients(loadPatientsDiv,allPatients);
+//         }
+//     })
+// }
 
 function initialPopulatePatients(loadPatientsDiv,allPatients){
     $.each(allPatients,function(index,eachPatient){
@@ -52,14 +63,24 @@ function initialPopulatePatients(loadPatientsDiv,allPatients){
 }
 
 function createPatientSearchNode(patientDetail){
-    var eachPatientDivId = 'patSearch_'+patientDetail.name+'_'+patientDetail.id+'_'+patientDetail.village_id;
-    var eachPatientName = firstWordCap(patientDetail.name);
+    var eachPatientDivId = 'patSearch_'+patientDetail.patient_name+'_'+patientDetail.patient_id+'_'+patientDetail.village_id;
+    var eachPatientName = firstWordCap(patientDetail.patient_name);
     var eachPatientGender = patientDetail.gender ? "M " : "F ";
     var eachPatientAge = patientDetail.age;
     var eachPatientDisplayText = eachPatientName+' ('+ eachPatientGender+'/ '+eachPatientAge+')';
-    var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.id+");'> > "+eachPatientDisplayText+"</div>";
+    var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.patient_id+");'> > "+eachPatientDisplayText+"</div>";
     return eachPatientBlock;
 }
+
+// function createPatientSearchNode(patientDetail){
+//     var eachPatientDivId = 'patSearch_'+patientDetail.name+'_'+patientDetail.id+'_'+patientDetail.village_id;
+//     var eachPatientName = firstWordCap(patientDetail.name);
+//     var eachPatientGender = patientDetail.gender ? "M " : "F ";
+//     var eachPatientAge = patientDetail.age;
+//     var eachPatientDisplayText = eachPatientName+' ('+ eachPatientGender+'/ '+eachPatientAge+')';
+//     var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.id+");'> > "+eachPatientDisplayText+"</div>";
+//     return eachPatientBlock;
+// }
 
 function loadPatientDetails(patientId) {
     $.ajax({
@@ -260,7 +281,7 @@ function firstWordCap(stringToConvert){
                     }
 
                     showDialogueForPatientPage(successMessageTitle,successMessage);
-                    loadPatientsForSearch($('#patients_list_block_div'));
+                    loadPatientsForSearch($('#patients_list_block_div'),$('#report_select_id').val());
                 },
                 error:function (data) {
                     console.log(data);

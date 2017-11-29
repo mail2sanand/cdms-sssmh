@@ -40,7 +40,16 @@ class PatientController < ApplicationController
   end
 
   def get_all_patients_for_search
-    @patientsForSearch = Patient.all.select(:id,:name,:gender,:age,:village_id)
+    for_village = params[:for_village]
+
+    @patientsForSearch
+
+    if(for_village == "all_villages")
+      @patientsForSearch = Patient.all.select(:id,:name,:gender,:age,:village_id)
+    else
+      @patientsForSearch = Patient.all.select(:id,:name,:gender,:age,:village_id)
+    end
+
 
     respond_to do |format|
       format.html

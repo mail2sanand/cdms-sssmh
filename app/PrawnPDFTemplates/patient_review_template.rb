@@ -206,16 +206,13 @@ class PatientReviewTemplate < Prawn::Document
   end
 
   def header(dm_details)
-    # t = make_table([
-    #    ["<u>MONTHLY REVIEW REPORT</u>","this is the second row"]
-    # ]),:cell_style => { :inline_format => true }
-    #
-    # t.draw
+
+    dm_number = (dm_details ? dm_details.ailment_detail_value : "<u>Prawn::Text::NBSP*33</u>")
 
     data = ([
        [
            {:content => "<u>MONTHLY REVIEW REPORT</u>", :colspan => 3, :align => :center,:padding => 0, :borders => [:bottom],:border_width => 0},
-           {:content => "<u>DM : #{dm_details.ailment_detail_value}</u>", :align => :left,:padding => [0,10,0,0], :borders => [:bottom],:border_width => 0}
+           {:content => "<u>DM : #{dm_number}</u>", :align => :left,:padding => [0,10,0,0], :borders => [:bottom],:border_width => 0}
            # {:content => "<u>DM : #{Prawn::Text::NBSP*33}</u>", :align => :left,:padding => [0,10,0,0], :borders => [:bottom],:border_width => 0}
        ]
     ])

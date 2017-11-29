@@ -23,7 +23,9 @@ class ReportsController < ApplicationController
                   WHEN v.parent_village_id != 0
                       THEN (SELECT name FROM villages WHERE id=v.parent_village_id)
                   ELSE v.name
-              END village_name
+              END village_name,
+              p.age,
+              p.gender
               FROM patients p
                   JOIN villages v ON v.id = p.village_id
     "
