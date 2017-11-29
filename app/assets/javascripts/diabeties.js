@@ -60,8 +60,10 @@
         patientGeneralDetail = patientDMAllDetails.general
         console.log(patientGeneralDetail);
 
-        $('#span_dm_details_dm_number').html(patientGeneralDetail.ailment_detail_value);
-        $('#input_dm_details_dm_number').val(patientGeneralDetail.ailment_detail_value);
+        if(patientGeneralDetail) {
+            $('#span_dm_details_dm_number').html(patientGeneralDetail.ailment_detail_value);
+            $('#input_dm_details_dm_number').val(patientGeneralDetail.ailment_detail_value);
+        }
 
         if(patientDMDetails.length != 0){
             var visit_date_div_id = 1;
