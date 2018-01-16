@@ -242,10 +242,12 @@ class PatientController < ApplicationController
 
     patient_cmc_details_hash = {}
     patient_cmc_details.each do |each_patient_cmc_detail|
-      patient_cmc_details_hash[each_patient_cmc_detail.code] = each_patient_cmc_detail.comorbid_condition_details
+      puts "======>> #{each_patient_cmc_detail.comorbid_condition_details.inspect}"
+      patient_cmc_details_hash[each_patient_cmc_detail.code] =
+          each_patient_cmc_detail.comorbid_condition_details
     end
 
-    if(patient_cmc_details_hash.empty?)
+    # if(patient_cmc_details_hash.empty?)
       report_details[:history][:cmc][:ailment_identified_from] = ""
       report_details[:history][:cmc][:ailment_type] = ""
       report_details[:history][:cmc][:under_sssmh_care_from] = ""
@@ -254,40 +256,45 @@ class PatientController < ApplicationController
       report_details[:history][:cmc][:cmc_cad] = ""
       report_details[:history][:cmc][:cmc_cva] = ""
       report_details[:history][:cmc][:cmc_others] = ""
-    else
+
+    # else
       # For Diabetes
       diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabeties"])
       report_details[:history][:cmc][:ailment_identified_from] = diabetes_details_json["suffering_since"]
       report_details[:history][:cmc][:ailment_type] = diabetes_details_json["ailment_type"]
       report_details[:history][:cmc][:under_sssmh_care_from] = report_details[:dm_details]["sssmh_care_from"]
 
-      cmc_htn = JSON.parse(patient_cmc_details_hash["hypertension"])["suffering_since"]
-      report_details[:history][:cmc][:cmc_htn] = (cmc_htn == "0" ? "" : cmc_htn)
+      if(patient_cmc_details_hash["hypertension"])
+        cmc_htn = JSON.parse(patient_cmc_details_hash["hypertension"])["suffering_since"]
+        report_details[:history][:cmc][:cmc_htn] = (cmc_htn == "0" ? "" : cmc_htn)
+      end
 
+      if(patient_cmc_details_hash["hyper_lipidemia"])
+        cmc_hyper_lipidemia = JSON.parse(patient_cmc_details_hash["hyper_lipidemia"])["suffering_since"]
+        report_details[:history][:cmc][:cmc_hyper_lipidemia] = (cmc_hyper_lipidemia == "0" ? "" : cmc_hyper_lipidemia)
+      end
 
-      cmc_hyper_lipidemia = JSON.parse(patient_cmc_details_hash["hyper_lipidemia"])["suffering_since"]
-      report_details[:history][:cmc][:cmc_hyper_lipidemia] = (cmc_hyper_lipidemia == "0" ? "" : cmc_hyper_lipidemia)
+      if(patient_cmc_details_hash["cardiac_ailment"])
+        cardiac_ailment = JSON.parse(patient_cmc_details_hash["cardiac_ailment"])["suffering_since"]
+        report_details[:history][:cmc][:cmc_cad] = (cardiac_ailment == "0" ? "" : cardiac_ailment)
+      end
 
-
-      cardiac_ailment = JSON.parse(patient_cmc_details_hash["cardiac_ailment"])["suffering_since"]
-      report_details[:history][:cmc][:cmc_cad] = (cardiac_ailment == "0" ? "" : cardiac_ailment)
-
-
-      cmc_cva = JSON.parse(patient_cmc_details_hash["cva"])["suffering_since"]
-      report_details[:history][:cmc][:cmc_cva] = (cmc_cva == "0" ? "" : cmc_cva)
-
+      if(patient_cmc_details_hash["cva"])
+        cmc_cva = JSON.parse(patient_cmc_details_hash["cva"])["suffering_since"]
+        report_details[:history][:cmc][:cmc_cva] = (cmc_cva == "0" ? "" : cmc_cva)
+      end
 
       cmc_others = ""
-      cmc_thyroid = JSON.parse(patient_cmc_details_hash["thyroid"])["suffering_since"]
-      cmc_asthma = JSON.parse(patient_cmc_details_hash["asthma"])["suffering_since"]
-      cmc_epilepsy = JSON.parse(patient_cmc_details_hash["epilepsy"])["suffering_since"]
+      cmc_thyroid = patient_cmc_details_hash["thyroid"] ? JSON.parse(patient_cmc_details_hash["thyroid"])["suffering_since"] : ""
+      cmc_asthma = patient_cmc_details_hash["asthma"] ? JSON.parse(patient_cmc_details_hash["asthma"])["suffering_since"] : ""
+      cmc_epilepsy = patient_cmc_details_hash["epilepsy"] ? JSON.parse(patient_cmc_details_hash["epilepsy"])["suffering_since"] : ""
 
       cmc_others = "#{cmc_others}#{Prawn::Text::NBSP*3}Thy : #{cmc_thyroid}" if cmc_thyroid != "0"
       cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Asth : #{cmc_asthma}" if cmc_asthma != "0"
       cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Epi : #{cmc_epilepsy}" if cmc_epilepsy != "0"
 
       report_details[:history][:cmc][:cmc_others] = cmc_others
-    end
+    # end
 
     puts "report_details[:history][:cmc] :#{report_details[:history][:cmc]}"
 
