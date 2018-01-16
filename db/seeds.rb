@@ -40,25 +40,26 @@ Department.create([
 ms_dept = Department.find_by(:name=>"MS")
 
 Ailment.create([
-    {:code=>"diabeties",:name=>"Diabeties",:desc=>"Diabeties",:department_id=>ms_dept.id},
+    {:code=>"diabeties",:name=>"Diabeties",:desc=>"Diabeties",:department_id=>ms_dept.id, :botanical_name => "Diabetes Mellitus"},
     {:code=>"hypertension",:name=>"Hypertension",:desc=>"Hypertension",:department_id=>ms_dept.id},
     {:code=>"cardiac_ailment",:name=>"Cardiac Ailments",:desc=>"Cardiac Ailments",:department_id=>ms_dept.id},
     {:code=>"epilepsy",:name=>"Epilepsy",:desc=>"Epilepsy",:department_id=>ms_dept.id},
     {:code=>"asthma",:name=>"Asthama",:desc=>"Asthama",:department_id=>ms_dept.id},
     {:code=>"thyroid",:name=>"Thyroid",:desc=>"Thyroid",:department_id=>ms_dept.id},
-    {:code=>"gtcs",:name=>"GTCS",:desc=>"GTCS",:department_id=>ms_dept.id},
-    {:code=>"cva",:name=>"CVA",:desc=>"CVA",:department_id=>ms_dept.id},
-    {:code=>"combined_disease",:name=>"Combined Disease",:desc=>"Combined Disease",:department_id=>ms_dept.id},
-    {:code=>"all_diseases",:name=>"All Diseases",:desc=>"All Diseases",:department_id=>ms_dept.id}
+    {:code=>"hyper_lipidemia",:name=>"Hyper Lipidemia",:desc=>"Hyper Lipidemia",:department_id=>ms_dept.id},
+    {:code=>"cva",:name=>"CVA",:desc=>"CVA",:department_id=>ms_dept.id}
+    # {:code=>"gtcs",:name=>"GTCS",:desc=>"GTCS",:department_id=>ms_dept.id},
+    # ,{:code=>"combined_disease",:name=>"Combined Disease",:desc=>"Combined Disease",:department_id=>ms_dept.id},
+    # {:code=>"all_diseases",:name=>"All Diseases",:desc=>"All Diseases",:department_id=>ms_dept.id}
 ])
 
 dm = Ailment.find_by name: "Diabeties"
 htm = Ailment.find_by name: "Hypertension"
 Ailment.create([
     {:code=>"diabeties_type_1",:name=>"Diabeties Type 1", :desc=>"Diabeties Type 1",:parent_ailment_id=>dm.id},
-    {:code=>"diabeties_type_2",:name=>"Diabeties Type 2", :desc=>"Diabeties Type 2",:parent_ailment_id=>dm.id},
-    {:code=>"htn_type_1",:name=>"Hypertension Type 1", :desc=>"Hypertension Type 1",:parent_ailment_id=>htm.id},
-    {:code=>"htn_type_2",:name=>"Hypertension Type 2", :desc=>"Hypertension Type 2",:parent_ailment_id=>htm.id}
+    {:code=>"diabeties_type_2",:name=>"Diabeties Type 2", :desc=>"Diabeties Type 2",:parent_ailment_id=>dm.id}
+    # {:code=>"htn_type_1",:name=>"Hypertension Type 1", :desc=>"Hypertension Type 1",:parent_ailment_id=>htm.id},
+    # {:code=>"htn_type_2",:name=>"Hypertension Type 2", :desc=>"Hypertension Type 2",:parent_ailment_id=>htm.id}
 ])
 
 Habit.create([
@@ -66,8 +67,9 @@ Habit.create([
     {:code=>"alcohol",:name=>"Alcohol"},
     {:code=>"tobacco_chewing",:name=>"Tobacco Chewing"},
     {:code=>"non_veg_food",:name=>"Non-Veg Food"},
-    {:code=>"left_style",:name=>"Left Style"},
-    {:code=>"prayer_meditation",:name=>"Prayer / Meditation"},
+    # {:code=>"life_style",:name=>"Life Style"},
+    {:code=>"prayer",:name=>"Prayer"},
+    {:code=>"meditation",:name=>"Meditation"},
     {:code=>"excercise",:name=>"Exercise"},
     {:code=>"diet",:name=>"Diet"}
 ])
@@ -76,19 +78,19 @@ Examination.create([
     {:code=>"height",:name=>"Height",:units=>"Ft.",:parameter_length=>"small",:ailments_supported=>[0]},
     {:code=>"weight",:name=>"Weight",:units=>"Kgs",:parameter_length=>"small",:ailments_supported=>[0,dm.id]},
     {:code=>"bmi",:name=>"BMI",:parameter_length=>"small",:ailments_supported=>[0]},
+    {:code=>"waist_circumference",:name=>"Waist Circumference",:ailments_supported=>[0]},
     {:code=>"pulse",:name=>"Pulse",:units=>"/min",:parameter_length=>"small",:ailments_supported=>[0,dm.id]},
     {:code=>"peripheral pulses",:name=>"Peripheral Pulses",:ailments_supported=>[0]},
+    {:code=>"bp",:name=>"B.P",:units=>"mm/Hg",:parameter_length=>"small",:ailments_supported=>[0,1]},
     {:code=>"cvs",:name=>"CVS",:ailments_supported=>[0]},
     {:code=>"respiratory",:name=>"Respiratory",:ailments_supported=>[0]},
-    {:code=>"waist_circumference",:name=>"Waist Circumference",:ailments_supported=>[0]},
-    {:code=>"bp",:name=>"B.P",:units=>"mm/Hg",:parameter_length=>"small",:ailments_supported=>[0,1]},
     {:code=>"foot_examination",:name=>"Foot Examination",:ailments_supported=>[0]},
+    {:code=>"others",:name=>"Others",:ailments_supported=>[0]},
     {:code=>"hypoglycemic_attacks",:name=>"Hypoglycemic Attacks",:ailments_supported=>[dm.id]},
     {:code=>"infective_focus",:name=>"Infective Focus",:ailments_supported=>[dm.id]},
     {:code=>"fbs",:name=>"FBS",:units=>"mg/dl",:parameter_length=>"small",:ailments_supported=>[dm.id]},
     {:code=>"ppbs",:name=>"PPBS",:units=>"mg/dl",:parameter_length=>"small",:ailments_supported=>[dm.id]},
-    {:code=>"rbs",:name=>"RBS",:units=>"mg/dl",:parameter_length=>"small",:ailments_supported=>[dm.id]},
-    {:code=>"others",:name=>"Others",:ailments_supported=>[0]}
+    {:code=>"rbs",:name=>"RBS",:units=>"mg/dl",:parameter_length=>"small",:ailments_supported=>[dm.id]}
 ])
 
 Investigation.create([
@@ -103,7 +105,11 @@ Investigation.create([
     {:name=>"2D-Echo",:code=>"2d_echo"},
     {:name=>"TMT",:code=>"tmt"},
     {:name=>"Other",:code=>"Other"},
-    {:name=>"Retinal Examination",:code=>"retinal_exam"}
+    {:name=>"Retinal Examination",:code=>"retinal_exam"},
+    {:name=>"eGFR",:code=>"egfr"},
+    {:name=>"Urine : Protein/Crt Ratio",:code=>"urine_protein_crt_ratio"},
+    {:name=>"HbA1C",:code=>"hba1c"},
+    {:name=>"Chronic Complications",:code=>"chronic_complication",:parameter_length=>"textarea"},
 ])
 
 

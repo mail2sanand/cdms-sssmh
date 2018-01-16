@@ -25,6 +25,7 @@ module CdmsHealthPortal
 
     # For Loading all the js and css files for jsGrid Functioality
     config.assets.paths << Rails.root.join("app","assets","jsGrid")
+    config.assets.paths << Rails.root.join("app","assets","wysiwyg")
     config.assets.paths << Rails.root.join("app","assets","jquery-ui-1.11.4")
 
     config.assets.paths << Rails.root.join("patientPhotos")

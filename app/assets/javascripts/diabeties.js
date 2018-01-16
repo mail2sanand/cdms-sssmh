@@ -56,13 +56,15 @@
         $('#dm_details_for_patient_div_parent [id^="input_dm_details_"]').hide();
         $('#dm_details_for_patient_div_parent [id^="span_dm_details_"]').show();
 
-        patientDMDetails = patientDMAllDetails.examination
-        patientGeneralDetail = patientDMAllDetails.general
-        console.log(patientGeneralDetail);
+        patientDMDetails = patientDMAllDetails.examination;
+        patientGeneralDetail = (patientDMAllDetails.general ? patientDMAllDetails.general.patient_ailment_details : null);
 
         if(patientGeneralDetail) {
-            $('#span_dm_details_dm_number').html(patientGeneralDetail.ailment_detail_value);
-            $('#input_dm_details_dm_number').val(patientGeneralDetail.ailment_detail_value);
+            $('#span_dm_details_dm_number').html(patientGeneralDetail.dm_no);
+            $('#input_dm_details_dm_number').val(patientGeneralDetail.dm_no);
+
+            $('#span_dm_details_sssmh_care_from').html(patientGeneralDetail.sssmh_care_from);
+            $('#input_dm_details_sssmh_care_from').val(patientGeneralDetail.sssmh_care_from);
         }
 
         if(patientDMDetails.length != 0){

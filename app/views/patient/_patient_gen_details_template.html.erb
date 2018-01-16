@@ -1,4 +1,22 @@
-<div id="patient_gen_details_left_div" style="height:35vh;padding-left:5px;">
+<% content_for :scripts do %>
+    <script>
+
+      $(function() {
+        $("#input_pgd_dateOfBirth").datepicker(
+            {
+              changeMonth: true,
+              changeYear: true,
+              yearRange: "-100:+0",
+              dateFormat: "yy-mm-dd"
+            }
+        );
+
+      });
+
+    </script>
+<% end %>
+
+<div id="patient_gen_details_left_div" style="height:40vh;padding-left:5px;">
 
   <div class="patients_details_general" style="height:20px;">
     <div style="height:22px;float;" class="patient_details_label">
@@ -15,13 +33,32 @@
 
   <div class="patients_details_general" style="height:20px;">
     <div style="height:22px;float;" class="patient_details_label">
-      Date Of Birth
+      Relation Name
     </div>
     <div style="height:22px;" class="patient_details_colon">
       :
     </div>
     <div style="height:30px;" class="patient_details_input">
-      <input id="input_pgd_age" type="text" placeholder="MMM-YYYY" name="pgd[age]"/>
+      <input id="input_pgd_relationName" type="text" placeholder="Patient's Relation Name" name="pgd[relationName]"/>
+      <span id="span_pgd_relationName">Patient's Relation Name</span>
+    </div>
+  </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Age
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+
+      <!--<div id="input_pgd_age_calendar_div" style="display:none;border:0px solid green;height:auto;float:left;margin-left:2px;" align="left">-->
+        <!--<i class="fa fa-calendar" id="pgd_age_visit_calendar_icon" title="Select Date of Visit"></i>-->
+        <!--<input size="1" type="text" id="age_datepicker" style="visibility:hidden;">-->
+      <!--</div>-->
+
+      <input type="text" id="input_pgd_dateOfBirth" name="pgd[dateOfBirth]">
       <span id="span_pgd_age">Age Of the Patient</span>
     </div>
   </div>
@@ -35,11 +72,17 @@
     </div>
     <div style="height:35px;" class="patient_details_input" align="left">
       <div class="sssmh_combo slate" style="height:20px;">
-        <select id="input_pgd_gender" name="pgd[gender]" style="margin-left: 12px;">
-          <option value="1" checked>Male</option>
-          <option value="2">Female</option>
-        </select>
-        <span id="span_pgd_gender">Gender (M / F)</span>
+
+        <div style="height: auto;">
+          <select id="input_pgd_gender" name="pgd[gender]" style="margin-left: 0px;">
+            <option value="1" checked>Male</option>
+            <option value="2">Female</option>
+          </select>
+        </div>
+
+        <div style="padding-top: 5px;height: auto;">
+          <span id="span_pgd_gender">Gender (M / F)</span>
+        </div>
       </div>
       <!--<input type="text" placeholder="Name Of The Patient"  name="gender"/>-->
     </div>
@@ -53,7 +96,7 @@
       :
     </div>
     <div style="height:30px;padding-top:2px;" class="patient_details_input" align="left">
-      <input type="checkbox" id="input_pgd_alive" name="pgd[alive]" checked="true" style="display:none;">
+      <input type="checkbox" id="input_pgd_alive" name="pgd[alive]" checked="true" style="display:none;margin-left: 0px;">
       <span id="span_pgd_alive">Alive</span>
     </div>
   </div>
@@ -94,16 +137,19 @@
     </div>
     <div style="height:35px;vertical-align: middle;padding-top: 3px;" class="patient_details_input" align="left">
       <div class="sssmh_combo slate" style="height:20px;">
-        <select id="input_pgd_village_id" name="pgd[village_id]" style="margin-left: 12px;">
+        <select id="input_pgd_village_id" name="pgd[village_id]" style="margin-left: 0px;">
           <option value="0">Choose a Village </option>
         </select>
-        <span id="span_pgd_village_id">Village Name</span>
+        <div style="padding-top: 5px;height: auto;">
+          <span id="span_pgd_village_id">Village Name</span>
+        </div>
       </div>
     </div>
   </div>
 
 </div>
 <div id="patient_gen_details_right_div" style="height:35vh;">
+
   <div class="patients_details_general" style="height:20px;">
     <div style="height:22px;float;" class="patient_details_label">
       CD No.
@@ -116,6 +162,20 @@
       <span id="span_pgd_cdno">CD Number</span>
     </div>
   </div>
+
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;float;" class="patient_details_label">
+      Ref. No.
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:30px;" class="patient_details_input">
+      <input id="input_pgd_bmNo" type="text" placeholder="BM Number" name="pgd[bmNo]"/>
+      <span id="span_pgd_bmNo">BM Number</span>
+    </div>
+  </div>
+
   <div class="patients_details_general" style="height:20px;">
     <div style="height:22px;float;" class="patient_details_label">
       SSSMHMS Id. No.
@@ -155,8 +215,9 @@
       <input id="input_pgd_photo" type="file" placeholder="Select Photo ... " style="padding-left:19px;" name="pgd[photo]"/>
       <!--</label>-->
       <span id="span_pgd_photo">
-              <img id="span_pgd_photo_src" src="/assets/no_photo_available.jpg" width="130px;" height="160px;">
-            </span>
+        <img id="span_pgd_photo_src" src="/assets/no_photo_available.jpg" width="130px;" height="160px;">
+      </span>
+
     </div>
   </div>
 

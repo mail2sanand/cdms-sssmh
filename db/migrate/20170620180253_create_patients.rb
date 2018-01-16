@@ -9,14 +9,17 @@ class CreatePatients < ActiveRecord::Migration[5.1]
       t.string :cdno
       t.string :sssmhIdNo
       t.string :aadharNo
+      t.string :bmNo
+      t.string :relationName
 
-      t.integer :dateOfBirth
+      t.date :dateOfBirth
       t.string :annualIncome
 
       t.integer :alive
 
       t.references :village, foreign_key: true
       # t.references :ailment, foreign_key: true
+      # t.attachment :photo
 
       t.timestamps
     end

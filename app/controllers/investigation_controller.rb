@@ -18,7 +18,6 @@ class InvestigationController < ApplicationController
     elsif patientVisit.empty?
       # We will have to error that there is no Visit Selected.
     else
-      puts "patientVisit isn't a number and is a Date"
       newVisit = Visit.find_or_create_by({
         :patient_id => patient.id,
         :visited_on => patientVisit,
@@ -58,8 +57,12 @@ class InvestigationController < ApplicationController
 
     patientInvestigationDetail =
         InvestigationDetail.joins(:visit)
-            .where("investigation_details.patient_id=#{patientId} and visited_on='#{parsedDate}'").first.investigation_details
+            .where("investigation_details.patient_id=#{patientId} and visited_on='#{parsedDate}'")
+            .order("visited_on desc")
+            .first.investigation_details
 
+    puts "====================>> \n #{patientInvestigationDetail.inspect}"
+    puts "<< ==================="
 
     respond_to do |format|
       format.html

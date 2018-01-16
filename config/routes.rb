@@ -26,8 +26,10 @@ Rails.application.routes.draw do
   # Reports
 
     get 'reports', to:'reports#index'
-    get 'print_patient_details/:id', to: 'patient#print_patient_details'
-    get 'print_village_review_report/:patient_ids/:village_id', to: 'reports#print_village_review_report'
+    get 'print_patient_details/:id/:print/:ailment', to: 'patient#print_patient_details'
+    get 'print_village_report/:patient_ids/:village_id/:print/:ailment_id',
+        to: 'reports#print_village_report'
+
     get 'get_all_patients_for_reports/:village_id', to:'reports#get_all_patients_for_reports'
 
   # END of Reports

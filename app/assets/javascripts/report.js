@@ -35,13 +35,13 @@ function selectAllNonePatients(select_all_none) {
 
 function unSelectAllPatients() {
     $('[id^="patient_checkbox_"]').each(function () {
-        $(this).attr("checked",false);
+        $(this).prop("checked",false);
     })
 }
 
 function selectAllPatients() {
     $('[id^="patient_checkbox_"]').each(function () {
-        $(this).attr("checked",true);
+        $(this).prop("checked",true);
     })
 }
 
@@ -56,13 +56,19 @@ function individualpatientDivClick(element) {
     var patient_id = clicked_patient.split("patient_id_")[1];
 
     var clicked_patient_checkbox = $("#patient_checkbox_"+patient_id);
-    clicked_patient_checkbox.attr("checked",!clicked_patient_checkbox.attr("checked"));
+    clicked_patient_checkbox.prop("checked",!clicked_patient_checkbox.prop("checked"));
+    if(
+        (clicked_patient_checkbox.prop("checked") === undefined || !clicked_patient_checkbox.prop("checked"))
+        && $('#select_all_none').prop("checked")
+    ){
+        $('#select_all_none').prop("checked",false);
+    }
 }
 
-function printSelectedPatients() {
+function getSelectedPatients() {
     var selectedPatientsIds = "";
     $('[id^="patient_checkbox_"]').each(function () {
-        if($(this).attr("checked")){
+        if($(this).prop("checked")){
             var selected_patient_checkbox = this.id;
             var selected_patient_id = selected_patient_checkbox.split("patient_checkbox_")[1];
             selectedPatientsIds = selectedPatientsIds + selected_patient_id + "_";
@@ -73,8 +79,15 @@ function printSelectedPatients() {
 
     selectedPatientsIds = selectedPatientsIds.replace(/_(\s+)?$/,'');
 
+    return selectedPatientsIds;
+}
+
+function printReportsDetailsPage(report_type) {
+    var all_selected_patients = getSelectedPatients();
+    var selected_ailment = $('#ailment_combo_for_reports').val();
+
     // AJAX request to Print the selected Patients
-    window.open('/print_village_review_report/'+selectedPatientsIds+'/'+village_id, '_blank')
+    window.open('/print_village_report/'+all_selected_patients+'/'+village_id+'/'+report_type+'/'+selected_ailment, '_blank')
 }
 
 function showAndHideAllPatients(show_village) {
@@ -149,6 +162,16 @@ function display_patients_function(allPatients) {
 //            );
 
 }
+
+function loadAilmentsForRreports(){
+    simpleComboLoad("/get_all_ailments_for_combo.json",
+        $('#ailment_combo_for_reports'),false,[function (comboResultArray) {
+            $('#ailment_combo_for_reports').val(1);
+        }]
+    );
+}
+
+
 
 // $('#individual_patient_block_divs').on('click', function (event) {
 //     alert("I am getting triggered");

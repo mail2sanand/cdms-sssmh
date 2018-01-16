@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171129193010) do
+ActiveRecord::Schema.define(version: 20180103201537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20171129193010) do
   create_table "ailments", force: :cascade do |t|
     t.string "name"
     t.string "desc"
+    t.string "botanical_name"
     t.integer "parent_ailment_id"
     t.string "code"
     t.bigint "department_id"
@@ -35,7 +36,7 @@ ActiveRecord::Schema.define(version: 20171129193010) do
   create_table "comorbid_conditions", force: :cascade do |t|
     t.bigint "sub_ailment_id"
     t.bigint "patient_id"
-    t.string "comorbid_condition_details"
+    t.json "comorbid_condition_details"
     t.integer "identified_on_visit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -112,6 +113,7 @@ ActiveRecord::Schema.define(version: 20171129193010) do
     t.bigint "ailment_id"
     t.string "ailment_detail_name"
     t.string "ailment_detail_value"
+    t.jsonb "patient_ailment_details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ailment_id"], name: "index_patient_ailment_details_on_ailment_id"
@@ -132,6 +134,16 @@ ActiveRecord::Schema.define(version: 20171129193010) do
     t.index ["visit_id"], name: "index_patient_habits_on_visit_id"
   end
 
+  create_table "patient_histories", force: :cascade do |t|
+    t.bigint "ailment_id"
+    t.bigint "patient_id"
+    t.jsonb "patient_history_details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ailment_id"], name: "index_patient_histories_on_ailment_id"
+    t.index ["patient_id"], name: "index_patient_histories_on_patient_id"
+  end
+
   create_table "patients", force: :cascade do |t|
     t.string "name"
     t.integer "age"
@@ -140,7 +152,9 @@ ActiveRecord::Schema.define(version: 20171129193010) do
     t.string "cdno"
     t.string "sssmhIdNo"
     t.string "aadharNo"
-    t.integer "dateOfBirth"
+    t.string "bmNo"
+    t.string "relationName"
+    t.date "dateOfBirth"
     t.string "annualIncome"
     t.integer "alive"
     t.bigint "village_id"

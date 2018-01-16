@@ -1,4 +1,29 @@
+<% content_for :scripts do %>
+    <script>
+
+      function calculate_year(element) {
+          var element_value = element.value;
+          var element_id = element.id;
+          var d = new Date();
+          var n = d.getFullYear();
+          return n-element_value;
+      }
+
+      function calculate_and_select_year(element) {
+          var year_to_be_selected = calculate_year(element);
+          $('#'+(element.id.split('__')[0])+"__years_select").val(year_to_be_selected);
+      }
+
+      function calculate_and_display_year(element) {
+          var year_to_be_selected = calculate_year(element);
+          $('#'+(element.id.split('__')[0])+"__suffering_since_years").val(year_to_be_selected);
+      }
+
+    </script>
+<% end %>
+
 <%comorbid_conditions = get_comorbid_conditions_from_helper%>
+<%last_100_years = get_last_100_years%>
 
 <div id="co_morbid_condition_details_for_patient_div" style="height:45vh;border:1px solid green;width:90%;">
 
@@ -7,13 +32,40 @@
     <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px solid green;height:2vh;"><b>Comment</b></div>
   </div>
 
-  <div class="ailment_mid_divs" id="comorbid_condition_details_div" style="height:42vh;overflow-y:auto;border:0px solid red;width:100%">
+  <div class="ailment_mid_divs" id="comorbid_condition_details_div"
+       style="height:42vh;overflow-y:auto;border:0px solid red;width:100%">
     <%comorbid_conditions.each do|each_comorbid_condition|%>
+        <%next if each_comorbid_condition.parent_ailment_id%>
+
         <div id="co_morbid_condition_header" style="height:4vh;width:100%;">
           <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;"><%=each_comorbid_condition.name%></div>
           <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
-            <input style="display:none;" type="text" size="30" id="input_cmc_<%=each_comorbid_condition.code%>" name="cmc[<%=each_comorbid_condition.id%>_<%=each_comorbid_condition.code%>]" />
-            <span id="span_cmc_<%=each_comorbid_condition.code%>"> - </span>
+            <!--In case of Sub-Ailments -->
+
+            <span id="input_cmc_<%=each_comorbid_condition.code%>__subailment_combo">
+
+              <%sub_ailments = comorbid_conditions.where(:parent_ailment_id => each_comorbid_condition.id)%>
+              <%if(sub_ailments.length > 0)%>
+                  <select id="input_cmc_<%=each_comorbid_condition.code%>_sub_ailment_select" name="cmc[<%=each_comorbid_condition.id%>[ailment_type]]">
+                    <%sub_ailments.each do|each_sub_ailment|%>
+                        <option value="<%=each_sub_ailment.name%>"><%=each_sub_ailment.name%></option>
+                    <%end%>
+                  </select>
+              <%end%>
+
+              <select id="input_cmc_<%=each_comorbid_condition.code%>__years_select" name="cmc[<%=each_comorbid_condition.id%>[suffering_since]]" onchange="calculate_and_display_year(this);">
+                <option value="0">Suffering Since</option>
+                <%last_100_years.each do|each_year|%>
+                    <option value="<%=each_year%>"><%=each_year%></option>
+                <%end%>
+              </select>
+              <input style="display:none;" type="text" size="5" id="input_cmc_<%=each_comorbid_condition.code%>__suffering_since_years" name="" onblur="calculate_and_select_year(this);"/>
+
+
+              <input style="display:none;" type="text" size="20" id="input_cmc_<%=each_comorbid_condition.code%>__details" name="cmc[<%=each_comorbid_condition.id%>[details]]" />
+            </span>
+
+            <span id="span_cmc_<%=each_comorbid_condition.code%>__display_detail"> - </span>
           </div>
         </div>
     <%end%>

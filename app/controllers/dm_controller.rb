@@ -5,15 +5,21 @@ class DmController < ApplicationController
 
     patientVisit = dm_details.delete("visit")
     dm_no = dm_details.delete("dm_number")
+    sssmh_care_from = dm_details.delete("sssmh_care_from")
+
+    puts " ========>>>>> sssmh_care_from : #{sssmh_care_from}"
 
     # Create a record for the Patient Diabeties Number
     patient_ailment_detail = PatientAilmentDetail.find_or_create_by({
        :patient_id => patient.id,
        :ailment_id => Ailment.find_by(:name => "Diabeties").id,
-       :ailment_detail_name => "DM ID",
+       # :ailment_detail_name => "DM ID",
     })
 
-    patient_ailment_detail.update(:ailment_detail_value => dm_no)
+    patient_ailment_detail.update(:patient_ailment_details => {
+        "dm_no" => dm_no,
+        "sssmh_care_from" => sssmh_care_from
+    })
 
     puts "=========>>> dm_details : #{dm_details.inspect}"
     puts "==============>>>>>>>>>>>>>>> patientVisit : #{patientVisit}"

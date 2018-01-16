@@ -28,6 +28,12 @@
 
             $(seperate_investigation_details_div).css("width",total_width+"%");
 
+            var all_investigations_value_json = $.parseJSON($('#all_investigations_value').val());
+            var all_investigations_hash = {};
+            $.each(all_investigations_value_json, function (i,obj) {
+                all_investigations_hash[obj.code] = obj.parameter_length;
+            })
+
             patientInvestigationDetails.forEach(function (eachPatientInvestigationDetail) {
                 // console.log(eachPatientInvestigationDetail.visited_on);
 
@@ -51,7 +57,7 @@
                 $("#investigation_history_"+visit_date_div_id).append(
                     $('<div/>')
                         .attr("id","visit_date_"+visit_date_div_id)
-                        .attr("style","height: 2.5vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
+                        .attr("style","height: 2.5vh;margin-top: 4px;margin-bottom: 0px;font-weight:bold;border-bottom: 1px dotted green;")
                         .attr("align","center")
                         .append(
                             $('<span/>')
@@ -59,17 +65,17 @@
                         )
                 );
 
+                var div_height = '4.5';
                 $.each(investigationDetails,function(key){
                     var code = key;
+                    div_height = (all_investigations_hash[key] == "textarea" ? "12" : div_height);
                     var code_value = investigationDetails[key];
 
-                    // $('#no_examination_detail_'+code).hide();
-                    // $('#examination_header_'+code).append(
                     $("#investigation_history_"+visit_date_div_id).append(
                         $('<div/>')
                             .attr("id","history_visit_"+visit_date_div_id+"_"+code)
                             .attr("align","center")
-                            .attr("style","margin-left:0px;padding-left:0px;width:180px;margin-top:0px;border-bottom:1px dotted green;height:4.5vh;")
+                            .attr("style","margin-left:0px;padding-left:0px;width:180px;margin-top:0px;border-bottom:1px dotted green;height:"+div_height+"vh;")
                             .addClass("patient_visited_on_div")
                             .append(
                                 $('<div/>')
@@ -78,7 +84,7 @@
                                     .attr("style","margin-left: 0px;margin-top: 5px;border-right: 0px solid green;border: 0px dotted green;height: 3vh;")
                                     .append(
                                         $('<span/>')
-                                            .text(code_value)
+                                            .html(code_value)
                                     )
                             )
                     )

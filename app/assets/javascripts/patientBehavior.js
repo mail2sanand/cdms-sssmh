@@ -32,7 +32,11 @@ function loadHabits() {
     simpleComboLoad("/get_all_habits_for_combo.json",$('#habits_option_id'),false);
 }
 
-function loadPatientsForSearch(loadPatientsDiv,village){
+function loadPatientsForSearch(loadPatientsDiv,village) {
+    if (village == null){
+        village = "all_villages"
+    }
+
     $.ajax({
         url:'/get_all_patients_for_reports/'+village+'.json',
         method:"GET",
@@ -110,6 +114,7 @@ function firstWordCap(stringToConvert){
         loadNonEditEmptyPGDTemplate();
         loadNonEditEmptyCMCTemplate();
         loadNonEditEmptyHabitsTemplate();
+        loadNonEditEmptyHistoryTemplate();
         loadNonEditEmptyExaminationFindingsTemplate();
 
     }
@@ -127,6 +132,15 @@ function firstWordCap(stringToConvert){
         // Hide all the Input Elements and show all the Span Elements
         $('#patient_gen_details_main_div [id^="input_habits_"]').hide();
         $('#patient_gen_details_main_div [id^="span_habits_"]').each(function (index, eachSpanElement) {
+            $(eachSpanElement).html('-');
+            $(eachSpanElement).show();
+        })
+    }
+
+    function loadNonEditEmptyHistoryTemplate() {
+        // Hide all the Input Elements and show all the Span Elements
+        $('#patient_gen_details_main_div [id^="input_history_"]').hide();
+        $('#patient_gen_details_main_div [id^="span_history_"]').each(function (index, eachSpanElement) {
             $(eachSpanElement).html('-');
             $(eachSpanElement).show();
         })
@@ -184,6 +198,7 @@ function firstWordCap(stringToConvert){
             loadEditEmptyPGDTemplate();
             loadEditCMCTemplate();
             loadEditHabitsTemplate();
+            loadEditHistoryTemplate();
             loadEditExaminationFindingsTemplate();
 
             $('#patient_detail_options').hide();
@@ -199,6 +214,12 @@ function firstWordCap(stringToConvert){
             // Hide all the Input Elements
             $('#patient_gen_details_main_div [id^="input_habits_"]').show();
             $('#patient_gen_details_main_div [id^="span_habits_"]').hide();
+        }
+
+        function loadEditHistoryTemplate() {
+            // Hide all the Input Elements
+            $('#patient_gen_details_main_div [id^="input_history_"]').show();
+            $('#patient_gen_details_main_div [id^="span_history_"]').hide();
         }
 
         function loadEditExaminationFindingsTemplate() {
@@ -305,9 +326,11 @@ function firstWordCap(stringToConvert){
         $('#operation_mode').val("nonEdit");
 
         //Change the Sub-Header Text to New Patient Registration
-        $('#patient_detail_info').text("Details of Patient : "+patientDetails.name);
+        $('#patient_detail_info').text("Details of Patient : "+patientDetails.pgd.name);
 
         pgd = patientDetails.pgd
+        console.log(pgd);
+
         patientId = pgd.id;
         loadNonEditPatientPGDTemplate(pgd);
 
@@ -321,6 +344,12 @@ function firstWordCap(stringToConvert){
             loadNonEditEmptyHabitsTemplate();
         }else{
             loadNonEditHabitsTemplate(patientDetails.habits);
+        }
+
+        if(patientDetails.other_history.length == 0){
+            loadNonEditEmptyHistoryTemplate();
+        }else{
+            loadNonEditHistoryTemplate($.parseJSON(patientDetails.other_history));
         }
 
         if(patientDetails.examinationDetails.length == 0){
@@ -364,7 +393,8 @@ function firstWordCap(stringToConvert){
         $('#patient_gen_details_main_div [id^="input_cmc_"]').hide();
         $('#patient_gen_details_main_div [id^="span_cmc_"]').show();
 
-        populateInputsAndSpans(patientCMCDetails,'input_cmc_','span_cmc_',true,"comorbid_condition_details");
+        // populateInputsAndSpans(patientCMCDetails,'input_cmc_','span_cmc_',true,"comorbid_condition_details");
+        populateInputsAndSpans(patientCMCDetails,'input_cmc_','span_cmc_',false,"comorbid_condition_details");
     }
 
 
@@ -373,6 +403,14 @@ function firstWordCap(stringToConvert){
         $('#patient_gen_details_main_div [id^="span_habits_"]').show();
 
         populateInputsAndSpans(patientHabitsDetails,'input_habits_','span_habits_',true,"comment");
+    }
+
+    function loadNonEditHistoryTemplate(patientHistoryDetails) {
+        $('#patient_gen_details_main_div [id^="input_history_"]').hide();
+        $('#patient_gen_details_main_div [id^="span_history_"]').show();
+
+        // populateInputsAndSpans(patientHistoryDetails,'input_history_','span_history_','iterate_hash',"");
+        populateInputsAndSpans(patientHistoryDetails,'input_history_','span_history_',false,"");
     }
 
     function loadNonEditExaminationFindingsTemplate(patientExaminationFindings) {
@@ -426,6 +464,7 @@ function firstWordCap(stringToConvert){
         loadEditPatientPGDTemplate();
         loadEditCMCTemplate();
         loadEditHabitsTemplate();
+        loadEditHistoryTemplate();
         loadEditExaminationFindingsTemplate();
         loadEditInvestigationDetailsTemplate();
         loadEditDMDetailsTemplate();
@@ -468,8 +507,9 @@ function firstWordCap(stringToConvert){
     function populateInputsAndSpans(patientDetails,input_key,span_key,iterate_with_code,code_value_parameter) {
 
         // Load all the details of the Patient into the respective Spans
+        console.log("input_key : "+input_key+"patientDetails : "+patientDetails);
         $.each(patientDetails,function (eachpatientDetailKey,eachpatientDetailValue) {
-            // console.log("Key : "+eachpatientDetailKey+"===> "+eachpatientDetailValue);
+            console.log("Key : "+eachpatientDetailKey+"===> "+eachpatientDetailValue);
             var eachpatientDetailInputElement;
             var eachpatientDetailSpanElement;
             var eachpatientDetailValueAttribute;
@@ -479,9 +519,15 @@ function firstWordCap(stringToConvert){
                 eachpatientDetailSpanElement = $('#'+span_key+eachpatientDetailValue.code);
 
                 eachpatientDetailValueAttribute = eachpatientDetailValue[code_value_parameter];
+            // }else if(iterate_with_code == "iterate_hash"){
+            //
             }else{
+                console.log("==>"+span_key+eachpatientDetailKey+"==>"+eachpatientDetailValue);
                 eachpatientDetailInputElement = $('#'+input_key+eachpatientDetailKey);
                 eachpatientDetailSpanElement = $('#'+span_key+eachpatientDetailKey);
+
+                // console.log("==>"+span_key+eachpatientDetailKey+"==>"+eachpatientDetailValue);
+
 
                 eachpatientDetailValueAttribute = eachpatientDetailValue;
             }
@@ -500,28 +546,57 @@ function firstWordCap(stringToConvert){
                     checkboxValue = "No";
                     checkedValue = false;
                 }
-                $(eachpatientDetailSpanElement).text(checkboxValue);
+                $(eachpatientDetailSpanElement).html(checkboxValue);
                 $(eachpatientDetailInputElement).attr('checked',checkedValue);
             }else if($(eachpatientDetailInputElement).is("input")){
-                $(eachpatientDetailSpanElement).text(eachpatientDetailValueAttribute);
+                $(eachpatientDetailSpanElement).html(eachpatientDetailValueAttribute);
                 $(eachpatientDetailInputElement).val(eachpatientDetailValueAttribute);
             }else if($(eachpatientDetailInputElement).is("select")){
                 $(eachpatientDetailInputElement).val(eachpatientDetailValueAttribute);
                 var selectedText = $("#"+eachpatientDetailInputElement.attr('id')+" option:selected").text();
-                eachpatientDetailSpanElement.text(selectedText);
+                eachpatientDetailSpanElement.html(selectedText);
             }else if($(eachpatientDetailInputElement).is("textarea")){
-                $(eachpatientDetailSpanElement).text(eachpatientDetailValueAttribute);
+                $(eachpatientDetailSpanElement).html(eachpatientDetailValueAttribute);
                 $(eachpatientDetailInputElement).val(eachpatientDetailValueAttribute);
+            }else{
+                $(eachpatientDetailSpanElement).html(eachpatientDetailValueAttribute);
             }
         });
     }
     // END OF Function to populate .....
 
     // Print Patient Details Page
-    function printPatientDetailsPage() {
+    function printPatientReviewDetailsPage() {
         var patientId = $('#input_pgd_id').val();
-        window.open('/print_patient_details/'+patientId, '_blank')
+        window.open('/print_patient_details/'+patientId+'/review/1', '_blank')
     }
+
+    function printPatientIndexDetailsPage() {
+        var patientId = $('#input_pgd_id').val();
+        window.open('/print_patient_details/'+patientId+'/index/1', '_blank')
+    }
+
+    function showPrintOptions(printElement) {
+        $(printElement).append($('<div/>')
+            .attr("id","custom_icons_for_print")
+            .attr("align","center")
+            .attr("style","cursor:default;z-index:20;position:absolute;background-color:#e9ecf3;height:4vh;width:55px;border:1px solid grey;margin:0px;padding:4px;")
+            .html(
+                "<div id='review_print' style='float: left;margin:0px;padding:0px;' class='custom_icons_print' id='custom_icons_R'>" +
+                    "<img src='/assets/review_print.png' class='print_icons_class' border='0' onclick='printPatientReviewDetailsPage();'>"+
+                "</div>" +
+                "<div id='index_print' style='float: right;margin:0px;padding:0px;' class='custom_icons_print' id='custom_icons_I'>" +
+                    "<img src='/assets/index_print.png' class='print_icons_class' border='0' onclick='printPatientIndexDetailsPage();'>"+
+                "</div>"
+            )
+        );
+    }
+
+    function review_print(){
+        alert("dsdssdsdsds");
+    }
+
+
     //
 
     // Delete Patient

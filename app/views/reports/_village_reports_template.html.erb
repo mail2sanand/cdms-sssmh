@@ -20,6 +20,7 @@
         $(document).ready(function(){
             loadVillagesForReportsPage();
             load_and_display_patients_function("all_villages");
+            loadAilmentsForRreports();
         })
         
         function loadVillagesForReportsPage() {
@@ -44,8 +45,24 @@
         </div>
 
       <div id="buttons_div" style="float:right">
-        <i class="fa fa-list-alt" style="font-size: 20px;margin-right: 20px;cursor: pointer;" title="Print Review Report" onclick="printSelectedPatients()"></i>
+
+        <div style='float: right;margin-right:10px;padding:0px;'>
+          <select id="ailment_combo_for_reports" style="">
+            <option value="0">Select An Ailment</option>
+          </select>
+        </div>
+
+        <div id='review_print' title="Print Review Sheets for Selected Patients" style='float:left;margin-right:10px;padding:0px;' class='custom_icons_print' id='custom_icons_R'>
+            <img src='/assets/review_print.png' class='print_icons_class' border='0' onclick='printReportsDetailsPage("review");'>
+          </div>
+
+          <div id='index_print' title="Print Index Sheets for Selected Patients" style='float: right;margin-right:10px;padding:0px;' class='custom_icons_print' id='custom_icons_I'>
+            <img src='/assets/index_print.png' class='print_icons_class' border='0' onclick='printReportsDetailsPage("index");'>
+          </div>
+
+        <!--<i class="fa fa-list-alt" style="font-size: 20px;margin-right: 20px;cursor: pointer;" title="Print Review Report" onclick="printSelectedPatients()"></i>-->
       </div>
+
     </div>
 
     <br><br>
@@ -62,7 +79,8 @@
         <input id="patient_search_box" type="text" name="patient_search" size="25" onfocus="$('#patient_search_icon').hide();" onblur="$('#patient_search_icon').show();" placeholder="       Search Patient..."/>
 
         <div align="left" style="margin-top: 10px;margin-left: 5px;">
-          <b>Select All / None :</b> <input type="checkbox" id="select_all_none" onclick="selectAllNonePatients(this.checked);" checked>
+          <b>Select All / None :</b>
+          <input type="checkbox" id="select_all_none" onclick="selectAllNonePatients(this.checked);" checked>
         </div>
 
 

@@ -1,0 +1,58 @@
+<h2>User Log in</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+    <div id="login_fields" align="center" style="width: 50%;border: 0px solid green;padding:0px;">
+
+      <div id="username_block" align="center" class="login_block">
+
+        <div class="login_fields" id="username_text" style="width: 40%;float:left;border: 0px solid red;">
+          Email:
+        </div>
+
+        <div id="username_value" style="width: 50%;float:left;border: 0px solid darkviolet" class="login_input">
+          <input type="email" size="45" name="user[email]"/>
+        </div>
+
+      </div>
+
+      <br>
+      <div id="user_password_block" align="center" class="login_block">
+
+        <div class="login_fields" id="userpassword_text" style="width: 40%;float:left;border: 0px solid red;">
+          Password:
+        </div>
+
+        <div id="username_value" style="width: 50%;float:left;border: 0px solid darkviolet" class="login_input">
+          <input type="password" size="45" name="user[password]" id="user_password" autocomplete="off"/>
+        </div>
+
+      </div>
+
+      <% if devise_mapping.rememberable? -%>
+
+          <div style="height:30px;width: 100%;border: 0px solid darkviolet;margin-top: 10px;" align="right">
+
+            <div id="username_value" style="float:right;border: 0px solid darkviolet">
+              <input type="checkbox" checked name="user[remember_me]" id="user_remember_me" class="login_input_checkbox"/>
+            </div>
+
+            <div class="login_fields_small" id="user_remember_me_text" style="width: 40%;float:right;border: 0px solid red;margin: 4px;">
+              Remember Me:
+            </div>
+
+            <input name="user[remember_me]" type="hidden" value="0">
+
+          </div>
+
+      <% end -%>
+
+      <div style="height:30px;width: 100%;border: 0px solid darkviolet;margin: 10px;" align="center">
+        <input type="submit" class="login_fields" name="commit" value="Log in" data-disable-with="Log in">
+      </div>
+
+    </div>
+
+<% end %>
+
+<%= render "devise/shared/links" %>

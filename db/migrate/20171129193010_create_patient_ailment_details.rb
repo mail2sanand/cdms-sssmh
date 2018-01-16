@@ -5,6 +5,7 @@ class CreatePatientAilmentDetails < ActiveRecord::Migration[5.1]
       t.references :ailment
       t.string :ailment_detail_name
       t.string :ailment_detail_value
+      t.jsonb :patient_ailment_details
 
       t.timestamps
     end

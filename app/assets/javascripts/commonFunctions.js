@@ -1,3 +1,44 @@
+
+function delete_custom_icons_display() {
+    $('#custom_icons_display').remove();
+    $('#custom_icons_for_print').remove();
+}
+
+function display_custom_icons_menu(object_of_insertion,obj,point_of_insertion) {
+    $('#custom_icons_display').remove();
+
+    $(object_of_insertion[0]).prepend($('<div/>')
+        .attr("id","custom_icons_display")
+        .attr("align","center")
+        .attr("style","position:absolute;background-color:#e9ecf3;height:3vh;width:200px;border:1px solid grey;margin:20px 0 0 40px;text-align:left;")
+        .html("" +
+            "<span style='cursor:pointer;' id='custom_icons_uarr'>&uarr;</span> | " +
+            "<span style='cursor:pointer;' id='custom_icons_darr'>&darr;</span> | " +
+            "")
+    );
+
+    $('#custom_icons_display [id^="custom_icons_"]').on('click',function (e) {
+        var obj_val = $(obj).val();
+
+        var selected_icon_id = this.id;
+        var text_to_insert = "&"+selected_icon_id.split("custom_icons_")[1]+";";
+        var modified_text = [obj_val.slice(0, point_of_insertion), text_to_insert, obj_val.slice(point_of_insertion)].join('');
+        $(obj).val(modified_text);
+        delete_custom_icons_display();
+    })
+
+}
+
+function displayFloatingPopup(relativeElement) {
+}
+
+
+
+function insert_html(insert_text,obj,point_of_insertion) {
+    var obj_val = $(obj).val();
+    $(obj).val("sdsdsds");
+}
+
 function simpleComboLoad(urlToLoadCombo,comboElementToLoad,nameAsNameInOption,callbackFunctions){
     $.ajax({
         type:"GET",

@@ -34,6 +34,7 @@
 
 
 <% examinations_for_diabeties = get_examinations_for_ailment("Diabeties") %>
+<%last_100_years = get_last_100_years%>
 
 <!--<div id="dm_details_input_div">-->
 
@@ -41,11 +42,25 @@
 
 <div id="dm_details_for_patient_div_parent">
 
-  <div align="left" style="margin-left: 13px;margin-bottom:6px;height: 3vh;">
+  <div align="left" style="margin-left: 13px;margin-bottom:40px;height: 3vh;">
 
-    <b>DM No.</b> &nbsp; : &nbsp;&nbsp;&nbsp;
-    <input style="display:none;" type="text" id="input_dm_details_dm_number" name="dm_details[dm_number]"/>
-    <span style="padding-left: 0px;" id="span_dm_details_dm_number"> - </span>
+    <div id="dm_number_div" style="margin: 0px;">
+      <b>DM No.</b> &nbsp; : &nbsp;&nbsp;&nbsp;
+      <input style="display:none;" type="text" id="input_dm_details_dm_number" name="dm_details[dm_number]"/>
+      <span style="padding-left: 0px;" id="span_dm_details_dm_number"> - </span>
+
+      <br><br>
+
+      <b>Under SSS Mobile Hospital care from</b> &nbsp; : &nbsp;&nbsp;&nbsp;
+      <select style="display:none;"  id="input_dm_details_sssmh_care_from" name="dm_details[sssmh_care_from]" onchange="">
+        <option value="0">Select</option>
+        <%last_100_years.each do|each_year|%>
+            <option value="<%=each_year%>"><%=each_year%></option>
+        <%end%>
+      </select>
+      <!--<input style="display:none;" type="text" id="input_dm_details_sssmh_care_from" name="dm_details[sssmh_care_from]"/>-->
+      <span style="padding-left: 0px;" id="span_dm_details_sssmh_care_from"> - </span>
+    </div>
 
   </div>
 

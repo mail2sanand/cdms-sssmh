@@ -3,6 +3,7 @@ class CreateAilments < ActiveRecord::Migration[5.1]
     create_table :ailments do |t|
       t.string :name
       t.string :desc
+      t.string :botanical_name
       t.integer :parent_ailment_id
       t.string :code
       t.references :department,foreign_key:true

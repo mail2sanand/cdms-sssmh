@@ -38,7 +38,7 @@ class ReportsController < ApplicationController
               order by p.id asc
     "
 
-    full_query = ""
+    village_id = "all_villages" if !village_id
     if(village_id == "all_villages")
       full_query = query_1 + query_3
     else
@@ -55,37 +55,65 @@ class ReportsController < ApplicationController
     end
   end
 
-  def print_village_review_report
+  def print_village_report
     patient_ids = params[:patient_ids].split("_")
     village_name = params[:village_id]
+    ailment_id = params[:ailment_id]
+    print = params[:print]
     village_name = (village_name == "Select a Village" ? "All Villages" : village_name)
 
     combined_village_pdf = CombinePDF.new
-    puts "combined_village_pdf : #{combined_village_pdf}"
+    villageFilePath = ""
 
-    patient_ids.each do |each_patient|
-      patientFile =
-          @@patientsController.print_patient_details_internal(each_patient)
+    if(params[:print] == "review")
+      # Select only those Patients whose details have been updated a month ago
+      filtered_patients = []
+      filtered_patients_records =
+          Patient.where("id in (#{params[:patient_ids].gsub('_',',')}) and
+        updated_at >= (CURRENT_DATE - INTEGER '31') AND updated_at <= CURRENT_TIMESTAMP")
 
-      combined_village_pdf << CombinePDF.load(patientFile)
+      filtered_patients_records.map{|i| filtered_patients << i.id.to_s} if filtered_patients_records.length > 0
+
+      patient_ids = filtered_patients
+
+      villageFilePath = "ReviewReports"
+    elsif(params[:print] == "index")
+      villageFilePath = "IndexReports"
     end
 
-    villageFilePath = File.join(Rails.root, "public/villageReports/ReviewReports/#{village_name}/")
-    FileUtils.mkdir_p(villageFilePath) unless File.exist?(villageFilePath)
+    puts "patient_ids : #{patient_ids.inspect}"
 
-    villageReviewReportFile =
-        File.join(villageFilePath+"/#{village_name}_#{Time.now.strftime("%d-%m-%Y")}.pdf")
+    if(patient_ids.length > 0)
+      patient_ids.each do |each_patient|
+        patientFile =
+            @@patientsController.print_patient_details_internal(
+                each_patient,print,ailment_id)
 
-    combined_village_pdf.number_pages
-    combined_village_pdf.save villageReviewReportFile
+        combined_village_pdf << CombinePDF.load(patientFile)
+      end
 
-    send_file(
-        villageReviewReportFile,
-        type: "application/pdf",
-        disposition: 'inline'
-    )
-    # pdf.save "#{village_name}_"
+      villageFilePath = File.join(Rails.root, "public/villageReports/#{villageFilePath}/#{village_name}/")
+      FileUtils.mkdir_p(villageFilePath) unless File.exist?(villageFilePath)
 
+      villageReviewReportFile =
+          File.join(villageFilePath+"/#{village_name}_#{Time.now.strftime("%d-%m-%Y")}.pdf")
+
+      # combined_village_pdf.number_pages
+      combined_village_pdf.save villageReviewReportFile
+
+      send_file(
+          villageReviewReportFile,
+          type: "application/pdf",
+          disposition: 'inline'
+      )
+
+    else
+      render "_no_patients"
+      # send_file(
+      #     File.join(Rails.root, "app/assets/images/no_patients.pdf"),
+      #     type: "application/pdf"
+      # )
+    end
 
   end
 
