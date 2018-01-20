@@ -166,7 +166,7 @@ function display_patients_function(allPatients) {
 function loadAilmentsForRreports(){
     simpleComboLoad("/get_all_ailments_for_combo.json",
         $('#ailment_combo_for_reports'),false,[function (comboResultArray) {
-            $('#ailment_combo_for_reports').val(1);
+            // $('#ailment_combo_for_reports').val(9);   // By default Diabeties is Selected.
         }]
     );
 }

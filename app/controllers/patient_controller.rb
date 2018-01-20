@@ -230,8 +230,14 @@ class PatientController < ApplicationController
 
     # Patient General Details
     report_details[:pgd] =
-        Patient.joins(:village).where(:id => patient_id)
-            .select("patients.*,villages.name as village_name, villages.*, patients.name patient_name")
+        Patient.joins("inner join villages v on v.id = patients.village_id").where(:id => patient_id)
+            .select("
+              CASE
+                  WHEN v.parent_village_id != 0
+                      THEN v.name || ' (' || (SELECT name FROM villages WHERE id=v.parent_village_id) || ' )'
+                  ELSE v.name
+              END village_name,patients.name as patient_name, v.*, patients.*
+            ")
 
     # Patient History Details
     report_details[:history] = {}
@@ -259,7 +265,11 @@ class PatientController < ApplicationController
 
     # else
       # For Diabetes
-      diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabeties"])
+      diabetes_details_json = {}
+      if(patient_cmc_details_hash["diabeties"])
+        diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabeties"])
+      end
+
       report_details[:history][:cmc][:ailment_identified_from] = diabetes_details_json["suffering_since"]
       report_details[:history][:cmc][:ailment_type] = diabetes_details_json["ailment_type"]
       report_details[:history][:cmc][:under_sssmh_care_from] = report_details[:dm_details]["sssmh_care_from"]
@@ -323,29 +333,36 @@ class PatientController < ApplicationController
     end
 
     # Patient Examination Finding Details
-    patient_index_examination_findings =
-        ExaminationDetail.joins("inner join examinations e on e.id = examination_details.examination_id")
-            .where(:patient_id => patient_id, :visit_id => 0)
-            .select("examination_details.*,e.code,e.name, e.units")
+    patient_index_examination_findings = "
+      select e.name,tmp.examination_finding,tmp.examination_id,e.units
+        from examinations e
+          left outer join (
+            select examination_id,examination_finding from examination_details ed
+              where patient_id=#{patient_id} and visit_id=0
+          ) tmp on tmp.examination_id = e.id
+        where 0 = ANY(ailments_supported)
+    "
+    patient_index_examination_findings = ActiveRecord::Base.connection.execute(patient_index_examination_findings)
 
     report_details[:examination_findings] = {}
     patient_index_examination_findings.each do |each_patient_index_examination_finding|
-      report_details[:examination_findings][each_patient_index_examination_finding.name] =
-          "#{each_patient_index_examination_finding.examination_finding} #{each_patient_index_examination_finding.units}"
+      puts "each_patient_index_examination_finding :",each_patient_index_examination_finding.inspect
+      report_details[:examination_findings][each_patient_index_examination_finding["name"]] =
+          "#{each_patient_index_examination_finding["examination_finding"]} #{each_patient_index_examination_finding["units"]}"
     end
 
-    puts "====================================\n"
-    puts report_details[:dm_details].inspect
-    puts "----------\n"
-    puts report_details[:pgd].inspect
-    puts "----------\n"
-    puts report_details[:history][:cmc].inspect
-    puts "----------\n"
-    puts report_details[:history][:habits].inspect
-    puts "----------\n"
-    puts report_details[:examination_findings].inspect
-
-    puts "====================================\n"
+    # puts "====================================\n"
+    # puts report_details[:dm_details].inspect
+    # puts "----------\n"
+    # puts report_details[:pgd].inspect
+    # puts "----------\n"
+    # puts report_details[:history][:cmc].inspect
+    # puts "----------\n"
+    # puts report_details[:history][:habits].inspect
+    # puts "----------\n"
+    # puts report_details[:examination_findings].inspect
+    #
+    # puts "====================================\n"
 
     createPatientIndexReport(report_details, patient_id, ailment)
 

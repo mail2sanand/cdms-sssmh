@@ -568,12 +568,12 @@ function firstWordCap(stringToConvert){
     // Print Patient Details Page
     function printPatientReviewDetailsPage() {
         var patientId = $('#input_pgd_id').val();
-        window.open('/print_patient_details/'+patientId+'/review/1', '_blank')
+        window.open('/print_patient_details/'+patientId+'/review/9', '_blank')
     }
 
     function printPatientIndexDetailsPage() {
         var patientId = $('#input_pgd_id').val();
-        window.open('/print_patient_details/'+patientId+'/index/1', '_blank')
+        window.open('/print_patient_details/'+patientId+'/index/9', '_blank')
     }
 
     function showPrintOptions(printElement) {

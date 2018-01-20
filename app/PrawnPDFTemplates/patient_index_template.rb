@@ -64,6 +64,10 @@ class PatientIndexTemplate < Prawn::Document
 
   def patient_examination_details_block(examination_findings,ailment_details)
 
+    if(examination_findings.empty?)
+      # examination_findings =
+    end
+
     # Patient Examination Findings Block
     bounding_box([3,cursor], :width=>580, :height=>125) do
       bounding_box([5,cursor-5], :width=>580) do
@@ -74,6 +78,7 @@ class PatientIndexTemplate < Prawn::Document
 
         # Patient Examination Findings Block
         # bounding_box([10,cursor], :width=>570) do
+        puts "==========================>>>>>>> examination_findings : #{examination_findings.inspect}"
           table get_table_block(examination_findings,
                                 {"cell_height"=>33,"border"=>0}),
                 :cell_style => {
