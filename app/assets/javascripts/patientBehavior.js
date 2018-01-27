@@ -38,7 +38,7 @@ function loadPatientsForSearch(loadPatientsDiv,village) {
     }
 
     $.ajax({
-        url:'/get_all_patients_for_reports/'+village+'.json',
+        url:'/get_all_patients_for_reports/'+village+'/true.json',
         method:"GET",
         success:function (allPatients) {
             loadPatientsDiv.empty();
@@ -349,7 +349,8 @@ function firstWordCap(stringToConvert){
         if(patientDetails.other_history.length == 0){
             loadNonEditEmptyHistoryTemplate();
         }else{
-            loadNonEditHistoryTemplate($.parseJSON(patientDetails.other_history));
+            // loadNonEditHistoryTemplate($.parseJSON(patientDetails.other_history));
+            loadNonEditHistoryTemplate(patientDetails.other_history);
         }
 
         if(patientDetails.examinationDetails.length == 0){

@@ -19,12 +19,30 @@
     <script>
         $(document).ready(function(){
             loadVillagesForReportsPage();
-            load_and_display_patients_function("all_villages");
-            loadAilmentsForRreports();
+            loadNodalVillagesForReportsPage();
+//            load_and_display_patients_function("all_villages");
+//            loadFirstNodalVillage();
+            loadAilmentsForReports();
         })
-        
+
+        var loadFirstNodalVillage = function (comboResultArray) {
+          console.log(comboResultArray);
+        }
+
         function loadVillagesForReportsPage() {
-            simpleComboLoad("/get_all_villages.json",$('#report_select_id'),false);
+            simpleComboLoad("/get_all_sub_villages.json",
+                $('#report_select_id'),false);
+        }
+
+        function loadNodalVillagesForReportsPage() {
+            simpleComboLoad(
+                "/get_all_nodal_villages.json",$('#report_nodal_village_select_id'),false,
+              [function () {
+                  load_and_display_patients_function(
+                      $('#report_nodal_village_select_id').val()
+                  ,true);
+              }]
+            );
         }
         
 
@@ -37,12 +55,19 @@
   <div style="margin-left:30px;" align="left">
 
     <div id="villages_buttons_div">
-        <div id="villages_div" style="float:left">
-          Villages :
+
+      <div id="nodal_villages_div" style="float:left;margin-right: 20px;">
+        Nodal Villages :
+        <select id="report_nodal_village_select_id" onchange="changeNodalVillage(this.value);"></select>
+      </div>
+
+      <div id="villages_div" style="float:left">
+          Sub Villages :
           <select id="report_select_id" onchange="changeVillage(this.value);">
             <option value="-1" selected>Select a Village</option>
           </select>
-        </div>
+      </div>
+
 
       <div id="buttons_div" style="float:right">
 
@@ -74,17 +99,23 @@
         min-height: 60vh;
         font-family: "Open Sans",sans-serif;' align="center">
 
-      <div id="patient_search_div">
+      <div id="patient_search_div" style="overflow: scroll;">
         <i class="fa fa-search" id="patient_search_icon" title="Search Patients"></i>
         <input id="patient_search_box" type="text" name="patient_search" size="25" onfocus="$('#patient_search_icon').hide();" onblur="$('#patient_search_icon').show();" placeholder="       Search Patient..."/>
 
-        <div align="left" style="margin-top: 10px;margin-left: 5px;">
-          <b>Select All / None :</b>
-          <input type="checkbox" id="select_all_none" onclick="selectAllNonePatients(this.checked);" checked>
+        <div id="select_all_block">
+            <div style="margin-top: 10px;margin-left: 5px;float: left">
+              <b>Select All / None :</b>
+              <input type="checkbox" id="select_all_none" onclick="selectAllNonePatients(this.checked);" checked>
+            </div>
+
+            <div id="patients_count" style="margin-top: 10px;float: right"></div>
         </div>
+        <br>
+        <br>
 
 
-        <div id="patients_block_div" style="margin-top:10px;">
+        <div id="patients_block_div" style="overflow: scroll;height: 48vh;">
         </div>
 
       </div>

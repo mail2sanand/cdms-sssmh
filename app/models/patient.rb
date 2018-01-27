@@ -24,4 +24,23 @@ class Patient < ApplicationRecord
   # validates_with AttachmentPresenceValidator, attributes: :photo
   # validates_with AttachmentSizeValidator, attributes: :photo, less_than: 1.megabytes
 
+  def self.nodal_village(patient_id)
+    record = joins("inner join villages v on v.id = patients.village_id").where(:id => patient_id)
+    .select("
+      CASE
+          WHEN v.parent_village_id != 0
+              THEN (SELECT id FROM villages WHERE id=v.parent_village_id)
+          ELSE v.id
+       END village_id
+      ,CASE
+          WHEN v.parent_village_id != 0
+              THEN v.name || ' (' || (SELECT name FROM villages WHERE id=v.parent_village_id) || ' )'
+          ELSE v.name
+      END village_name
+    ")
+
+    record.first
+
+  end
+
 end

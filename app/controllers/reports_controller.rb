@@ -11,6 +11,9 @@ class ReportsController < ApplicationController
 
   def get_all_patients_for_reports
     village_id = params[:village_id]
+    nodal_village = params[:nodal]
+
+    puts "nodal_village : #{nodal_village}"
 
     query_1 = "
           SELECT p.id patient_id,p.name patient_name
@@ -33,6 +36,11 @@ class ReportsController < ApplicationController
     query_2 = "
                    WHERE v.id = #{village_id}
     "
+
+    puts "nodal_village : #{nodal_village} | ",nodal_village
+    if(nodal_village == "true")
+      query_2 = query_2 + " or v.parent_village_id = #{village_id}"
+    end
 
     query_3 = "
               order by p.id asc

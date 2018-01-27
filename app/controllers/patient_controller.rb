@@ -33,7 +33,10 @@ class PatientController < ApplicationController
 
     @@comorbidConditionController.create_comorbid_condition_for_patient(@newPatient,params[:cmc])
     @@habitController.create_habits_for_patient(@newPatient,params[:habits])
-    @@historyController.create_other_history_details(@newPatient,params[:other_history])
+
+    ailment = Ailment.find_by_name('Diabeties').id
+
+    @@historyController.create_other_history_details(@newPatient,params[:other_history],ailment)
     @@examinationFindingsController.create_examination_findings_for_patient(@newPatient,params[:examination_findings])
     # @@investigationDetailsController.
 
@@ -132,8 +135,10 @@ class PatientController < ApplicationController
     # Update the Patient Habits
     @@habitController.update_patient_habits(patientForEditing,params[:habits])
 
+    ailment = Ailment.find_by_name('Diabeties').id
+
     # Update the Patient Other History Details
-    @@historyController.update_other_history_details(patientForEditing,params[:other_history])
+    @@historyController.update_other_history_details(patientForEditing,params[:other_history],ailment)
 
     # Update the Examination Findings
     @@examinationFindingsController.update_examination_findings_for_patient(patientForEditing,params[:examination_findings])
@@ -323,7 +328,8 @@ class PatientController < ApplicationController
     report_details[:history][:other_history_details] = {}
     patient_history = PatientHistory.find_by(:patient_id => patient_id)
     if(patient_history)
-      patient_other_history_details = JSON.parse(patient_history.patient_history_details)
+      # patient_other_history_details = JSON.parse(patient_history.patient_history_details)
+      patient_other_history_details = patient_history.patient_history_details
 
       patient_other_history_details.each do |each_patient_other_history_detail_key,each_patient_other_history_detail_value|
         report_details[:history][:other_history_details][each_patient_other_history_detail_key] = each_patient_other_history_detail_value

@@ -1,8 +1,9 @@
-function load_and_display_patients_function(village_id) {
+function load_and_display_patients_function(village_id,nodal) {
     $.ajax({
-        url:'/get_all_patients_for_reports/'+village_id+'.json/',
+        url:'/get_all_patients_for_reports/'+village_id+'/'+nodal+'.json',
         method:"GET",
         success:function (allPatients) {
+            populateTotalPatients(allPatients.length,nodal);
             display_patients_function(allPatients);
             selectAllPatients();
             attachClickEventToPatients();
@@ -10,14 +11,34 @@ function load_and_display_patients_function(village_id) {
     })
 }
 
+function populateTotalPatients(patients_count,nodal) {
+    var village_name = ";"
+    if(nodal){
+        village_name = $('#report_nodal_village_select_id option:selected').text();
+    }else{
+        village_name = $('#report_select_id option:selected').text();
+    }
+
+    $('#patients_count').html("<b>"+patients_count+"</b> patient(s) in "+ (nodal ? "Nodal " : "") +"Village : <b>" + village_name+"</b>")
+}
+
+
 function changeVillage(selectedVillage) {
     removeAllPatientDivs();
 
     if(selectedVillage == -1){
-        load_and_display_patients_function("all_villages");
+        load_and_display_patients_function("all_villages",false);
     }else{
-        load_and_display_patients_function(selectedVillage);
+        load_and_display_patients_function(selectedVillage,false);
     }
+}
+
+function changeNodalVillage(selectedVillage) {
+    // console.log(selectedVillage);
+
+    removeAllPatientDivs();
+
+    load_and_display_patients_function(selectedVillage,true);
 }
 
 function removeAllPatientDivs() {
@@ -163,7 +184,7 @@ function display_patients_function(allPatients) {
 
 }
 
-function loadAilmentsForRreports(){
+function loadAilmentsForReports(){
     simpleComboLoad("/get_all_ailments_for_combo.json",
         $('#ailment_combo_for_reports'),false,[function (comboResultArray) {
             // $('#ailment_combo_for_reports').val(9);   // By default Diabeties is Selected.

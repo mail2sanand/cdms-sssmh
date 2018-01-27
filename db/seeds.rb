@@ -19,7 +19,7 @@ User.create([
 
 Village.create([
    {:id=>1,:name=>"Cherlopalli",:xcord=>14.571705,:ycord=>78.114152,:displayOrder=>5},
-   {:id=>2,:name=>"Kondakamarala",:xcord=>14.068898,:ycord=>77.958026,:displayOrder=>6},
+   {:id=>2,:name=>"Kondakamarla",:xcord=>14.068898,:ycord=>77.958026,:displayOrder=>6},
    {:id=>3,:name=>"Marala",:xcord=>14.3089655379495,:ycord=>77.9459381103516,:displayOrder=>9},
    {:id=>4,:name=>"Chandrayunpalli",:xcord=>14.200946,:ycord=>77.801907,:displayOrder=>10},
    {:id=>5,:name=>"Veldurthi",:xcord=>14.2810193632547,:ycord=>77.7706718444824,:displayOrder=>11},
@@ -27,7 +27,7 @@ Village.create([
    {:id=>9,:name=>"Byrapuram",:xcord=>14.1342451598417,:ycord=>77.7131652832031,:displayOrder=>3},
    {:id=>10,:name=>"Chowtakuntapalli",:xcord=>14.15039164715,:ycord=>77.9878234863281,:displayOrder=>7},
    {:id=>12,:name=>"Markuntapalli",:xcord=>14.184512,:ycord=>77.714617,:displayOrder=>4},
-   {:id=>13,:name=>"GowniPalli",:displayOrder=>13},
+   {:id=>13,:name=>"Gownipalli",:displayOrder=>13},
    {:id=>14,:name=>"Nidimamidi",:xcord=>14.0507479051766,:ycord=>77.7133369445801,:displayOrder=>2},
    {:id=>15,:name=>"Obulampalli",:xcord=>14.2697068294713,:ycord=>77.6354026794434,:displayOrder=>12},
    {:id=>16,:name=>"Test Village"}

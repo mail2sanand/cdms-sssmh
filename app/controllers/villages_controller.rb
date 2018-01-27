@@ -22,6 +22,24 @@ class VillagesController < ApplicationController
     end
   end
 
+  def get_all_nodal_villages
+    nodal_villages = Village.parent_villages
+
+    respond_to do |format|
+      format.html
+      format.json { render json: nodal_villages}
+    end
+  end
+
+  def get_all_sub_villages
+    sub_villages = Village.sub_villages
+
+    respond_to do |format|
+      format.html
+      format.json { render json: sub_villages}
+    end
+  end
+
   def create
       new_village_hash = {
           :name                   =>params[:name],

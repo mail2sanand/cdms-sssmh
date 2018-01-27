@@ -21,12 +21,18 @@
 
     <script>
       $(document).ready(function () {
-          loadPatientsForSearch($('#patients_list_block_div'),"all_villages");
+//          loadPatientsForSearch($('#patients_list_block_div'),"all_villages");
           loadVillagesForPatientsPage();
       })
 
       function loadVillagesForPatientsPage() {
-          simpleComboLoad("/get_all_villages.json",$('#report_select_id'),false);
+//          simpleComboLoad("/get_all_villages.json",$('#report_select_id'),false);
+          simpleComboLoad(
+              "/get_all_nodal_villages.json",$('#report_select_id'),false,
+              [function () {
+                  loadPatientsForSearch($('#patients_list_block_div'),$('#report_select_id').val())
+              }]
+          )
       }
 
     </script>
@@ -52,8 +58,8 @@
       </div>
 
       <div id="villages_div" style="float:left;margin: 5px 0 0px 15px;">
-        <select id="report_select_id" onchange="loadPatientsForSearch($('#patients_list_block_div'),this.value);">
-          <option value="all_villages" selected>Select a Village</option>
+        <select id="report_select_id"
+                onchange="loadPatientsForSearch($('#patients_list_block_div'),this.value);">
         </select>
       </div>
 

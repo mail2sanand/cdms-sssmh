@@ -30,7 +30,9 @@ Rails.application.routes.draw do
     get 'print_village_report/:patient_ids/:village_id/:print/:ailment_id',
         to: 'reports#print_village_report'
 
-    get 'get_all_patients_for_reports/:village_id', to:'reports#get_all_patients_for_reports'
+    match 'get_all_patients_for_reports/:village_id/:nodal' => 'reports#get_all_patients_for_reports',
+          :via => :get,
+          :defaults => { :nodal => "false" }
 
   # END of Reports
 
@@ -53,6 +55,10 @@ Rails.application.routes.draw do
   # Villages
     resources :villages
     get 'get_all_villages', to: 'villages#get_all_villages'
+    get 'get_all_nodal_villages',to:'villages#get_all_nodal_villages'
+    get 'get_all_sub_villages',to:'villages#get_all_sub_villages'
+
+
     post 'delete_villages', to: 'villages#delete_villages'
     get 'get_parent_villages', to: 'villages#get_parent_villages'
   # END OF Villages
@@ -65,6 +71,8 @@ Rails.application.routes.draw do
     get 'get_investigation_details_visits/:id', to: 'investigation#get_all_patient_investigation_visits'
     get 'get_all_patients_investigation_details/:id/:visit', to: 'investigation#get_all_patients_investigation_details'
     get 'get_all_patients_dm_details/:id/:visit', to: 'dm#get_all_patients_dm_details'
+
+    get 'load_investigation_details', to: 'investigation#load_investigation_details'
 
   # END OF Investigation Details
 

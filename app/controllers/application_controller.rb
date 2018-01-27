@@ -16,4 +16,9 @@ class ApplicationController < ActionController::Base
     Date.today.year - year
   end
 
+  def calculate_year_with_age(age)
+    Date.today.year - age
+  end
+
+
 end
