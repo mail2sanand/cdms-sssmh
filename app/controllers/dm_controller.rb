@@ -9,10 +9,10 @@ class DmController < ApplicationController
 
     puts " ========>>>>> sssmh_care_from : #{sssmh_care_from}"
 
-    # Create a record for the Patient Diabeties Number
+    # Create a record for the Patient Diabetes Number
     patient_ailment_detail = PatientAilmentDetail.find_or_create_by({
        :patient_id => patient.id,
-       :ailment_id => Ailment.find_by(:name => "Diabeties").id,
+       :ailment_id => Ailment.find_by(:name => "Diabetes").id,
        # :ailment_detail_name => "DM ID",
     })
 

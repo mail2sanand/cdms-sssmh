@@ -26,7 +26,7 @@ class AilmentController < ApplicationController
     render "_"+ailment.downcase+"_template", :layout=>false
 
     # case params[:ailment]
-    #   when "Diabeties"
+    #   when "Diabetes"
     #     render :
     # end
   end

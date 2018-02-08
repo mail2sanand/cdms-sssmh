@@ -24,7 +24,7 @@
         })
     }
 
-    // function createDiabetiesTemplate() {
+    // function createDiabetesTemplate() {
     // }
 
 

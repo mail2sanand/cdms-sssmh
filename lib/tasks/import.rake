@@ -116,7 +116,7 @@ namespace :import do
 
     end
 
-    ailment = Ailment.find_by_name('Diabeties').id
+    ailment = Ailment.find_by_name('Diabetes').id
 
     latest_patient_history_array.each do |patient_id,patient_history_detail_hash|
 
@@ -331,7 +331,7 @@ namespace :import do
   task review_data: :environment do
     filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data_original.xlsx"
     review_comorbid_details = {}
-    ailment_id = Ailment.find_by_name("Diabeties").id
+    ailment_id = Ailment.find_by_name("Diabetes").id
 
     xlsx = Roo::Excelx.new(filename)
     sheet_0 = xlsx.sheet(0)
@@ -431,7 +431,7 @@ namespace :import do
           if comorbid_diabteties_type_and_from and comorbid_diabteties_type_and_from.class == String
             if match = comorbid_diabteties_type_and_from.match(/(T1|T2).+(\d+)/)
               diabetes_details = match.captures
-              comorbid_condition_details_for_diabetes["ailment_type"] = "Diabeties Type " + (diabetes_details[0] == "T1" ? "1" : "2")
+              comorbid_condition_details_for_diabetes["ailment_type"] = "Diabetes Type " + (diabetes_details[0] == "T1" ? "1" : "2")
               comorbid_condition_details_for_diabetes["suffering_since"] =
                   calculate_year_with_age(diabetes_details[1])
             end
@@ -498,7 +498,7 @@ namespace :import do
 
   def create_inv_details_records_for_patients(inv_det)
 
-    ailment_id = Ailment.find_by_name("Diabeties").id
+    ailment_id = Ailment.find_by_name("Diabetes").id
 
     # begin
       inv_det.each do |patient_id,each_patient_details|

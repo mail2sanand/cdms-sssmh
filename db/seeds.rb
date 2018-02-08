@@ -139,14 +139,14 @@ Village.create([
 
 
 Department.create([
-    {:name => "MS", :desc => "Medical Specialists. Diabeties, Hyper Tension and Other come under this"},
+    {:name => "MS", :desc => "Medical Specialists. Diabetes, Hyper Tension and Other come under this"},
     {:name => "Opthamology", :desc => "Opthamology"}
 ])
 
 ms_dept = Department.find_by(:name=>"MS")
 
 Ailment.create([
-    {:id=>9,:code=>"diabeties",:name=>"Diabeties",:desc=>"Diabeties",:department_id=>ms_dept.id, :botanical_name => "Diabetes Mellitus"},
+    {:id=>9,:code=>"diabetes",:name=>"Diabetes",:desc=>"Diabetes",:department_id=>ms_dept.id, :botanical_name => "Diabetes Mellitus"},
     {:id=>10,:code=>"hypertension",:name=>"Hypertension",:desc=>"Hypertension",:department_id=>ms_dept.id},
     {:id=>11,:code=>"cardiac_ailment",:name=>"Cardiac Ailments",:desc=>"Cardiac Ailments",:department_id=>ms_dept.id},
     {:id=>12,:code=>"epilepsy",:name=>"Epilepsy",:desc=>"Epilepsy",:department_id=>ms_dept.id},
@@ -159,11 +159,11 @@ Ailment.create([
     # {:code=>"all_diseases",:name=>"All Diseases",:desc=>"All Diseases",:department_id=>ms_dept.id}
 ])
 
-dm = Ailment.find_by name: "Diabeties"
+dm = Ailment.find_by name: "Diabetes"
 htm = Ailment.find_by name: "Hypertension"
 Ailment.create([
-    {:code=>"diabeties_type_1",:name=>"Diabeties Type 1", :desc=>"Diabeties Type 1",:parent_ailment_id=>dm.id},
-    {:code=>"diabeties_type_2",:name=>"Diabeties Type 2", :desc=>"Diabeties Type 2",:parent_ailment_id=>dm.id}
+    {:code=>"diabetes_type_1",:name=>"Diabetes Type 1", :desc=>"Diabetes Type 1",:parent_ailment_id=>dm.id},
+    {:code=>"diabetes_type_2",:name=>"Diabetes Type 2", :desc=>"Diabetes Type 2",:parent_ailment_id=>dm.id}
     # {:code=>"htn_type_1",:name=>"Hypertension Type 1", :desc=>"Hypertension Type 1",:parent_ailment_id=>htm.id},
     # {:code=>"htn_type_2",:name=>"Hypertension Type 2", :desc=>"Hypertension Type 2",:parent_ailment_id=>htm.id}
 ])

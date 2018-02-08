@@ -24,7 +24,7 @@ class InvestigationController < ApplicationController
         :visited_at => patient.village_id
       })
 
-      ailments = Ailment.find_by_name("Diabeties").id
+      ailments = Ailment.find_by_name("Diabetes").id
 
       newVisit.update({:ailments => [ailments]})
 

@@ -9,7 +9,7 @@ function loadVillages(){
 }
 
 var createDefaultTemplates = function (comboResultArray) {
-    var defaultAilmentsToBeLoaded = ["Diabeties"]
+    var defaultAilmentsToBeLoaded = ["Diabetes"]
     $('#ailment_combo_select_id > option').each(function () {
         if(defaultAilmentsToBeLoaded.indexOf(this.text) != -1){
             add_new_ailment(this.value);
@@ -363,7 +363,7 @@ function firstWordCap(stringToConvert){
         loadVisitsComboInAilmentDetailsTemplate(patientId);
         loadNonEditInvestigationDetailsTemplate(patientDetails.investigationDetails);
 
-        // // Load the Visit Details of the Patient in the Diabeties Details Section
+        // // Load the Visit Details of the Patient in the Diabetes Details Section
         loadVisitsComboInDMDetailsTemplate(patientId);
         loadNonEditDMDetailsTemplate(patientDetails.dmDetails);
 

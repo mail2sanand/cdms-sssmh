@@ -33,7 +33,7 @@
 
 
 
-<% examinations_for_diabeties = get_examinations_for_ailment("Diabeties") %>
+<% examinations_for_diabetes = get_examinations_for_ailment("Diabetes") %>
 <%last_100_years = get_last_100_years%>
 
 <!--<div id="dm_details_input_div">-->
@@ -82,7 +82,7 @@
 
           <div id="dm_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width: 63%;border-right:0px solid green;height:4.1vh;">
             <!--<div id="dm_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
-            <div id="diabeties_new_visit_div" style="width:100%;height:4.1vh;border:0px solid green;border-bottom:1px solid green;" >
+            <div id="diabetes_new_visit_div" style="width:100%;height:4.1vh;border:0px solid green;border-bottom:1px solid green;" >
               <!--<input type="hidden" name="dm_details[patient_visit]" value="0">-->
               <div style="margin-left:20px;width:65%;float:left;height:auto;border:0px solid green;">
                 <select id="dm_patient_visits_select_id" onchange="changeVisitOption(this.value,'dm');">
@@ -91,7 +91,7 @@
                 </select>
               </div>
 
-              <div id="diabeties_new_visit_calendar" style="border:0px solid green;height:auto;float:left;margin-left:2px;" align="left">
+              <div id="diabetes_new_visit_calendar" style="border:0px solid green;height:auto;float:left;margin-left:2px;" align="left">
                 <i style="display:none;" class="fa fa-calendar" id="dm_visit_calendar_icon" title="Select Date of Visit"></i>
                 <input size="1" type="text" id="dm_datepicker" style="visibility:hidden;">
               </div>
@@ -109,7 +109,7 @@
 
       <div class="ailment_mid_divs" id="dm_details_div" style="height:auto;overflow-y:auto;border:0px solid red;width:95%">
 
-        <%examinations_for_diabeties.each do|each_dm_parameter|%>
+        <%examinations_for_diabetes.each do|each_dm_parameter|%>
             <div id="examination_header_<%=each_dm_parameter.code%>" style="margin-left:10px;height:4.5vh;width:100%;border-bottom:1px dotted green;" align="left">
 
               <div style="margin-left:0px;margin-top:5px;width:37%;float:left;border-right:0px solid green;border:0px dotted green;height:3vh;">
@@ -171,7 +171,7 @@
     <div id="dm_details_right_block" style="float: left;width: 63%;border: 0px solid red;">
 
       <div style="margin-left:6px;margin-top:12px;/* float:left; */width: 98%;border-right:0px solid green;border-bottom:1px solid green;height:2.9vh;" align="center">
-        <b>History of Diabeties Examination Parameters for this Patient</b>
+        <b>History of Diabetes Examination Parameters for this Patient</b>
       </div>
       <div id="seperate_dm_details_div_block" style="height:auto;width:98%;border: 0px solid darkviolet;overflow-x: auto;">
         <div id="seperate_dm_details_div" style="border: 1px solid green;height:auto;"></div>

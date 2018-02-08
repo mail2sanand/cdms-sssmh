@@ -34,7 +34,7 @@ class PatientController < ApplicationController
     @@comorbidConditionController.create_comorbid_condition_for_patient(@newPatient,params[:cmc])
     @@habitController.create_habits_for_patient(@newPatient,params[:habits])
 
-    ailment = Ailment.find_by_name('Diabeties').id
+    ailment = Ailment.find_by_name('Diabetes').id
 
     @@historyController.create_other_history_details(@newPatient,params[:other_history],ailment)
     @@examinationFindingsController.create_examination_findings_for_patient(@newPatient,params[:examination_findings])
@@ -90,7 +90,7 @@ class PatientController < ApplicationController
 
     patientDMDetails[:general] = PatientAilmentDetail.find_by(
       :patient_id => patientId,
-      :ailment_id => Ailment.find_by(:name => "Diabeties").id,
+      :ailment_id => Ailment.find_by(:name => "Diabetes").id,
       # :ailment_detail_name => "DM ID"
     )
 
@@ -135,7 +135,7 @@ class PatientController < ApplicationController
     # Update the Patient Habits
     @@habitController.update_patient_habits(patientForEditing,params[:habits])
 
-    ailment = Ailment.find_by_name('Diabeties').id
+    ailment = Ailment.find_by_name('Diabetes').id
 
     # Update the Patient Other History Details
     @@historyController.update_other_history_details(patientForEditing,params[:other_history],ailment)
@@ -222,12 +222,12 @@ class PatientController < ApplicationController
     send("generate_index_data_for_patient_report_for_#{ailment_record.name.downcase}",patient_id,ailment)
   end
 
-  def generate_index_data_for_patient_report_for_diabeties(patient_id,ailment)
+  def generate_index_data_for_patient_report_for_diabetes(patient_id,ailment)
 
     report_details = {}
     patient_ailment = PatientAilmentDetail.find_by(
         :patient_id => patient_id,
-        # :ailment_id => Ailment.find_by(:name => "Diabeties").id,
+        # :ailment_id => Ailment.find_by(:name => "Diabetes").id,
         :ailment_id => ailment
     )
 
@@ -271,8 +271,8 @@ class PatientController < ApplicationController
     # else
       # For Diabetes
       diabetes_details_json = {}
-      if(patient_cmc_details_hash["diabeties"])
-        diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabeties"])
+      if(patient_cmc_details_hash["diabetes"])
+        diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabetes"])
       end
 
       report_details[:history][:cmc][:ailment_identified_from] = diabetes_details_json["suffering_since"]
@@ -424,7 +424,7 @@ class PatientController < ApplicationController
 
     # report_details[:dm_details] = PatientAilmentDetail.find_by(
     #   :patient_id => patient_id,
-    #   # :ailment_id => Ailment.find_by(:name => "Diabeties").id,
+    #   # :ailment_id => Ailment.find_by(:name => "Diabetes").id,
     #   :ailment_id => ailment,
     #   # :ailment_detail_name => "DM ID"
     # )
@@ -449,12 +449,12 @@ class PatientController < ApplicationController
             .select("patients.*,villages.name as village_name, villages.*, patients.name patient_name")
 
 
-    patient_cmc_details = ComorbidCondition.joins(:ailment).where("patient_id = #{patient_id} and code in ('diabeties','hypertension','cardiac_ailment','cva')").select("code,comorbid_condition_details")
+    patient_cmc_details = ComorbidCondition.joins(:ailment).where("patient_id = #{patient_id} and code in ('diabetes','hypertension','cardiac_ailment','cva')").select("code,comorbid_condition_details")
     # binding.pry
 
     report_details[:cmc] = Hash.new
     cmc_ailments = {
-        "diabeties" => "dm",
+        "diabetes" => "dm",
         "hypertension" => "htn"
         # "cardiac_ailment" => "cad"
     }
