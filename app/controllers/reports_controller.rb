@@ -28,7 +28,8 @@ class ReportsController < ApplicationController
                   ELSE v.name
               END village_name,
               p.age,
-              p.gender
+              p.gender,
+              p.cdno
               FROM patients p
                   JOIN villages v ON v.id = p.village_id
     "
@@ -43,7 +44,7 @@ class ReportsController < ApplicationController
     end
 
     query_3 = "
-              order by p.id asc
+              order by p.name asc
     "
 
     village_id = "all_villages" if !village_id

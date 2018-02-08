@@ -71,20 +71,11 @@ function createPatientSearchNode(patientDetail){
     var eachPatientName = firstWordCap(patientDetail.patient_name);
     var eachPatientGender = patientDetail.gender ? "M " : "F ";
     var eachPatientAge = patientDetail.age;
-    var eachPatientDisplayText = eachPatientName+' ('+ eachPatientGender+'/ '+eachPatientAge+')';
+    var eachPatientCDNo = patientDetail.cdno;
+    var eachPatientDisplayText = eachPatientName+' ('+ eachPatientCDNo +')';
     var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.patient_id+");'> > "+eachPatientDisplayText+"</div>";
     return eachPatientBlock;
 }
-
-// function createPatientSearchNode(patientDetail){
-//     var eachPatientDivId = 'patSearch_'+patientDetail.name+'_'+patientDetail.id+'_'+patientDetail.village_id;
-//     var eachPatientName = firstWordCap(patientDetail.name);
-//     var eachPatientGender = patientDetail.gender ? "M " : "F ";
-//     var eachPatientAge = patientDetail.age;
-//     var eachPatientDisplayText = eachPatientName+' ('+ eachPatientGender+'/ '+eachPatientAge+')';
-//     var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.id+");'> > "+eachPatientDisplayText+"</div>";
-//     return eachPatientBlock;
-// }
 
 function loadPatientDetails(patientId) {
     $.ajax({
