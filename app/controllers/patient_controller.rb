@@ -493,9 +493,23 @@ class PatientController < ApplicationController
 
     report_details[:cmc][:chronic_complications] = (latest_inv_det ? latest_inv_det["chronic_complication"] : "")
 
+    puts "*****************"
     # Get the Latest Visit's Examination Parameters
-    visit_examinations = ExaminationDetail.joins(:visit).where(:patient_id => patient_id, :examination_id => 0).order("visit_id desc").limit(5)
-    latest_visit_examination = visit_examinations.order("visit_id desc").first
+    visit_examinations = ExaminationDetail.joins(:visit)
+                             .where(:patient_id => patient_id, :examination_id => 0)
+                             .order("visits.visited_on desc").limit(5)
+    puts "*****************"
+
+    # visit_examinations = ExaminationDetail.joins(:visit)
+    #                          .where(:patient_id => patient_id, :examination_id => 0)
+    #                          .order("visit_id desc").limit(5)
+
+    visit_examinations = visit_examinations.to_a
+    puts "&*&*&*&&&*&&**& ===> visit_examinations : #{visit_examinations.inspect}"
+
+    # latest_visit_examination = visit_examinations.order("visit_id desc").first
+    latest_visit_examination = visit_examinations.shift
+    puts "===========>>> latest_visit_examination : #{latest_visit_examination.inspect}, \n #{latest_visit_examination.examination_details["fbs"]}"
 
     index_visit =
         ExaminationDetail
@@ -528,9 +542,9 @@ class PatientController < ApplicationController
 
     bs_examination_details = Array.new
     i=0
-    visit_examinations.order("visit_id desc").each do |each_visit_examination|
-      i = i+1
-      next if i==1
+    visit_examinations.each do |each_visit_examination|
+      # i = i+1
+      # next if i==1
       bs_examination_details_hash = Hash.new
       bs_examination_details_hash[:visit] = each_visit_examination.visit.visited_on.strftime("%d %b %Y")
       bs_examination_details_hash[:fbs] = each_visit_examination.examination_details["fbs"]
@@ -539,6 +553,9 @@ class PatientController < ApplicationController
 
       bs_examination_details << bs_examination_details_hash
     end
+
+    puts "====================>>>>>>> bs_examination_details: #{bs_examination_details.inspect}"
+    puts "==============>> one_month_examination_detail : #{one_month_examination_detail.inspect}"
 
     report_details[:bs_examination_details] = bs_examination_details
 

@@ -286,17 +286,43 @@ class PatientReviewTemplate < Prawn::Document
         :rbs => "",
     }
 
-    last_but_one_visit =
-        bs_examination_details[bs_examination_details.length-2] ? bs_examination_details[bs_examination_details.length-2] : empty_visit
+    puts "last But Four : #{bs_examination_details[bs_examination_details.length-4]}"
+    last_but_one_visit_record = bs_examination_details.shift
+    last_but_one_visit = last_but_one_visit_record ? last_but_one_visit_record : empty_visit
+        # bs_examination_details[bs_examination_details.length-4] ? bs_examination_details[bs_examination_details.length-5] : empty_visit
 
-    last_but_2_visit =
-        bs_examination_details[bs_examination_details.length-3] ? bs_examination_details[bs_examination_details.length-3] : empty_visit
+    puts "last But Three : #{bs_examination_details[bs_examination_details.length-3]}"
+    last_but_2_visit_record = bs_examination_details.shift
+    last_but_2_visit = last_but_2_visit_record ? last_but_2_visit_record : empty_visit
+        # bs_examination_details[bs_examination_details.length-3] ? bs_examination_details[bs_examination_details.length-4] : empty_visit
 
-    last_but_3_visit =
-        bs_examination_details[bs_examination_details.length-4] ? bs_examination_details[bs_examination_details.length-4] : empty_visit
+    puts "last But Two : #{bs_examination_details[bs_examination_details.length-2]}"
+    last_but_3_visit_record = bs_examination_details.shift
+    last_but_3_visit = last_but_3_visit_record ? last_but_3_visit_record : empty_visit
+        # bs_examination_details[bs_examination_details.length-2] ? bs_examination_details[bs_examination_details.length-3] : empty_visit
 
-    last_but_4_visit =
-        bs_examination_details[bs_examination_details.length-5] ? bs_examination_details[bs_examination_details.length-5] : empty_visit
+    puts "last But One : #{bs_examination_details[bs_examination_details.length-1]}"
+    last_but_4_visit_record = bs_examination_details.shift
+    last_but_4_visit = last_but_4_visit_record ? last_but_4_visit_record : empty_visit
+        # bs_examination_details[bs_examination_details.length-1] ? bs_examination_details[bs_examination_details.length-2] : empty_visit
+
+
+
+    # puts "last But One : #{bs_examination_details[bs_examination_details.length-1]}"
+    # last_but_one_visit =
+    #     bs_examination_details[bs_examination_details.length-2] ? bs_examination_details[bs_examination_details.length-2] : empty_visit
+    #
+    # puts "last But Two : #{bs_examination_details[bs_examination_details.length-2]}"
+    # last_but_2_visit =
+    #     bs_examination_details[bs_examination_details.length-3] ? bs_examination_details[bs_examination_details.length-3] : empty_visit
+    #
+    # puts "last But Three : #{bs_examination_details[bs_examination_details.length-3]}"
+    # last_but_3_visit =
+    #     bs_examination_details[bs_examination_details.length-4] ? bs_examination_details[bs_examination_details.length-4] : empty_visit
+    #
+    # puts "last But Four : #{bs_examination_details[bs_examination_details.length-4]}"
+    # last_but_4_visit =
+    #     bs_examination_details[bs_examination_details.length-5] ? bs_examination_details[bs_examination_details.length-5] : empty_visit
 
     patient_four_month_details = ([
       [
