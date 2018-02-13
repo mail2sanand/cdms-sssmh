@@ -409,6 +409,7 @@ function firstWordCap(stringToConvert){
         $('#patient_gen_details_main_div [id^="input_examination_findings_"]').hide();
         $('#patient_gen_details_main_div [id^="span_examination_findings_"]').show();
 
+        console.log("Examination Details in loadNonEditExaminationFindingsTemplate : ======>>");
         populateInputsAndSpans(patientExaminationFindings,'input_examination_findings_','span_examination_findings_',true,"examination_finding");
     }
 
@@ -499,9 +500,9 @@ function firstWordCap(stringToConvert){
     function populateInputsAndSpans(patientDetails,input_key,span_key,iterate_with_code,code_value_parameter) {
 
         // Load all the details of the Patient into the respective Spans
-        console.log("input_key : "+input_key+"patientDetails : "+patientDetails);
+        // console.log("input_key : "+input_key+"patientDetails : "+patientDetails);
         $.each(patientDetails,function (eachpatientDetailKey,eachpatientDetailValue) {
-            console.log("Key : "+eachpatientDetailKey+"===> "+eachpatientDetailValue);
+            // console.log("Key : "+eachpatientDetailKey+"===> "+eachpatientDetailValue);
             var eachpatientDetailInputElement;
             var eachpatientDetailSpanElement;
             var eachpatientDetailValueAttribute;
@@ -527,6 +528,7 @@ function firstWordCap(stringToConvert){
             // console.log(eachpatientDetailInputElement);
             // console.log(eachpatientDetailValueAttribute);
 
+            console.log("Examination Details : ======>>");
             if($(eachpatientDetailInputElement).is("input[type=file]")){
                 var file_element = $('#'+span_key+eachpatientDetailKey+"_src");
                 $(file_element).attr("src",eachpatientDetailValueAttribute);
@@ -548,6 +550,7 @@ function firstWordCap(stringToConvert){
                 var selectedText = $("#"+eachpatientDetailInputElement.attr('id')+" option:selected").text();
                 eachpatientDetailSpanElement.html(selectedText);
             }else if($(eachpatientDetailInputElement).is("textarea")){
+                console.log("eachpatientDetailValueAttribute : TextArea ==> "+eachpatientDetailValueAttribute);
                 $(eachpatientDetailSpanElement).html(eachpatientDetailValueAttribute);
                 $(eachpatientDetailInputElement).val(eachpatientDetailValueAttribute);
             }else{

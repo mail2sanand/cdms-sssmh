@@ -231,7 +231,16 @@ class PatientController < ApplicationController
         :ailment_id => ailment
     )
 
-    report_details[:dm_details] = (patient_ailment ? patient_ailment.patient_ailment_details : {})
+    if(patient_ailment)
+      if patient_ailment.patient_ailment_details
+        report_details[:dm_details] = patient_ailment.patient_ailment_details
+      else
+        report_details[:dm_details] = {}
+      end
+    else
+      report_details[:dm_details] = {}
+    end
+    # report_details[:dm_details] = (patient_ailment ? patient_ailment.patient_ailment_details : {})
 
     # Patient General Details
     report_details[:pgd] =
@@ -434,7 +443,16 @@ class PatientController < ApplicationController
         :ailment_id => ailment
     )
     puts "patient_ailment : #{patient_ailment.inspect}"
-    report_details[:dm_details] = (patient_ailment ? patient_ailment.patient_ailment_details : {})
+    if(patient_ailment)
+      if patient_ailment.patient_ailment_details
+        report_details[:dm_details] = patient_ailment.patient_ailment_details
+      else
+        report_details[:dm_details] = {}
+      end
+    else
+      report_details[:dm_details] = {}
+    end
+    # report_details[:dm_details] = (patient_ailment ? patient_ailment.patient_ailment_details : {})
 
 
     report_details[:ailment_details] = {
@@ -493,23 +511,23 @@ class PatientController < ApplicationController
 
     report_details[:cmc][:chronic_complications] = (latest_inv_det ? latest_inv_det["chronic_complication"] : "")
 
-    puts "*****************"
+    # puts "*****************"
     # Get the Latest Visit's Examination Parameters
     visit_examinations = ExaminationDetail.joins(:visit)
                              .where(:patient_id => patient_id, :examination_id => 0)
                              .order("visits.visited_on desc").limit(5)
-    puts "*****************"
+    # puts "*****************"
 
     # visit_examinations = ExaminationDetail.joins(:visit)
     #                          .where(:patient_id => patient_id, :examination_id => 0)
     #                          .order("visit_id desc").limit(5)
 
     visit_examinations = visit_examinations.to_a
-    puts "&*&*&*&&&*&&**& ===> visit_examinations : #{visit_examinations.inspect}"
+    # puts "&*&*&*&&&*&&**& ===> visit_examinations : #{visit_examinations.inspect}"
 
     # latest_visit_examination = visit_examinations.order("visit_id desc").first
     latest_visit_examination = visit_examinations.shift
-    puts "===========>>> latest_visit_examination : #{latest_visit_examination.inspect}, \n #{latest_visit_examination.examination_details["fbs"]}"
+    # puts "===========>>> latest_visit_examination : #{latest_visit_examination.inspect}, \n #{latest_visit_examination.examination_details["fbs"]}"
 
     index_visit =
         ExaminationDetail

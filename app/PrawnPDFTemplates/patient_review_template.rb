@@ -81,6 +81,7 @@ class PatientReviewTemplate < Prawn::Document
   end
 
   def patient_general_details_block(pgd_array,dm_details)
+    puts "pgd_array : #{pgd_array.inspect}"
     dm_number = dm_details["dm_no"]
     # (dm_details ?  : "")
 
