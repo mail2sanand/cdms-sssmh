@@ -85,8 +85,6 @@
             $(seperate_dm_details_div).css("width",total_width+"%");
 
             patientDMDetails.forEach(function (eachPatientDMDetail) {
-                // console.log(eachPatientDMDetail.visited_on);
-
                 var parsed_visited_date = $.datepicker.parseDate("yy-mm-dd",eachPatientDMDetail.visited_on);
                 var formatted_visit_date =  $.datepicker.formatDate('M d, yy', parsed_visited_date);
 
@@ -98,10 +96,6 @@
                         .attr("align","center")
                         .attr("style","margin-left:20px;padding-left:0px;margin-top:0px;float:left;width:180px;border:1px dotted green;height:auto;")
                         .addClass("patient_visited_on_div")
-                    // .append(
-                    //     $('<span/>')
-                    //         .text(formatted_visit_date)
-                    // )
                 );
 
                 $("#dm_history_"+visit_date_div_id).append(
@@ -118,6 +112,8 @@
                 $.each(dmDetails,function(key){
                     var code = key;
                     var code_value = dmDetails[key];
+                    console.log("code: "+code);
+                    console.log("code_value: "+code_value);
 
                     var code_height = $('#examination_header_'+code).height();
 
@@ -136,8 +132,10 @@
                                     // .attr("align","center")
                                     .attr("style","margin-left: 0px;margin-top: 5px;border-right: 0px solid green;border: 0px dotted green;height: 3vh;")
                                     .append(
+                                        // $('<span/>')
+                                        //     .text(code_value)
                                         $('<span/>')
-                                            .text(code_value)
+                                            .html(code_value)
                                     )
                             )
                     )
@@ -145,6 +143,10 @@
                 })
 
             })
+
+            // Process all Current Medicine for Listing
+            
+
         }
 
     }

@@ -32,7 +32,7 @@ class PatientReviewTemplate < Prawn::Document
 
     move_down 10
 
-    patient_treatment_advised_block(report_details[:treatment_advised])
+    patient_treatment_advised_block(report_details[:current_medicine])
   end
 
   def header(ailment_details)

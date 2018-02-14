@@ -539,7 +539,7 @@ class PatientController < ApplicationController
           .where.not(:examination_id => 0)
           .select("examinations.code, examination_details.id, examination_id, examination_finding")
 
-    report_details[:treatment_advised] = ""
+    report_details[:current_medicine] = ""
     one_month_examination_detail = Hash.new
     if(latest_visit_examination)
       one_month_examination_detail[:weight] = latest_visit_examination.examination_details["weight"]
@@ -549,7 +549,7 @@ class PatientController < ApplicationController
       one_month_examination_detail[:ppbs] = latest_visit_examination.examination_details["ppbs"]
       one_month_examination_detail[:rbs] = latest_visit_examination.examination_details["rbs"]
 
-      report_details[:treatment_advised] = latest_visit_examination.examination_details["treatment_advised"]
+      report_details[:current_medicine] = latest_visit_examination.examination_details["current_medicine"]
     else
       one_month_examination_detail[:weight] = index_visit.where("examinations.code = 'weight'").first ? index_visit.where("examinations.code = 'weight'").first.examination_finding : ""
       one_month_examination_detail[:bp] = index_visit.where("examinations.code = 'bp'").first ? index_visit.where("examinations.code = 'bp'").first.examination_finding : ""

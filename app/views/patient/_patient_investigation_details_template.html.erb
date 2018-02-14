@@ -63,21 +63,13 @@
 <%all_investigations = get_investigations_from_helper%>
 <input id="all_investigations_value" type="hidden" value="<%=all_investigations.to_json%>"/>
 
-<div id="investigation_details_for_patient_div" style="position:relative;height:72vh;border:0px solid green;width:100%;margin-left:0px;float:left;">
+<div id="investigation_details_for_patient_div" style="position:relative;height:87vh;border:0px solid green;width:100%;margin-left:0px;float:left;">
 
   <div id="investigation_details_left_block" style="float: left;width:28%;border-right: 1px solid red;height: auto;">
 
     <div id="header_date_block" style="height: 8vh;border: 0px solid darkviolet;border-bottom:1px solid darkviolet">
 
       <div id="header_block" style="height:5vh;border:0px solid yellow;">
-
-        <!--<div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;border-right:0px solid green;height:5vh;">-->
-          <!--<div style="border-bottom:1px solid green;height: 3vh;"><b>Investigation</b></div>-->
-
-          <!--&lt;!&ndash;<div style="margin-left:0px;border:0px dotted green;height:2vh;margin-top:5px;">&ndash;&gt;-->
-            <!--&lt;!&ndash;<b>Date Of Visit</b>&ndash;&gt;-->
-          <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</div>-->
 
         <div align="right" id="investigation_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width:95%;border-right:0px solid green;height:4.1vh;">
           <!--<div id="investigation_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
@@ -106,7 +98,7 @@
 
     </div>
 
-    <div class="ailment_mid_divs" id="investigation_details_div" style="height:62vh;overflow-y:auto;border:0px solid red;width:95%">
+    <div class="ailment_mid_divs" id="investigation_details_div" style="height:85vh;overflow-y:auto;border:0px solid red;width:95%">
 
       <%all_investigations.each do|each_investigation|%>
 
@@ -157,7 +149,7 @@
       <b>History of Investigation Details</b>
     </div>
     <div id="seperate_investigation_details_div_block" style="height:auto;width:98%;border: 0px solid darkviolet;overflow-x: auto;">
-      <div id="seperate_investigation_details_div" style="border: 1px solid green;height: 65.5vh;overflow-y: auto;"></div>
+      <div id="seperate_investigation_details_div" style="border: 1px solid green;height: 88vh;overflow-y: auto;"></div>
     </div>
 
   </div>

@@ -70,17 +70,6 @@ function loadPatientsForSearch(loadPatientsDiv,village) {
     })
 }
 
-// function loadPatientsForSearch(loadPatientsDiv,village){
-//     $.ajax({
-//         url:'/get_all_patients_for_search/'+village+'.json',
-//         method:"GET",
-//         success:function (allPatients) {
-//             loadPatientsDiv.empty();
-//             initialPopulatePatients(loadPatientsDiv,allPatients);
-//         }
-//     })
-// }
-
 function initialPopulatePatients(loadPatientsDiv,allPatients){
     $.each(allPatients,function(index,eachPatient){
         loadPatientsDiv.append(
