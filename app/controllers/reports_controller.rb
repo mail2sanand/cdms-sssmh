@@ -34,14 +34,23 @@ class ReportsController < ApplicationController
                   JOIN villages v ON v.id = p.village_id
     "
 
-    query_2 = "
+    query_2 = ""
+    if(village_id == "-1")
+      query_2 = "
+                   WHERE alive = 0
+      "
+    else
+      query_2 = "
                    WHERE v.id = #{village_id}
-    "
+      "
 
-    puts "nodal_village : #{nodal_village} | ",nodal_village
-    if(nodal_village == "true")
-      query_2 = query_2 + " or v.parent_village_id = #{village_id}"
+      puts "nodal_village : #{nodal_village} | ",nodal_village
+      if(nodal_village == "true")
+        query_2 = query_2 + " or v.parent_village_id = #{village_id} and alive = 1"
+      end
+
     end
+
 
     query_3 = "
               order by p.name asc

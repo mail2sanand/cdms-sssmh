@@ -31,6 +31,22 @@ class VillagesController < ApplicationController
     end
   end
 
+  def get_nodal_villages_and_expired_patients
+    nodal_villages = Village.parent_villages
+
+    nodal_villages_json = nodal_villages.as_json
+    nodal_villages_json << {
+        "id" => -1,
+        "name" => "Expired Patients"
+    }
+
+    respond_to do |format|
+      format.html
+      format.json { render json: nodal_villages_json}
+    end
+
+  end
+
   def get_all_sub_villages
     sub_villages = Village.sub_villages
 

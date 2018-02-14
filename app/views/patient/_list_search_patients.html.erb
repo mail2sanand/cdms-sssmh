@@ -27,8 +27,11 @@
 
       function loadVillagesForPatientsPage() {
 //          simpleComboLoad("/get_all_villages.json",$('#report_select_id'),false);
+//          get_nodal_villages_and_expired_patients
+//          "/get_all_nodal_villages.json",$('#report_select_id'),false,
+
           simpleComboLoad(
-              "/get_all_nodal_villages.json",$('#report_select_id'),false,
+              "/get_nodal_villages_and_expired_patients.json",$('#report_select_id'),false,
               [function () {
                   loadPatientsForSearch($('#patients_list_block_div'),$('#report_select_id').val())
               }]

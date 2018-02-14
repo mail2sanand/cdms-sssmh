@@ -35,13 +35,20 @@
         }
 
         function loadNodalVillagesForReportsPage() {
+//            "/get_all_nodal_villages.json",$('#report_nodal_village_select_id'),false,
+//            get_nodal_villages_and_expired_patients
+
             simpleComboLoad(
-                "/get_all_nodal_villages.json",$('#report_nodal_village_select_id'),false,
-              [function () {
-                  load_and_display_patients_function(
-                      $('#report_nodal_village_select_id').val()
-                  ,true);
-              }]
+                "/get_nodal_villages_and_expired_patients.json",
+                $('#report_nodal_village_select_id'),
+                false,
+                [   function () {
+                      load_and_display_patients_function(
+                          $('#report_nodal_village_select_id').val()
+                          ,true
+                      );
+                    }
+                ]
             );
         }
         
