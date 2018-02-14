@@ -1,3 +1,5 @@
+var subVillageNodalVillageMapping;
+
 function showDialogueForPatientPage(title,message) {
     var dialogueElement = $('#patient_dialogue_box');
     dialogueElement.text(message);
@@ -6,6 +8,27 @@ function showDialogueForPatientPage(title,message) {
 
 function loadVillages(){
     simpleComboLoad("/get_all_villages.json",$('#input_pgd_village_id'));
+    simpleComboLoad("/get_all_nodal_villages.json",$('#input_pgd_nodal_village_id'));
+    populateSubVillageNodalVillageMapping();
+}
+
+function selectRespectiveNodalVillage(sub_village_id) {
+    // console.log(subVillageNodalVillageMapping);
+    nodal_village = subVillageNodalVillageMapping[sub_village_id];
+    console.log(nodal_village);
+
+    $('#input_pgd_nodal_village_id').val(nodal_village);
+}
+
+function populateSubVillageNodalVillageMapping() {
+    $.ajax({
+        type: "GET",
+        url: '/get_sub_village_nodal_village_mapping.json',
+        success: function (sub_village_nodal_villages) {
+            subVillageNodalVillageMapping =
+                sub_village_nodal_villages;
+        }
+    })
 }
 
 var createDefaultTemplates = function (comboResultArray) {

@@ -129,7 +129,7 @@
   </div>
 
   <div class="patients_details_general" style="height:20px;">
-    <div style="height:22px;float;" class="patient_details_label">
+    <div style="height:22px;" class="patient_details_label">
       Village
     </div>
     <div style="height:22px;" class="patient_details_colon">
@@ -137,7 +137,7 @@
     </div>
     <div style="height:35px;vertical-align: middle;padding-top: 3px;" class="patient_details_input" align="left">
       <div class="sssmh_combo slate" style="height:20px;">
-        <select id="input_pgd_village_id" name="pgd[village_id]" style="margin-left: 0px;">
+        <select id="input_pgd_village_id" name="pgd[village_id]" style="margin-left: 0px;" onchange="selectRespectiveNodalVillage(this.value);">
           <option value="0">Choose a Village </option>
         </select>
         <div style="padding-top: 5px;height: auto;">
@@ -147,7 +147,29 @@
     </div>
   </div>
 
+  <!-- Nodal Village -->
+  <div class="patients_details_general" style="height:20px;">
+    <div style="height:22px;" class="patient_details_label">
+      Nodal Village
+    </div>
+    <div style="height:22px;" class="patient_details_colon">
+      :
+    </div>
+    <div style="height:35px;vertical-align: middle;padding-top: 3px;" class="patient_details_input" align="left">
+      <div class="sssmh_combo slate" style="height:20px;">
+        <select id="input_pgd_nodal_village_id" name="pgd[nodal_village_id]" style="margin-left: 0px;">
+          <option value="0">Choose a Village </option>
+        </select>
+        <div style="padding-top: 5px;height: auto;">
+          <span id="span_pgd_nodal_village_id">Nodal Village Name</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>
+
 <div id="patient_gen_details_right_div" style="height:35vh;">
 
   <div class="patients_details_general" style="height:20px;">

@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     get 'get_all_nodal_villages',to:'villages#get_all_nodal_villages'
     get 'get_nodal_villages_and_expired_patients',to:'villages#get_nodal_villages_and_expired_patients'
     get 'get_all_sub_villages',to:'villages#get_all_sub_villages'
+    get 'get_sub_village_nodal_village_mapping',to:'villages#get_sub_village_nodal_village_mapping'
 
 
     post 'delete_villages', to: 'villages#delete_villages'

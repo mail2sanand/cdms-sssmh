@@ -38,10 +38,12 @@ namespace :import do
       cdno = sheet_0_each_row[9]
       dateOfBirth = sheet_0_each_row[12].to_s+"-1-1"
       village_id = sheet_0_each_row[6]
+      old_village_id = sheet_0_each_row[6]
       old_sub_village = sheet_0_each_row[10]
 
       alive = ((sheet_0_each_row[13] == "NULL" or sheet_0_each_row[13] == "Y" or village_id == 16) ? 0 : 1 )
       sub_village_rec = Village.find_by_name(old_sub_village)
+      nodal_village_id = 0
       if(sub_village_rec)
         village_id = sub_village_rec.id
       else
@@ -49,11 +51,22 @@ namespace :import do
         village_id = Village.find_by_name(alternate_village_hash[old_sub_village]).id
       end
 
+      if(old_village_id == 16)
+        new_village = Village.find(village_id)
+        nodal_village_id =
+            (new_village.parent_village_id == 0 ? new_village.id : new_village.parent_village_id)
+      else
+        nodal_village_id = old_village_id
+      end
+
+
+
       Patient.create({
          :id => patient_id,
          :name => patient_name,
          :gender => gender,
          :village_id => village_id,
+         :nodal_village_id => nodal_village_id,
          :contact => contact_number,
          :cdno => cdno,
          :dateOfBirth=>dateOfBirth,

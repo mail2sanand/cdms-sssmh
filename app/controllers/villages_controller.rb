@@ -47,6 +47,21 @@ class VillagesController < ApplicationController
 
   end
 
+  def get_sub_village_nodal_village_mapping
+    sub_village_nodal_villages = {}
+
+    all_villages = Village.select(:id,:parent_village_id)
+    all_villages.each do |each_village|
+      sub_village_nodal_villages[each_village.id] = each_village.parent_village_id
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: sub_village_nodal_villages}
+    end
+
+  end
+
   def get_all_sub_villages
     sub_villages = Village.sub_villages
 

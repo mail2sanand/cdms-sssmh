@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 20180103201537) do
     t.string "annualIncome"
     t.integer "alive"
     t.bigint "village_id"
+    t.integer "nodal_village_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "photo_file_name"

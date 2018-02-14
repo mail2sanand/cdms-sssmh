@@ -41,12 +41,15 @@ class ReportsController < ApplicationController
       "
     else
       query_2 = "
-                   WHERE v.id = #{village_id}
+                   WHERE
       "
 
-      puts "nodal_village : #{nodal_village} | ",nodal_village
+      # puts "nodal_village : #{nodal_village} | ",nodal_village
       if(nodal_village == "true")
-        query_2 = query_2 + " or v.parent_village_id = #{village_id} and alive = 1"
+        # query_2 = query_2 + "(v.id = #{village_id} or v.parent_village_id = #{village_id}) and alive = 1"
+        query_2 = query_2 + "p.nodal_village_id = #{village_id} and alive = 1"
+      else
+        query_2 = query_2 + "p.village_id = #{village_id} and alive = 1"
       end
 
     end
@@ -72,6 +75,70 @@ class ReportsController < ApplicationController
       format.json { render json: all_patient_details}
     end
   end
+
+  # def get_all_patients_for_reports
+  #   village_id = params[:village_id]
+  #   nodal_village = params[:nodal]
+  #
+  #   puts "nodal_village : #{nodal_village}"
+  #
+  #   query_1 = "
+  #         SELECT p.id patient_id,p.name patient_name
+  #             ,CASE
+  #                 WHEN v.parent_village_id != 0
+  #                     THEN (SELECT id FROM villages WHERE id=v.parent_village_id)
+  #                 ELSE v.id
+  #              END village_id
+  #             ,CASE
+  #                 WHEN v.parent_village_id != 0
+  #                     THEN (SELECT name FROM villages WHERE id=v.parent_village_id)
+  #                 ELSE v.name
+  #             END village_name,
+  #             p.age,
+  #             p.gender,
+  #             p.cdno
+  #             FROM patients p
+  #                 JOIN villages v ON v.id = p.village_id
+  #   "
+  #
+  #   query_2 = ""
+  #   if(village_id == "-1")
+  #     query_2 = "
+  #                  WHERE alive = 0
+  #     "
+  #   else
+  #     query_2 = "
+  #                  WHERE v.id = #{village_id}
+  #     "
+  #
+  #     puts "nodal_village : #{nodal_village} | ",nodal_village
+  #     if(nodal_village == "true")
+  #       query_2 = query_2 + " or v.parent_village_id = #{village_id} and alive = 1"
+  #     end
+  #
+  #   end
+  #
+  #
+  #   query_3 = "
+  #             order by p.name asc
+  #   "
+  #
+  #   village_id = "all_villages" if !village_id
+  #   if(village_id == "all_villages")
+  #     full_query = query_1 + query_3
+  #   else
+  #     full_query = query_1 + query_2 + query_3
+  #   end
+  #
+  #   puts "===============>> #{full_query}"
+  #
+  #   all_patient_details = ActiveRecord::Base.connection.execute(full_query)
+  #
+  #   respond_to do |format|
+  #     format.html
+  #     format.json { render json: all_patient_details}
+  #   end
+  # end
 
   def print_village_report
     patient_ids = params[:patient_ids].split("_")

@@ -18,6 +18,8 @@ class CreatePatients < ActiveRecord::Migration[5.1]
       t.integer :alive
 
       t.references :village, foreign_key: true
+      t.integer :nodal_village_id
+
       # t.references :ailment, foreign_key: true
       # t.attachment :photo
 

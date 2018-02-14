@@ -43,7 +43,7 @@ class PatientController < ApplicationController
     puts "===================\n"
 
     params[:pgd][:id]=""
-    # @newPatient = Patient.create(patient_params)
+    # @newPa  tient = Patient.create(patient_params)
     render :json => true
   end
 
@@ -246,11 +246,8 @@ class PatientController < ApplicationController
     report_details[:pgd] =
         Patient.joins("inner join villages v on v.id = patients.village_id").where(:id => patient_id)
             .select("
-              CASE
-                  WHEN v.parent_village_id != 0
-                      THEN v.name || ' (' || (SELECT name FROM villages WHERE id=v.parent_village_id) || ' )'
-                  ELSE v.name
-              END village_name,patients.name as patient_name, v.*, patients.*
+              v.name || ' (' || (SELECT name FROM villages WHERE id=patients.nodal_village_id) || ')'
+              village_name,patients.name as patient_name, v.*, patients.*
             ")
 
     # Patient History Details
@@ -463,9 +460,15 @@ class PatientController < ApplicationController
     #     Patient.joins(:village).where(:id => patient_id).select("patients.*,villages.name as village_name")
 
     report_details[:pgd] =
-        Patient.joins(:village).where(:id => patient_id)
-            .select("patients.*,villages.name as village_name, villages.*, patients.name patient_name")
+        Patient.joins("inner join villages v on v.id = patients.village_id").where(:id => patient_id)
+            .select("
+              v.name || ' (' || (SELECT name FROM villages WHERE id=patients.nodal_village_id) || ')'
+              village_name,patients.name as patient_name, v.*, patients.*
+            ")
 
+    # report_details[:pgd] =
+    #     Patient.joins(:village).where(:id => patient_id)
+    #         .select("patients.*,villages.name as village_name, villages.*, patients.name patient_name")
 
     patient_cmc_details = ComorbidCondition.joins(:ailment).where("patient_id = #{patient_id} and code in ('diabetes','hypertension','cardiac_ailment','cva')").select("code,comorbid_condition_details")
     # binding.pry
@@ -621,7 +624,7 @@ class PatientController < ApplicationController
 
   private
   def patient_params
-    params[:pgd].permit(:id,:alive,:photo,:name,:age,:gender, :dateOfBirth, :relationName,:bmNo,:contact, :annualIncome, :village_id, :cdno, :sssmhIdNo, :aadharNo)
+    params[:pgd].permit(:id,:alive,:photo,:name,:age,:gender, :dateOfBirth, :relationName,:bmNo,:contact, :annualIncome, :village_id, :nodal_village_id, :cdno, :sssmhIdNo, :aadharNo)
   end
 
 end
