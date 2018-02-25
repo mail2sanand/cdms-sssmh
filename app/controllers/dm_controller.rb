@@ -21,16 +21,15 @@ class DmController < ApplicationController
         "sssmh_care_from" => sssmh_care_from
     })
 
-    puts "=========>>> dm_details : #{dm_details.inspect}"
-    puts "==============>>>>>>>>>>>>>>> patientVisit : #{patientVisit}"
+    # puts "=========>>> dm_details : #{dm_details.inspect}"
+    # puts "==============>>>>>>>>>>>>>>> patientVisit : #{patientVisit}"
 
     dmDetailsJSON = convertHashObjectToJSON(dm_details)
 
     if(patientVisit =~ /^\d+$/)
-      puts "----------- Patient Visit is a old one"
+      # puts "----------- Patient Visit is a old one"
       dmDetailOnVisit = ExaminationDetail.find(:patient_id => patient.id, :visit_id => patientVisit)
       dmDetailOnVisit.update({:examination_details => dmDetailsJSON})
-
     elsif patientVisit.empty?
       # We will have to error that there is no Visit Selected.
     else
@@ -38,7 +37,7 @@ class DmController < ApplicationController
       newVisit = Visit.find_or_create_by({
            :patient_id => patient.id,
            :visited_on => patientVisit,
-           :visited_at => patient.village_id
+           :visited_at => Village.find(patient.village_id).parent_village_id
        })
       # puts "================>>>>>newVisit : #{newVisit.inspect}"
 

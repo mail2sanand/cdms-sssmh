@@ -16,6 +16,21 @@ class VisitController < ApplicationController
 
   end
 
+  def get_patient_dm_review_visit_dates
+    patientId = params[:id]
+
+    all_patient_visits =
+        ExaminationDetail.joins(:visit).where(:patient_id=>patientId)
+            .select("visits.id, to_char(visited_on, 'Mon DD, YYYY') as name")
+            .order("visited_on desc")
+
+    respond_to do |format|
+      format.html
+      format.json { render json: all_patient_visits}
+    end
+
+  end
+
   def save_patient_visit
   end
 end

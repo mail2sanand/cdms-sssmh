@@ -7,12 +7,12 @@ class InvestigationController < ApplicationController
   def update_investigation_details_for_patient(patient,investigationDetails)
 
     patientVisit = investigationDetails.delete("visit")
-    puts " =============>>>> patientVisit in InvestigationController : #{patientVisit}"
+    # puts " =============>>>> patientVisit in InvestigationController : #{patientVisit}"
 
     investigationDetailsJSON = convertHashObjectToJSON(investigationDetails)
 
     if(patientVisit =~ /^\d+$/)
-      puts "----------- Patient Visit is a old one"
+      # puts "----------- Patient Visit is a old one"
       investigationDetailOnVisit = InvestigationDetail.find(:patient_id => patient.id, :visit_id => patientVisit)
       investigationDetailOnVisit.update({:investigation_details => investigationDetailsJSON})
     elsif patientVisit.empty?
@@ -21,7 +21,7 @@ class InvestigationController < ApplicationController
       newVisit = Visit.find_or_create_by({
         :patient_id => patient.id,
         :visited_on => patientVisit,
-        :visited_at => patient.village_id
+        :visited_at => Village.find(patient.village_id).parent_village_id
       })
 
       ailments = Ailment.find_by_name("Diabetes").id
@@ -44,7 +44,9 @@ class InvestigationController < ApplicationController
   def get_all_patient_investigation_visits
     patientId = params[:id]
     patientInvestigationVisits =
-        InvestigationDetail.joins(:visit).where(:patient_id=>patientId).select("visits.id, to_char(visited_on, 'Mon DD, YYYY') as name")
+        InvestigationDetail.joins(:visit).where(:patient_id=>patientId)
+            .select("visits.id, to_char(visited_on, 'Mon DD, YYYY') as name")
+            .order("visited_on desc")
 
     # InvestigationDetail.joins(:visit).where(:patient_id=>patientId).select("visits.id, to_char(visited_on, 'Mon DD, YYYY') as name")
     respond_to do |format|
@@ -62,9 +64,8 @@ class InvestigationController < ApplicationController
             .where("investigation_details.patient_id=#{patientId} and visited_on='#{parsedDate}'")
             .order("visited_on desc")
             .first.investigation_details
-
-    puts "====================>> \n #{patientInvestigationDetail.inspect}"
-    puts "<< ==================="
+    # puts "====================>> \n #{patientInvestigationDetail.inspect}"
+    # puts "<< ==================="
 
     respond_to do |format|
       format.html

@@ -52,13 +52,9 @@
       :
     </div>
     <div style="height:30px;" class="patient_details_input">
+      <input type="text" id="input_pgd_dateOfBirth" size="12"  name="pgd[dateOfBirth]" onchange="calculate_and_display_year(this);">
+      <input style="display:none;" type="text" size="5" id="input_pgd_dateOfBirth__suffering_since_years" name="" onblur="calculate_and_select_year(this,'input_pgd_dateOfBirth',true);"/>
 
-      <!--<div id="input_pgd_age_calendar_div" style="display:none;border:0px solid green;height:auto;float:left;margin-left:2px;" align="left">-->
-        <!--<i class="fa fa-calendar" id="pgd_age_visit_calendar_icon" title="Select Date of Visit"></i>-->
-        <!--<input size="1" type="text" id="age_datepicker" style="visibility:hidden;">-->
-      <!--</div>-->
-
-      <input type="text" id="input_pgd_dateOfBirth" name="pgd[dateOfBirth]">
       <span id="span_pgd_age">Age Of the Patient</span>
     </div>
   </div>

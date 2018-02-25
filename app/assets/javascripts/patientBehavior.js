@@ -306,6 +306,9 @@ function firstWordCap(stringToConvert){
 
                     showDialogueForPatientPage(successMessageTitle,successMessage);
                     loadPatientsForSearch($('#patients_list_block_div'),$('#report_select_id').val());
+                    if($('#patient_search_box').val() != ""){
+                        searchPatientsInAllVillages();
+                    }
                 },
                 error:function (data) {
                     console.log(data);
@@ -647,6 +650,88 @@ function firstWordCap(stringToConvert){
 
     }
 // END OF Delete Patient
+
+// Patients Search Behavior
+    function searchPatientsInAllVillages() {
+        var patient_Search_Text = $('#patient_search_box').val();
+        $('#patients_search_list_block_div').empty();
+
+        if(patient_Search_Text == "") {
+            empty_patients_search();
+        }else{
+            $.ajax({
+                type:"GET",
+                url:"/search_patients_in_all_villages/"+patient_Search_Text+".json",
+                success:function(comboResultArray){
+                    if(comboResultArray.length > 0){
+                        populateVillageAndPatientsForSearch(comboResultArray);
+                        toggle_patient_search_divs();
+                    }else{
+                        alert("No Patients with the name"+patient_Search_Text);
+                    }
+
+                }
+            });
+        }
+    }
+
+    function populateVillageAndPatientsForSearch(patientsSearchArray) {
+        patientsSearchArray.forEach(function (each_patients_search) {
+            var village_name = each_patients_search.name;
+            var patients_in_this_village = each_patients_search.patients.split(",");
+
+            var patients_search_list_block_div = $('#patients_search_list_block_div');
+            patients_search_list_block_div.append($('<div/>')
+                .attr("id","patient_search_village_"+village_name)
+                .attr("align","left")
+                .attr("style","color:red;margin-left:15px;margin-bottom:10px;padding-left:0px;margin-top:4px;height:auto;")
+                .append(
+                    $('<span/>')
+                        .text(village_name)
+                )
+            );
+
+            patients_in_this_village.forEach(function (each_patient) {
+                var patient_details = each_patient.split("_");
+                var patient_name = patient_details[0]+" ("+patient_details[1]+")";
+                var patient_id = patient_details[2];
+
+                $("#patient_search_village_"+village_name).append($('<div/>')
+                    .attr("id","patient_search_"+patient_details[0])
+                    .attr("align","left")
+                    .attr("style","color:purple;margin-left:15px;padding-left:0px;margin-top:4px;border:0px dotted red;height:auto;cursor:pointer;")
+                    .attr("onclick","loadPatientDetails("+patient_id+")")
+                    .append(
+                        $('<span/>')
+                            .text(patient_name)
+                    )
+                );
+            })
+
+        })
+    }
+
+    //      onclick='loadPatientDetails("+patientDetail.patient_id+")
+
+    function closePatientsSearchDiv() {
+        $('#patient_search_box').val("");
+        searchPatientsInAllVillages();
+    }
+
+    function toggle_patient_search_divs() {
+        $('#patients_search_list_block_parent_div').show();
+        $('#patients_list_block_parent_div').hide();
+    }
+
+    function empty_patients_search() {
+        $('#patients_search_list_block_div').empty();
+        $('#patients_search_list_block_parent_div').hide();
+        $('#patients_list_block_parent_div').show();
+    }
+
+// END OF Patients Search Behavior
+
+
 
 
 

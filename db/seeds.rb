@@ -14,6 +14,10 @@ User.create([
   {:email=>"admin@admin.com",
    :password=>"admin123",
    :password_confirmation=>"admin123"
+  },
+  {:email=>"mail2sanand@gmail.com",
+   :password=>"sairam",
+   :password_confirmation=>"sairam"
   }
 ])
 
@@ -150,7 +154,7 @@ Ailment.create([
     {:id=>10,:code=>"hypertension",:name=>"Hypertension",:desc=>"Hypertension",:department_id=>ms_dept.id},
     {:id=>11,:code=>"cardiac_ailment",:name=>"Cardiac Ailments",:desc=>"Cardiac Ailments",:department_id=>ms_dept.id},
     {:id=>12,:code=>"epilepsy",:name=>"Epilepsy",:desc=>"Epilepsy",:department_id=>ms_dept.id},
-    {:id=>13,:code=>"asthma",:name=>"Asthama",:desc=>"Asthama",:department_id=>ms_dept.id},
+    {:id=>13,:code=>"asthma",:name=>"Asthma",:desc=>"Asthma",:department_id=>ms_dept.id},
     {:id=>14,:code=>"thyroid",:name=>"Thyroid",:desc=>"Thyroid",:department_id=>ms_dept.id},
     {:id=>19,:code=>"hyper_lipidemia",:name=>"Hyper Lipidemia",:desc=>"Hyper Lipidemia",:department_id=>ms_dept.id},
     {:id=>16,:code=>"cva",:name=>"CVA",:desc=>"CVA",:department_id=>ms_dept.id}
@@ -187,7 +191,7 @@ Examination.create([
     {:code=>"waist_circumference",:name=>"Waist Circumference",:ailments_supported=>[0]},
     {:code=>"pulse",:name=>"Pulse",:units=>"/min",:parameter_length=>"small",:ailments_supported=>[0,dm.id]},
     {:code=>"peripheral pulses",:name=>"Peripheral Pulses",:ailments_supported=>[0]},
-    {:code=>"bp",:name=>"B.P",:units=>"mm/Hg",:parameter_length=>"small",:ailments_supported=>[0,1]},
+    {:code=>"bp",:name=>"B.P",:units=>"mm/Hg",:parameter_length=>"small",:ailments_supported=>[0,dm.id]},
     {:code=>"cvs",:name=>"CVS",:ailments_supported=>[0]},
     {:code=>"respiratory",:name=>"Respiratory",:ailments_supported=>[0]},
     {:code=>"foot_examination",:name=>"Foot Examination",:ailments_supported=>[0]},
@@ -201,7 +205,7 @@ Examination.create([
 
 Investigation.create([
     {:name=>"Blood Urea",:code=>"blood_urea"},
-    {:name=>"S Creatin",:code=>"s_crt"},
+    {:name=>"S Creatinine",:code=>"s_crt"},
     {:name=>"Lipid TC",:code=>"lipid_tc"},
     {:name=>"Lipid TG",:code=>"lipid_tg"},
     {:name=>"Lipid HDL",:code=>"lipid_hdl"},
@@ -214,9 +218,10 @@ Investigation.create([
     {:name=>"Retinal Examination",:code=>"retinal_exam"},
     {:name=>"eGFR",:code=>"egfr"},
     {:name=>"Urine : Protein/Crt Ratio",:code=>"urine_protein_crt_ratio"},
-    {:name=>"HbA1C",:code=>"hba1c"},
-    {:name=>"Chronic Complications",:code=>"chronic_complication",:parameter_length=>"textarea"},
+    {:name=>"HbA1C",:code=>"hba1c"}
 ])
+
+# {:name=>"Chronic Complications",:code=>"chronic_complication",:parameter_length=>"textarea"},
 
 
 

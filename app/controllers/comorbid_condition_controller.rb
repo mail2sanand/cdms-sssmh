@@ -98,7 +98,10 @@ class ComorbidConditionController < ApplicationController
 
         patientCMCDetailsJson["#{each_patientCMCDetail.code}__display_detail"] = display_detail_1
         patientCMCDetailsJson["#{each_patientCMCDetail.code}__details"] = comorbid_condition_details_json["details"]
-        patientCMCDetailsJson["#{each_patientCMCDetail.code}__suffering_since_years"] = calculate_age_with_year(comorbid_condition_details_json['suffering_since'].to_i)
+
+        patientCMCDetailsJson["#{each_patientCMCDetail.code}__suffering_since_years"] =
+            calculate_age_with_year(comorbid_condition_details_json['suffering_since'].to_i) if comorbid_condition_details_json['suffering_since'] != ""
+
         patientCMCDetailsJson["#{each_patientCMCDetail.code}__years_select"] = comorbid_condition_details_json["suffering_since"]
         patientCMCDetailsJson["#{each_patientCMCDetail.code}__sub_ailment_select"] = comorbid_condition_details_json["ailment_type"]
 

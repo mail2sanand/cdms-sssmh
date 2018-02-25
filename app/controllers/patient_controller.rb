@@ -47,6 +47,24 @@ class PatientController < ApplicationController
     render :json => true
   end
 
+  def search_patients_in_all_villages
+    search_patient_name = params[:search_patient_name]
+    search_query = "
+      select v.name,string_agg(p.name||'_'||p.cdno||'_'||p.id,',') as patients
+      from patients p
+        join villages v on v.id = p.nodal_village_id
+      where p.name like '%#{search_patient_name}%'
+      group by v.name
+    "
+    patients_search_results = ActiveRecord::Base.connection.execute(search_query)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: patients_search_results}
+    end
+
+  end
+
   def get_all_patients_for_search
     for_village = params[:for_village]
 
@@ -100,7 +118,8 @@ class PatientController < ApplicationController
     patientDetailJson = patientDetail.as_json.merge({
         "photo": patientDetail.photo.url,
         "patient_photo_thumb": patientDetail.photo.url(:thumb),
-        "age": "#{patient_age} years - DOB : #{patientDetail.dateOfBirth}"
+        "age": "#{patient_age} years - DOB : #{patientDetail.dateOfBirth}",
+        "dateOfBirth__suffering_since_years": patient_age
     })
 
     return {

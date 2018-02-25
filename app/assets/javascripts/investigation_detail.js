@@ -100,7 +100,8 @@
         removeInvestigationDetailsForPastPatient();
         resetInvestigationDetailVisitsCombo();
         resetInvestigationDetailsNewVisitData();
-        simpleComboLoad("/get_patient_visits/"+patientId+".json",$('#patient_visits_select_id'),true);
+        // simpleComboLoad("/get_patient_visits/"+patientId+".json",$('#patient_visits_select_id'),true);
+        simpleComboLoad("/get_investigation_details_visits/"+patientId+".json",$('#patient_visits_select_id'),true);
     }
 
     function resetInvestigationDetailVisitsCombo() {

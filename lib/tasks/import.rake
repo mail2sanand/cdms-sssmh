@@ -228,6 +228,9 @@ namespace :import do
   task inv_det_data: :environment do
     puts "Processing : Patient Investigation Details Data\n"
     filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Old_Investigations_Data.xlsx"
+
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Index_Sheet_Data/Patient_81_Habibunissa.xlsx"
+
     inv_det = {}
 
     xsls = Roo::Excelx.new(filename)
@@ -334,8 +337,11 @@ namespace :import do
 
     end
 
-    inv_det[42] = inv_det[42].sort.to_h
-
+    # puts "inv_det : #{inv_det.inspect} \n\n"
+    # puts "inv_det[81] : #{inv_det[81]} \n\n ===> inv_det[42] ==> #{inv_det[42]}"
+    #
+    # inv_det[42] = inv_det[42].sort.to_h
+    #
     create_inv_details_records_for_patients(inv_det)
 
   end
@@ -343,6 +349,8 @@ namespace :import do
   desc "Import all Review Sheet Data"
   task review_data: :environment do
     filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data_original.xlsx"
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data/habibunissa_1.xlsx"
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data/patient_42_to_50.xlsx"
     review_comorbid_details = {}
     ailment_id = Ailment.find_by_name("Diabetes").id
 
@@ -352,147 +360,179 @@ namespace :import do
 
     t1 = Time.now
     ActiveRecord::Base.transaction do
+      (2..sheet_0.last_row).each do |each_row|
+          sheet_0_each_row = sheet_0.row(each_row)
 
-        (2..sheet_0.last_row).each do |each_row|
-      sheet_0_each_row = sheet_0.row(each_row)
+          patient_id = sheet_0_each_row[1]
+          created_date = sheet_0_each_row[14]
+          next if !created_date or created_date=="NULL"
 
-      patient_id = sheet_0_each_row[1]
-      created_date = sheet_0_each_row[14]
-      next if !created_date or created_date=="NULL"
+          created_date = convertIntoProperDateFormat(sheet_0_each_row[14]) #DateTime.strptime(sheet_0_each_row[14].to_s,'%Y-%d-%m').strftime('%Y-%m-%d')
+          puts "Processing : #{patient_id} : #{created_date}"
 
-      created_date = convertIntoProperDateFormat(sheet_0_each_row[14]) #DateTime.strptime(sheet_0_each_row[14].to_s,'%Y-%d-%m').strftime('%Y-%m-%d')
-      puts "Processing : #{patient_id} : #{created_date}"
-
-      begin
-        patient = Patient.find(patient_id)
-      rescue
-        next
-      end
-
-      # Finding or Creating the Visit for Review Visit Details
-          review_visit = Visit.find_or_create_by(
-              :patient_id => patient_id,
-              :visited_on => created_date,
-              :visited_at => Patient.nodal_village(patient_id).village_id,
-              :ailments   => [ailment_id]
-          )
-
-      # Examination Findings Of Review Visits
-          default_examination_details_hash = {}
-          default_examination_details_hash["weight"] = sheet_0_each_row[5] ? sheet_0_each_row[5] : ""
-          default_examination_details_hash["pulse"] = sheet_0_each_row[7] ? sheet_0_each_row[7] : ""
-          default_examination_details_hash["hypoglycemic_attacks"] = sheet_0_each_row[10] ? sheet_0_each_row[10] : ""
-          default_examination_details_hash["infective_focus"] = sheet_0_each_row[11] ? sheet_0_each_row[11] : ""
-          default_examination_details_hash["fbs"] = sheet_0_each_row[8] ? sheet_0_each_row[8] : ""
-          default_examination_details_hash["ppbs"] = sheet_0_each_row[9] ? sheet_0_each_row[9] : ""
-          default_examination_details_hash["rbs"] = ""
-          default_examination_details_hash["current_medicine"] = sheet_0_each_row[12] ? sheet_0_each_row[12] : ""
-          default_examination_details_hash["clinical_notes"] = ""
-
-          ExaminationDetail.create({
-             :patient_id => patient_id,
-             :visit_id => review_visit.id,
-             :examination_details => default_examination_details_hash,
-             :examination_id => 0
-          })
-
-      # Check if there is a visit for InvestigationDetails on this Created Date. Else create a new
-      # visit and save chronic_complications
-          chronic_complications = sheet_0_each_row[4]
-          patientInvestigationDetail =
-              InvestigationDetail.find_or_create_by({
-                 :patient_id => patient_id,
-                 :visit_id => review_visit.id
-              })
-
-          investigation_details_for_this_visit = patientInvestigationDetail.investigation_details
-          if(investigation_details_for_this_visit)
-            investigation_details_for_this_visit["chronic_complication"] = chronic_complications
-          else
-            investigation_details_for_this_visit = get_default_investigation_details_hash.merge(
-                {"chronic_complication" => chronic_complications}
-            )
+          begin
+            patient = Patient.find(patient_id)
+          rescue
+            next
           end
 
-          # puts "investigation_details_for_this_visit ======>> : #{investigation_details_for_this_visit}"
-          patientInvestigationDetail.update(
-              :investigation_details => investigation_details_for_this_visit
-          )
+          # Finding or Creating the Visit for Review Visit Details
+              review_visit = Visit.find_or_create_by(
+                  :patient_id => patient_id,
+                  :visited_on => created_date,
+                  :visited_at => Patient.nodal_village(patient_id).village_id,
+                  :ailments   => [ailment_id]
+              )
 
-      review_comorbid_details[patient_id] ||= {}
-      review_comorbid_details[patient_id]["comorbid_diabteties_type_and_from"] = sheet_0_each_row[17]
-      review_comorbid_details[patient_id]["comorbid_htn_and_from"] = sheet_0_each_row[18]
-      review_comorbid_details[patient_id]["comorbid_cad"] = sheet_0_each_row[19]
-      review_comorbid_details[patient_id]["diet_excercise"] = sheet_0_each_row[21]
+          # Examination Findings Of Review Visits
+              default_examination_details_hash = {}
+              default_examination_details_hash["weight"] = sheet_0_each_row[5] ? sheet_0_each_row[5] : ""
+              default_examination_details_hash["pulse"] = sheet_0_each_row[7] ? sheet_0_each_row[7] : ""
 
-    end
+              bp_from_old_portal = sheet_0_each_row[6]
+              if bp_from_old_portal and bp_from_old_portal =~ /\//
+                default_examination_details_hash["bp"] = bp_from_old_portal
+                default_examination_details_hash["bp"].gsub!("NULL","")
+              else
+                default_examination_details_hash["bp"] = ""
+              end
+
+              default_examination_details_hash["hypoglycemic_attacks"] = sheet_0_each_row[10] ? sheet_0_each_row[10] : ""
+              default_examination_details_hash["infective_focus"] = sheet_0_each_row[11] ? sheet_0_each_row[11] : ""
+              default_examination_details_hash["fbs"] = sheet_0_each_row[8] ? sheet_0_each_row[8] : ""
+              default_examination_details_hash["ppbs"] = sheet_0_each_row[9] ? sheet_0_each_row[9] : ""
+              default_examination_details_hash["rbs"] = ""
+              default_examination_details_hash["chronic_complication"] = sheet_0_each_row[4] ? sheet_0_each_row[4] : ""
+              default_examination_details_hash["current_medicine"] = sheet_0_each_row[12] ? sheet_0_each_row[12] : ""
+              default_examination_details_hash["clinical_notes"] = ""
+
+              ExaminationDetail.create({
+                 :patient_id => patient_id,
+                 :visit_id => review_visit.id,
+                 :examination_details => default_examination_details_hash,
+                 :examination_id => 0
+              })
+
+          # Check if there is a visit for InvestigationDetails on this Created Date. Else create a new
+          # visit and save chronic_complications
+          #     chronic_complications = sheet_0_each_row[4]
+          #     patientInvestigationDetail =
+          #         InvestigationDetail.find_or_create_by({
+          #            :patient_id => patient_id,
+          #            :visit_id => review_visit.id
+          #         })
+
+              # investigation_details_for_this_visit = patientInvestigationDetail.investigation_details
+              # if(investigation_details_for_this_visit)
+              #   investigation_details_for_this_visit["chronic_complication"] = chronic_complications
+              # else
+              #   investigation_details_for_this_visit = get_default_investigation_details_hash.merge(
+              #       {"chronic_complication" => chronic_complications}
+              #   )
+              # end
+              #
+              # # puts "investigation_details_for_this_visit ======>> : #{investigation_details_for_this_visit}"
+              # patientInvestigationDetail.update(
+              #     :investigation_details => investigation_details_for_this_visit
+              # )
+
+          unless(review_comorbid_details[patient_id])
+            review_comorbid_details[patient_id] = {}
+            review_comorbid_details[patient_id]["comorbid_diabteties_type_and_from"] = sheet_0_each_row[17]
+            review_comorbid_details[patient_id]["comorbid_htn_and_from"] = sheet_0_each_row[18]
+            review_comorbid_details[patient_id]["comorbid_cad"] = sheet_0_each_row[19]
+            review_comorbid_details[patient_id]["diet_excercise"] = sheet_0_each_row[21]
+          end
+
+      end
 
     # puts "review_comorbid_details : #{review_comorbid_details.inspect}"
 
-        review_comorbid_details.each do |patient_id,comorbid_condition_details|
+      review_comorbid_details.each do |patient_id,comorbid_condition_details|
 
-      # For Diabetes Comorbid Condition
-          comorbid_diabteties_type_and_from =
-              comorbid_condition_details["comorbid_diabteties_type_and_from"]
+    # For Diabetes Comorbid Condition
+        comorbid_diabteties_type_and_from =
+            comorbid_condition_details["comorbid_diabteties_type_and_from"]
 
-          comorbid_condition_details_for_diabetes = {
-              "ailment_type" => "",
-              "suffering_since" => "",
-              "details" => ""
-          }
+        comorbid_condition_details_for_diabetes = {
+            "ailment_type" => "",
+            "suffering_since" => "",
+            "details" => ""
+        }
 
-          if comorbid_diabteties_type_and_from and comorbid_diabteties_type_and_from.class == String
-            if match = comorbid_diabteties_type_and_from.match(/(T1|T2).+(\d+)/)
-              diabetes_details = match.captures
-              comorbid_condition_details_for_diabetes["ailment_type"] = "Diabetes Type " + (diabetes_details[0] == "T1" ? "1" : "2")
-              comorbid_condition_details_for_diabetes["suffering_since"] =
-                  calculate_year_with_age(diabetes_details[1])
-            end
+        if comorbid_diabteties_type_and_from and comorbid_diabteties_type_and_from.class == String
+          # if match = comorbid_diabteties_type_and_from.match(/(T1|T2).+(\d+)/)
+          if match = comorbid_diabteties_type_and_from.match(/^(T1|T2)\s+.+\s+(\d+)$/)
+            diabetes_details = match.captures
+            comorbid_condition_details_for_diabetes["ailment_type"] = "Diabetes Type " + (diabetes_details[0] == "T1" ? "1" : "2")
+            comorbid_condition_details_for_diabetes["suffering_since"] =
+                calculate_year_with_age(diabetes_details[1])
           end
-
-          ComorbidCondition.create({
-             :patient_id => patient_id,
-             :sub_ailment_id => ailment_id,
-             :comorbid_condition_details => comorbid_condition_details_for_diabetes.to_json
-          })
-
-
-      # For HTN Comorbid Condition
-          comorbid_htn_and_from = comorbid_condition_details["comorbid_htn_and_from"]
-          comorbid_condition_details_for_htn = {
-              "suffering_since" => "",
-              "details" => ""
-          }
-
-          if(comorbid_htn_and_from.class == String)
-            if match = comorbid_htn_and_from.match(/(\d+).*/)
-              htn_details = match.captures
-              comorbid_condition_details_for_htn["suffering_since"] =
-                  calculate_year_with_age(htn_details[1])
-            end
-          end
-
-          ComorbidCondition.create({
-             :patient_id => patient_id,
-             :sub_ailment_id => Ailment.find_by_name("Hypertension").id,
-             :comorbid_condition_details => comorbid_condition_details_for_htn.to_json
-          })
-
-
-      # For CAD Comorbid Condition
-          comorbid_condition_details_for_cad = {
-              "suffering_since" => "",
-              "details" => comorbid_condition_details["comorbid_cad"]
-          }
-
-          ComorbidCondition.create({
-             :patient_id => patient_id,
-             :sub_ailment_id => Ailment.find_by_name("Cardiac Ailments").id,
-             :comorbid_condition_details => comorbid_condition_details_for_cad.to_json
-          })
-
         end
 
+        ComorbidCondition.create({
+           :patient_id => patient_id,
+           :sub_ailment_id => ailment_id,
+           :comorbid_condition_details => comorbid_condition_details_for_diabetes.to_json
+        })
+
+
+    # For HTN Comorbid Condition
+        comorbid_htn_and_from = comorbid_condition_details["comorbid_htn_and_from"]
+        comorbid_condition_details_for_htn = {
+            "suffering_since" => "",
+            "details" => ""
+        }
+
+        if(comorbid_htn_and_from.class == String)
+          if(comorbid_htn_and_from.include?("month"))
+            comorbid_condition_details_for_htn["suffering_since"] = calculate_year_with_age(1)
+          elsif match = comorbid_htn_and_from.match(/(\d+).*/)
+            htn_details = match.captures
+            comorbid_condition_details_for_htn["suffering_since"] =
+                calculate_year_with_age(htn_details[0])
+          end
+        end
+
+        ComorbidCondition.create({
+           :patient_id => patient_id,
+           :sub_ailment_id => Ailment.find_by_name("Hypertension").id,
+           :comorbid_condition_details => comorbid_condition_details_for_htn.to_json
+        })
+
+
+    # For CAD Comorbid Condition
+        comorbid_cad_and_from = comorbid_condition_details["comorbid_cad"]
+        comorbid_condition_details_for_cad = {
+            "suffering_since" => "",
+            "details" => ""
+        }
+
+
+        if(comorbid_cad_and_from.class == String)
+          if match = comorbid_cad_and_from.match(/^(\d*)\s*(.+)/)
+            cad_details = match.captures
+            cad_suffering_since = cad_details[0]
+            cad_comment = cad_details[1]
+            if(cad_comment.include? "month")
+              cad_suffering_since = 1
+            end
+            cad_comment.gsub!(/[yr|Yrs.|month|NULL]\s*/,'')
+
+            comorbid_condition_details_for_cad["suffering_since"] =
+                calculate_year_with_age(cad_suffering_since) if cad_suffering_since.to_i > 0
+
+            comorbid_condition_details_for_cad["details"] = cad_comment
+          end
+        end
+
+        ComorbidCondition.create({
+           :patient_id => patient_id,
+           :sub_ailment_id => Ailment.find_by_name("Cardiac Ailments").id,
+           :comorbid_condition_details => comorbid_condition_details_for_cad.to_json
+        })
+
+      end
     end
 
     t2 = Time.now
@@ -505,9 +545,11 @@ namespace :import do
     {
         "blood_urea"=>"","s_crt"=>"","lipid_tc"=>"","lipid_tg"=>"","lipid_hdl"=>"","lipid_ldl"=>"",
         "usg_abdomen"=>"","ecg"=>"","2d_echo"=>"","tmt"=>"","Other"=>"","retinal_exam"=>"","egfr"=>"",
-        "urine_protein_crt_ratio"=>"","hba1c"=>"","chronic_complication"=>""
+        "urine_protein_crt_ratio"=>"","hba1c"=>""
     }
   end
+
+  # "urine_protein_crt_ratio"=>"","hba1c"=>"","chronic_complication"=>""
 
   def create_inv_details_records_for_patients(inv_det)
 
@@ -515,6 +557,9 @@ namespace :import do
 
     # begin
       inv_det.each do |patient_id,each_patient_details|
+
+        each_patient_details.sort.to_h
+
         begin
           patient = Patient.find(patient_id)
         rescue

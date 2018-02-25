@@ -94,6 +94,46 @@ function addCheckbox(addToElementId,checkboxId) {
     addToElement.append('<input type="checkbox" id="' + checkboxId + '"name="' + checkboxId + '" >')
 }
 
+function calculate_year(element) {
+    var element_value = element.value;
+    if(element_value.indexOf("-") != -1){
+        element_value = new Date(element_value).getFullYear();
+    }
+    var d = new Date();
+    var n = d.getFullYear();
+    return n-element_value;
+}
+
+function calculate_and_select_year(element,replace,datepicker) {
+    var default_replace = "__years_select";
+
+    var year_to_be_selected = calculate_year(element);
+    if(datepicker){
+        year_to_be_selected = year_to_be_selected+'-01-01';
+    }
+
+    if(replace){
+        $('#'+replace).val(year_to_be_selected);
+    }else{
+        $('#'+(element.id.split('__')[0]) + default_replace).val(year_to_be_selected);
+    }
+}
+
+function calculate_and_display_year(element,replace) {
+    var default_replace = "__suffering_since_years";
+
+    var year_to_be_selected = calculate_year(element);
+    // $('#'+(element.id.split('__')[0])+"__suffering_since_years").val(year_to_be_selected);
+
+    if(replace){
+        $('#'+replace).val(year_to_be_selected);
+    }else{
+        $('#'+(element.id.split('__')[0]) + default_replace).val(year_to_be_selected);
+    }
+
+    // $('#'+(element.id.split('__')[0])+replace).val(year_to_be_selected);
+}
+
 
 
 

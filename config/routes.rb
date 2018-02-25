@@ -23,6 +23,8 @@ Rails.application.routes.draw do
 
     delete 'delete_patient/:id', to:'patient#delete_patient'
 
+    get 'search_patients_in_all_villages/:search_patient_name', to:'patient#search_patients_in_all_villages'
+
   # Reports
 
     get 'reports', to:'reports#index'
@@ -67,6 +69,8 @@ Rails.application.routes.draw do
 
   # Visits
     get 'get_patient_visits/:id', to: 'visit#get_patient_visits'
+    get 'get_patient_dm_review_visit_dates/:id', to: 'visit#get_patient_dm_review_visit_dates'
+
   # END OF Visits
 
   # Investigation Details

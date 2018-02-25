@@ -3,7 +3,9 @@
      */
 
     function loadVisitsComboInDMDetailsTemplate(patientId) {
-        simpleComboLoad("/get_patient_visits/"+patientId+".json",$('#dm_patient_visits_select_id'),true);
+        // simpleComboLoad("/get_patient_visits/"+patientId+".json",$('#dm_patient_visits_select_id'),true);
+        simpleComboLoad("/get_patient_dm_review_visit_dates/"+patientId+".json",$('#dm_patient_visits_select_id'),true);
+
         resetDMDetailVisitsCombo();
         resetDMDetailsNewVisitData();
         removeDMDetailsForPastPatient();
@@ -145,7 +147,7 @@
             })
 
             // Process all Current Medicine for Listing
-            
+
 
         }
 

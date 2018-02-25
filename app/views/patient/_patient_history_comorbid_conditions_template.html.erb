@@ -1,24 +1,6 @@
 <% content_for :scripts do %>
     <script>
 
-      function calculate_year(element) {
-          var element_value = element.value;
-          var element_id = element.id;
-          var d = new Date();
-          var n = d.getFullYear();
-          return n-element_value;
-      }
-
-      function calculate_and_select_year(element) {
-          var year_to_be_selected = calculate_year(element);
-          $('#'+(element.id.split('__')[0])+"__years_select").val(year_to_be_selected);
-      }
-
-      function calculate_and_display_year(element) {
-          var year_to_be_selected = calculate_year(element);
-          $('#'+(element.id.split('__')[0])+"__suffering_since_years").val(year_to_be_selected);
-      }
-
     </script>
 <% end %>
 
@@ -46,7 +28,7 @@
 
               <%sub_ailments = comorbid_conditions.where(:parent_ailment_id => each_comorbid_condition.id)%>
               <%if(sub_ailments.length > 0)%>
-                  <select id="input_cmc_<%=each_comorbid_condition.code%>_sub_ailment_select" name="cmc[<%=each_comorbid_condition.id%>[ailment_type]]">
+                  <select id="input_cmc_<%=each_comorbid_condition.code%>__sub_ailment_select" name="cmc[<%=each_comorbid_condition.id%>[ailment_type]]">
                     <%sub_ailments.each do|each_sub_ailment|%>
                         <option value="<%=each_sub_ailment.name%>"><%=each_sub_ailment.name%></option>
                     <%end%>
