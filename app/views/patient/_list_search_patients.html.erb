@@ -60,7 +60,7 @@
       <div id="patient_search_crud_div">
         <div id="patient_search_div">
           <!--<i class="fa fa-search" id="patient_search_icon" title="Search Patients"></i>-->
-            <input id="patient_search_box" type="text" name="patient_search" size="25px"
+            <input id="patient_search_box" type="text" name="patient_search" style="width:90%"
                    placeholder="Search Patient..."/>
         </div>
         <i class="fa fa-search" id="patient_search_icon" title="Search Patients" onclick="searchPatientsInAllVillages();"></i>
@@ -73,8 +73,9 @@
 
       </div>
 
-      <div id="villages_div" style="float:left;margin: 5px 0 0px 15px;">
-        <select id="report_select_id"
+      <!--<div id="villages_div" style="float:left;margin: 5px 0 0px 15px;">-->
+      <div id="villages_div" style="margin: 5px 0 0px 15px;height: 0.1vh;">
+        <select id="report_select_id" style="margin-top: 5px;"
                 onchange="loadPatientsForSearch($('#patients_list_block_div'),this.value);">
         </select>
       </div>
