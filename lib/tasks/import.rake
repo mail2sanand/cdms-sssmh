@@ -59,8 +59,6 @@ namespace :import do
         nodal_village_id = old_village_id
       end
 
-
-
       Patient.create({
          :id => patient_id,
          :name => patient_name,
@@ -68,10 +66,22 @@ namespace :import do
          :village_id => village_id,
          :nodal_village_id => nodal_village_id,
          :contact => contact_number,
-         :cdno => cdno,
+         # :cdno => cdno,
          :dateOfBirth=>dateOfBirth,
          :alive => alive
        })
+
+      ailment = Ailment.find_by_name('Diabetes').id
+
+      PatientAilmentDetail.create({
+          :patient_id => patient_id,
+          :ailment_id => ailment,
+          :patient_ailment_details => {
+              "sssmh_care_from" => "",
+              "dm_no" => cdno
+          }
+      })
+
 
     end
 
@@ -84,6 +94,7 @@ namespace :import do
   task patient_history: :environment do
     puts "Processing : Patient History\n"
     filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Index_sheet_history_details.xlsx"
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patient42/Index_history_Details_selected_patients.xlsx"
     latest_patient_history_array = {}
 
     xsls = Roo::Excelx.new(filename)
@@ -109,7 +120,6 @@ namespace :import do
       if(question == 3)
         if match = answer.to_s.match(/(\d+).*/)
           year = match.captures
-          # latest_patient_history_array[patient_id]["under_sssmh_care_from"] = year
           latest_patient_history_array[patient_id]["patient_ailment_details"] = {
               "sssmh_care_from" => year.first,
               "dm_no" => ""
@@ -140,13 +150,27 @@ namespace :import do
         }
       )
 
-      PatientAilmentDetail.create({
-        :patient_id => patient_id,
-        :ailment_id => ailment,
-        :patient_ailment_details => patient_history_detail_hash["patient_ailment_details"]
-      })
+      patient_history_detail_hash = patient_history_detail_hash["patient_ailment_details"]
 
-      habit_comment = patient_history_detail_hash["diet_exceicise"]
+      puts "Patient Id : ====>> #{patient_id}"
+      sssmh_care_from = patient_history_detail_hash ? patient_history_detail_hash['sssmh_care_from'] : ""
+      puts "sssmh_care_from : ====>> #{sssmh_care_from}"
+
+      patientAilmentPatientAilmentDetailRec = PatientAilmentDetail.find_by(
+          :patient_id => patient_id,
+          :ailment_id => ailment
+      )
+
+      #
+      # patientAilmentPatientAilmentDetailRec.update(:patient_ailment_details => {})
+      #
+      if patientAilmentPatientAilmentDetailRec
+        patient_ailment_details_hash = patientAilmentPatientAilmentDetailRec.patient_ailment_details
+        patient_ailment_details_hash.merge!({"sssmh_care_from" => "#{sssmh_care_from}"})
+        patientAilmentPatientAilmentDetailRec.update(:patient_ailment_details => patient_ailment_details_hash)
+      end
+
+      habit_comment = patient_history_detail_hash ? patient_history_detail_hash["diet_exceicise"] : ""
       PatientHabit.create([{
           :patient_id => patient_id,
           :habit_id => 7,
@@ -176,12 +200,19 @@ namespace :import do
 
       next if(patient_array.include?(patient_id))
 
-      height = sheet_0_each_row[4] ? sheet_0_each_row[4] : ""
-      weight = sheet_0_each_row[5] ? sheet_0_each_row[5] : ""
-      bmi = sheet_0_each_row[6] ? sheet_0_each_row[6] : ""
-      waist_circumfrence = sheet_0_each_row[7] ? sheet_0_each_row[7] : ""
-      pulse = sheet_0_each_row[8] ? sheet_0_each_row[8] : ""
-      bp = sheet_0_each_row[13] ? sheet_0_each_row[13] : ""
+      # height = sheet_0_each_row[4] ? sheet_0_each_row[4] : ""
+      # weight = sheet_0_each_row[5] ? sheet_0_each_row[5] : ""
+      # bmi = sheet_0_each_row[6] ? sheet_0_each_row[6] : ""
+      # waist_circumfrence = sheet_0_each_row[7] ? sheet_0_each_row[7] : ""
+      # pulse = sheet_0_each_row[8] ? sheet_0_each_row[8] : ""
+      # bp = sheet_0_each_row[13] ? sheet_0_each_row[13] : ""
+
+      height = return_empty_on_null_or_0(sheet_0_each_row[4])
+      weight = return_empty_on_null_or_0(sheet_0_each_row[5])
+      bmi = return_empty_on_null_or_0(sheet_0_each_row[6])
+      waist_circumfrence = return_empty_on_null_or_0(sheet_0_each_row[7])
+      pulse = return_empty_on_null_or_0(sheet_0_each_row[8])
+      bp = return_empty_on_null_or_0(sheet_0_each_row[13])
 
       new_ex_finding_records = [
           {
@@ -349,6 +380,8 @@ namespace :import do
   desc "Import all Review Sheet Data"
   task review_data: :environment do
     filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data_original.xlsx"
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patient42/Review_Sheet_Data_selected_patients.xlsx"
+
     # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data/habibunissa_1.xlsx"
     # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data/patient_42_to_50.xlsx"
     review_comorbid_details = {}
@@ -386,8 +419,8 @@ namespace :import do
 
           # Examination Findings Of Review Visits
               default_examination_details_hash = {}
-              default_examination_details_hash["weight"] = sheet_0_each_row[5] ? sheet_0_each_row[5] : ""
-              default_examination_details_hash["pulse"] = sheet_0_each_row[7] ? sheet_0_each_row[7] : ""
+              default_examination_details_hash["weight"] = return_empty_on_null_or_0(sheet_0_each_row[5])
+              default_examination_details_hash["pulse"] = return_empty_on_null_or_0(sheet_0_each_row[7])
 
               bp_from_old_portal = sheet_0_each_row[6]
               if bp_from_old_portal and bp_from_old_portal =~ /\//
@@ -399,8 +432,8 @@ namespace :import do
 
               default_examination_details_hash["hypoglycemic_attacks"] = sheet_0_each_row[10] ? sheet_0_each_row[10] : ""
               default_examination_details_hash["infective_focus"] = sheet_0_each_row[11] ? sheet_0_each_row[11] : ""
-              default_examination_details_hash["fbs"] = sheet_0_each_row[8] ? sheet_0_each_row[8] : ""
-              default_examination_details_hash["ppbs"] = sheet_0_each_row[9] ? sheet_0_each_row[9] : ""
+              default_examination_details_hash["fbs"] = return_empty_on_null_or_0(sheet_0_each_row[8])
+              default_examination_details_hash["ppbs"] = return_empty_on_null_or_0(sheet_0_each_row[9])
               default_examination_details_hash["rbs"] = ""
               default_examination_details_hash["chronic_complication"] = sheet_0_each_row[4] ? sheet_0_each_row[4] : ""
               default_examination_details_hash["current_medicine"] = sheet_0_each_row[12] ? sheet_0_each_row[12] : ""
@@ -544,9 +577,18 @@ namespace :import do
   def get_default_investigation_details_hash
     {
         "blood_urea"=>"","s_crt"=>"","lipid_tc"=>"","lipid_tg"=>"","lipid_hdl"=>"","lipid_ldl"=>"",
-        "usg_abdomen"=>"","ecg"=>"","2d_echo"=>"","tmt"=>"","Other"=>"","retinal_exam"=>"","egfr"=>"",
-        "urine_protein_crt_ratio"=>"","hba1c"=>""
+        "usg_abdomen"=>"","ecg"=>"","2d_echo"=>"","tmt"=>"","retinal_exam"=>"","egfr"=>"",
+        "urine_protein_crt_ratio"=>"","hba1c"=>"","others"=>""
     }
+  end
+
+  def return_empty_on_null_or_0(parameter)
+    return_parameter = parameter
+    if(!parameter or parameter == 0)
+      return_parameter = ""
+    end
+
+    return return_parameter
   end
 
   # "urine_protein_crt_ratio"=>"","hba1c"=>"","chronic_complication"=>""

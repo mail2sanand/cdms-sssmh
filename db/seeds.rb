@@ -214,7 +214,7 @@ Investigation.create([
     {:name=>"ECG",:code=>"ecg"},
     {:name=>"2D-Echo",:code=>"2d_echo"},
     {:name=>"TMT",:code=>"tmt"},
-    {:name=>"Other",:code=>"Other"},
+    {:name=>"Others",:code=>"others",:parameter_length=>"textarea"},
     {:name=>"Retinal Examination",:code=>"retinal_exam"},
     {:name=>"eGFR",:code=>"egfr"},
     {:name=>"Urine : Protein/Crt Ratio",:code=>"urine_protein_crt_ratio"},

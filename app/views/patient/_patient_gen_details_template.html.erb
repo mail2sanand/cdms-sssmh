@@ -51,9 +51,9 @@
     <div style="height:22px;" class="patient_details_colon">
       :
     </div>
-    <div style="height:30px;" class="patient_details_input">
+    <div style="height:30px;width: 50%;overflow-x: scroll;" class="patient_details_input">
       <input type="text" id="input_pgd_dateOfBirth" size="12"  name="pgd[dateOfBirth]" onchange="calculate_and_display_year(this);">
-      <input style="display:none;" type="text" size="5" id="input_pgd_dateOfBirth__suffering_since_years" name="" onblur="calculate_and_select_year(this,'input_pgd_dateOfBirth',true);"/>
+      <input style="display:none;" type="text" size="3" id="input_pgd_dateOfBirth__suffering_since_years" name="" onblur="calculate_and_select_year(this,'input_pgd_dateOfBirth',true);"/>
 
       <span id="span_pgd_age">Age Of the Patient</span>
     </div>
@@ -189,21 +189,21 @@
       :
     </div>
     <div style="height:30px;" class="patient_details_input">
-      <input id="input_pgd_bmNo" type="text" placeholder="BM Number" name="pgd[bmNo]"/>
-      <span id="span_pgd_bmNo">BM Number</span>
+      <input id="input_pgd_bmNo" type="text" placeholder="MB Number" name="pgd[bmNo]"/>
+      <span id="span_pgd_bmNo">MB Number</span>
     </div>
   </div>
 
   <div class="patients_details_general" style="height:20px;">
     <div style="height:22px;float;" class="patient_details_label">
-      SSSMHMS Id. No.
+      SSSMH Id. No.
     </div>
     <div style="height:22px;" class="patient_details_colon">
       :
     </div>
     <div style="height:30px;" class="patient_details_input">
-      <input id="input_pgd_sssmhIdNo" type="text" placeholder="SSSMHMS Id. Number" name="pgd[sssmhIdNo]"/>
-      <span id="span_pgd_sssmhIdNo">SSSMHMS Id. Number</span>
+      <input id="input_pgd_sssmhIdNo" type="text" placeholder="SSSMH Id. Number" name="pgd[sssmhIdNo]"/>
+      <span id="span_pgd_sssmhIdNo">SSSMH Id. Number</span>
     </div>
   </div>
 

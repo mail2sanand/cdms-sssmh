@@ -29,9 +29,10 @@ class ReportsController < ApplicationController
               END village_name,
               p.age,
               p.gender,
-              p.cdno
+              pad.patient_ailment_details->'dm_no' cdno
               FROM patients p
                   JOIN villages v ON v.id = p.village_id
+                  join patient_ailment_details pad on pad.patient_id = p.id
     "
 
     query_2 = ""

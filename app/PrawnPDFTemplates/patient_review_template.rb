@@ -86,6 +86,7 @@ class PatientReviewTemplate < Prawn::Document
     # (dm_details ?  : "")
 
     pgd = pgd_array.first
+    date = Time.now.strftime('%d %b, %Y')
 
     dob_age =
         (pgd.dateOfBirth ? "#{pgd.dateOfBirth.strftime("%e %b %Y")} - #{ApplicationController.new.calculate_age(Date.strptime(pgd.dateOfBirth.to_s),Date.today)} years" : "")
@@ -94,8 +95,8 @@ class PatientReviewTemplate < Prawn::Document
     patient_general_details = ([
         [
             {
-                :content => "<b>Date : </b> ",
-                :width => 80,
+                :content => "<b>Date :</b>  #{date}",
+                :width => 95,
                 :height => 30
             },
             {

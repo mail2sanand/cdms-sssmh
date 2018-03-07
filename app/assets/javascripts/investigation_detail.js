@@ -19,8 +19,8 @@
             var seperate_investigation_details_div_width = 100;
             var extra_width = 0;
 
-            if(patientInvestigationDetails.length > 3){
-                extra_width = ( Math.ceil((patientInvestigationDetails.length - 3) ) ) * 40;
+            if(patientInvestigationDetails.length > 2){
+                extra_width = ( Math.ceil((patientInvestigationDetails.length - 2) ) ) * 60;
             }
 
             var total_width = seperate_investigation_details_div_width + extra_width;
@@ -65,7 +65,8 @@
                         )
                 );
 
-                var div_height = '4.5';
+                // var div_height = '4.5';
+                var div_height = '5';
                 $.each(investigationDetails,function(key){
                     var code = key;
                     div_height = (all_investigations_hash[key] == "textarea" ? "12" : div_height);

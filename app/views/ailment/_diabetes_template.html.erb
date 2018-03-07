@@ -32,7 +32,6 @@
     </script>
 
 
-
 <% examinations_for_diabetes = get_examinations_for_ailment("Diabetes") %>
 <%last_100_years = get_last_100_years%>
 
@@ -65,22 +64,22 @@
   </div>
 
 
-  <div id="dm_details_for_patient_div" style="position:relative;height:75vh;border:1px solid green;width:100%;margin-left:0px;float:left;padding:5px;">
+  <div id="dm_details_for_patient_div" style="position:relative;height:95vh;border:1px solid green;width:100%;margin-left:0px;float:left;padding:5px;">
 
     <div id="dm_details_left_block" style="float: left;width:36%;border-right: 1px solid red;height: auto;">
 
       <div id="header_date_block" style="height: 8vh;border: 0px solid darkviolet;border-bottom:1px solid darkviolet">
 
         <div id="header_block" style="height:5vh;border:0px solid yellow;">
-          <div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;border-right:0px solid green;height:5vh;">
-            <div style="border-bottom:1px solid green;height: 3vh;"><b>Ex. Parameter</b></div>
+          <!--<div style="margin-bottom:25px;margin-left:14px;margin-top:12px;float:left;border-right:0px solid green;height:5vh;">-->
+            <!--<div style="border-bottom:1px solid green;height: 3vh;"><b>Ex. Parameter</b></div>-->
 
             <!--<div style="margin-left:0px;border:0px dotted green;height:2vh;margin-top:5px;">-->
             <!--<b>Date Of Visit</b>-->
             <!--</div>-->
-          </div>
+          <!--</div>-->
 
-          <div id="dm_header_visit_div" style="margin-left:6px;margin-top:4px;float:left;width: 63%;border-right:0px solid green;height:4.1vh;">
+          <div id="dm_header_visit_div" style="margin-left:6px;margin-top:4px;float:right;width: 90%;border-right:0px solid green;height:4.1vh;">
             <!--<div id="dm_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
             <div id="diabetes_new_visit_div" style="width:100%;height:4.1vh;border:0px solid green;border-bottom:1px solid green;" >
               <!--<input type="hidden" name="dm_details[patient_visit]" value="0">-->
@@ -107,16 +106,17 @@
 
       </div>
 
-      <div class="ailment_mid_divs" id="dm_details_div" style="height:auto;overflow-y:auto;border:0px solid red;width:95%">
+      <div class="ailment_mid_divs" id="dm_details_div" style="height:auto;overflow-y:auto;border:0px solid red;width:95%;margin-top: 15px;">
 
         <%examinations_for_diabetes.each do|each_dm_parameter|%>
-            <div id="examination_header_<%=each_dm_parameter.code%>" style="margin-left:10px;height:4.5vh;width:100%;border-bottom:1px dotted green;" align="left">
+            <div id="examination_header_<%=each_dm_parameter.code%>" style="margin-left:10px;height:5vh;width:100%;border-bottom:1px dotted green;" align="left">
 
               <div style="margin-left:0px;margin-top:5px;width:37%;float:left;border-right:0px solid green;border:0px dotted green;height:3vh;">
                 <%=each_dm_parameter.name%>
               </div>
 
-              <div align="center" style="margin-left:5px;margin-top:5px;float:left;width:53%;border:0px solid red;border-bottom:0px dotted green;height:3vh;">
+              <!--<div align="center" style="margin-left:5px;margin-top:5px;float:left;width:53%;border:0px solid red;border-bottom:0px dotted green;height:3vh;">-->
+              <div align="center" style="margin-left:5px;margin-top:5px;float:left;border:0px solid red;border-bottom:0px dotted green;height:3vh;">
                 <%input_size = 15%>
                 <%if each_dm_parameter.parameter_length %>
                     <%case each_dm_parameter.parameter_length%>

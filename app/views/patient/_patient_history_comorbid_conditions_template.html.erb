@@ -20,13 +20,22 @@
         <%next if each_comorbid_condition.parent_ailment_id%>
 
         <div id="co_morbid_condition_header" style="height:4vh;width:100%;">
-          <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;"><%=each_comorbid_condition.name%></div>
-          <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px dotted green;height:3vh;">
+
+          <%sub_ailments_height = "4vh"%>
+          <%sub_ailments = comorbid_conditions.where(:parent_ailment_id => each_comorbid_condition.id)%>
+          <%if sub_ailments.length > 0%>
+              <%sub_ailments_height = "7vh"%>
+          <%end%>
+
+          <div style="margin-left:14px;margin-top:5px;float:left;width:30%;border-right:0px solid green;border-bottom:1px dotted green;height:<%=sub_ailments_height%>;">
+            <%=each_comorbid_condition.name%>
+          </div>
+
+          <div style="margin-left:22px;margin-top:5px;float:left;width:61%;border-right:0px solid green;border-bottom:1px dotted green;height:<%=sub_ailments_height%>;">
             <!--In case of Sub-Ailments -->
 
             <span id="input_cmc_<%=each_comorbid_condition.code%>__subailment_combo">
 
-              <%sub_ailments = comorbid_conditions.where(:parent_ailment_id => each_comorbid_condition.id)%>
               <%if(sub_ailments.length > 0)%>
                   <select id="input_cmc_<%=each_comorbid_condition.code%>__sub_ailment_select" name="cmc[<%=each_comorbid_condition.id%>[ailment_type]]">
                     <%sub_ailments.each do|each_sub_ailment|%>
@@ -44,7 +53,7 @@
               <input style="display:none;" type="text" size="5" id="input_cmc_<%=each_comorbid_condition.code%>__suffering_since_years" name="" onblur="calculate_and_select_year(this);"/>
 
 
-              <input style="display:none;" type="text" size="20" id="input_cmc_<%=each_comorbid_condition.code%>__details" name="cmc[<%=each_comorbid_condition.id%>[details]]" />
+              <input style="display:none;margin-top:2px;" type="text" size="20" id="input_cmc_<%=each_comorbid_condition.code%>__details" name="cmc[<%=each_comorbid_condition.id%>[details]]" />
             </span>
 
             <span id="span_cmc_<%=each_comorbid_condition.code%>__display_detail"> - </span>

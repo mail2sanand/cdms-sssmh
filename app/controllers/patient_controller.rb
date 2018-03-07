@@ -53,7 +53,7 @@ class PatientController < ApplicationController
       select v.name,string_agg(p.name||'_'||p.cdno||'_'||p.id,',') as patients
       from patients p
         join villages v on v.id = p.nodal_village_id
-      where p.name like '%#{search_patient_name}%'
+      where p.name ilike '%#{search_patient_name}%'
       group by v.name
     "
     patients_search_results = ActiveRecord::Base.connection.execute(search_query)
@@ -329,9 +329,9 @@ class PatientController < ApplicationController
       cmc_asthma = patient_cmc_details_hash["asthma"] ? JSON.parse(patient_cmc_details_hash["asthma"])["suffering_since"] : ""
       cmc_epilepsy = patient_cmc_details_hash["epilepsy"] ? JSON.parse(patient_cmc_details_hash["epilepsy"])["suffering_since"] : ""
 
-      cmc_others = "#{cmc_others}#{Prawn::Text::NBSP*3}Thy : #{cmc_thyroid}" if cmc_thyroid != "0"
-      cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Asth : #{cmc_asthma}" if cmc_asthma != "0"
-      cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Epi : #{cmc_epilepsy}" if cmc_epilepsy != "0"
+      cmc_others = "#{cmc_others}#{Prawn::Text::NBSP*3}Thy : #{cmc_thyroid}" if (cmc_thyroid != "0" and cmc_thyroid != "")
+      cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Asth : #{cmc_asthma}" if (cmc_asthma != "0"  and cmc_asthma != "")
+      cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Epi : #{cmc_epilepsy}" if (cmc_epilepsy != "0" and cmc_epilepsy != "")
 
       report_details[:history][:cmc][:cmc_others] = cmc_others
     # end
@@ -531,8 +531,8 @@ class PatientController < ApplicationController
         InvestigationDetail.where("patient_id = #{patient_id} and investigation_details->>'chronic_complication' is not null").order("id desc")
     latest_inv_det = (latest_inv_detail_with_cc.length > 0 ? latest_inv_detail_with_cc.first.investigation_details : nil)
 
-    report_details[:cmc][:chronic_complications] = (latest_inv_det ? latest_inv_det["chronic_complication"] : "")
-
+    # report_details[:cmc][:chronic_complications] = (latest_inv_det ? latest_inv_det["chronic_complication"] : "")
+    #
     # puts "*****************"
     # Get the Latest Visit's Examination Parameters
     visit_examinations = ExaminationDetail.joins(:visit)
@@ -569,6 +569,8 @@ class PatientController < ApplicationController
       one_month_examination_detail[:rbs] = latest_visit_examination.examination_details["rbs"]
 
       report_details[:current_medicine] = latest_visit_examination.examination_details["current_medicine"]
+      report_details[:cmc][:chronic_complications] = latest_visit_examination.examination_details["chronic_complication"]
+
     else
       one_month_examination_detail[:weight] = index_visit.where("examinations.code = 'weight'").first ? index_visit.where("examinations.code = 'weight'").first.examination_finding : ""
       one_month_examination_detail[:bp] = index_visit.where("examinations.code = 'bp'").first ? index_visit.where("examinations.code = 'bp'").first.examination_finding : ""
