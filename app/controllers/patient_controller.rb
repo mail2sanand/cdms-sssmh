@@ -49,13 +49,36 @@ class PatientController < ApplicationController
 
   def search_patients_in_all_villages
     search_patient_name = params[:search_patient_name]
+    # search_query = "
+    #   select v.name,string_agg(p.name||'_'||p.cdno||'_'||p.id,',') as patients
+    #   from patients p
+    #     join villages v on v.id = p.nodal_village_id
+    #   where p.name ilike '%#{search_patient_name}%'
+    #   group by v.name
+    # "
+
+    # pad.patient_ailment_details->'dm_no' as patient_dm_no,
+
     search_query = "
-      select v.name,string_agg(p.name||'_'||p.cdno||'_'||p.id,',') as patients
-      from patients p
-        join villages v on v.id = p.nodal_village_id
-      where p.name ilike '%#{search_patient_name}%'
-      group by v.name
+      select village_name as name,string_agg(patient_name || '_' || replace(patient_dm_no::text,'\"','') || '_' || patient_id::text,',') as patients
+      from (
+        select v.name village_name,p.name patient_name,
+        	case
+        		when pad.patient_ailment_details->'dm_no' is null
+        			then '{\"dm_no\":\"\"}'::jsonb->'dm_no'
+        		else
+        			pad.patient_ailment_details->'dm_no'
+        		end
+        	as patient_dm_no,
+        p.id as patient_id
+            from patients p
+              join villages v on v.id = p.nodal_village_id
+              left outer join patient_ailment_details pad on pad.patient_id = p.id
+            where p.name ilike '%#{search_patient_name}%'
+        ) tmp
+        group by village_name
     "
+
     patients_search_results = ActiveRecord::Base.connection.execute(search_query)
 
     respond_to do |format|
@@ -162,10 +185,10 @@ class PatientController < ApplicationController
     # Update the Examination Findings
     @@examinationFindingsController.update_examination_findings_for_patient(patientForEditing,params[:examination_findings])
 
-    # puts "====================>>>>> #{params[:investigation_details].inspect}"
+    puts "====================>>>>> update_investigation_details_for_patient : #{params[:investigation_details].inspect}"
     @@investigationDetailsController.update_investigation_details_for_patient(patientForEditing,params[:investigation_details])
 
-    # puts "=====================>>>>>>  dm_details Paramters : #{.inspect}"
+    puts "=====================>>>>>>  dm_details Paramters : #{params[:dm_details].inspect}"
     @@dmDetailsController.update_dm_details_for_patient(params[:dm_details], patientForEditing)
 
     # Update the Patient General Details
@@ -645,7 +668,7 @@ class PatientController < ApplicationController
 
   private
   def patient_params
-    params[:pgd].permit(:id,:alive,:photo,:name,:age,:gender, :dateOfBirth, :relationName,:bmNo,:contact, :annualIncome, :village_id, :nodal_village_id, :cdno, :sssmhIdNo, :aadharNo)
+    params[:pgd].permit(:id,:alive,:photo,:name,:age,:gender, :dateOfBirth, :relationName,:bmNo,:contact, :annualIncome, :village_id, :nodal_village_id, :cdno, :sssmhIdNo, :aadharNo, :mandal, :district)
   end
 
 end

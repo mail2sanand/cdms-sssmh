@@ -134,6 +134,23 @@ function calculate_and_display_year(element,replace) {
     // $('#'+(element.id.split('__')[0])+replace).val(year_to_be_selected);
 }
 
+function format_list(text_to_be_formatted) {
+    var text_to_be_formatted_array = text_to_be_formatted.split(/\d+\.\s+/);
+
+    var i=1;
+    var new_formatted_text = "";
+    text_to_be_formatted_array.forEach(function (each_array) {
+        if(each_array == "") {
+            return;
+        }
+        new_formatted_text = new_formatted_text + "<br>" + i + ". " + each_array;
+        i++;
+    })
+
+    var new_2_formatted_text = new_formatted_text.replace("<br>","");
+
+    return new_2_formatted_text;
+}
 
 
 

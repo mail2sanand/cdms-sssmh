@@ -157,7 +157,8 @@ Ailment.create([
     {:id=>13,:code=>"asthma",:name=>"Asthma",:desc=>"Asthma",:department_id=>ms_dept.id},
     {:id=>14,:code=>"thyroid",:name=>"Thyroid",:desc=>"Thyroid",:department_id=>ms_dept.id},
     {:id=>19,:code=>"hyper_lipidemia",:name=>"Hyper Lipidemia",:desc=>"Hyper Lipidemia",:department_id=>ms_dept.id},
-    {:id=>16,:code=>"cva",:name=>"CVA",:desc=>"CVA",:department_id=>ms_dept.id}
+    {:id=>16,:code=>"cva",:name=>"CVA",:desc=>"CVA",:department_id=>ms_dept.id},
+    {:id=>20,:code=>"others",:name=>"Others",:desc=>"Others",:department_id=>ms_dept.id}
     # {:code=>"gtcs",:name=>"GTCS",:desc=>"GTCS",:department_id=>ms_dept.id},
     # ,{:code=>"combined_disease",:name=>"Combined Disease",:desc=>"Combined Disease",:department_id=>ms_dept.id},
     # {:code=>"all_diseases",:name=>"All Diseases",:desc=>"All Diseases",:department_id=>ms_dept.id}

@@ -16,23 +16,25 @@ class ReportsController < ApplicationController
     puts "nodal_village : #{nodal_village}"
 
     query_1 = "
-          SELECT p.id patient_id,p.name patient_name
-              ,CASE
-                  WHEN v.parent_village_id != 0
-                      THEN (SELECT id FROM villages WHERE id=v.parent_village_id)
-                  ELSE v.id
-               END village_id
-              ,CASE
-                  WHEN v.parent_village_id != 0
-                      THEN (SELECT name FROM villages WHERE id=v.parent_village_id)
-                  ELSE v.name
-              END village_name,
-              p.age,
-              p.gender,
-              pad.patient_ailment_details->'dm_no' cdno
-              FROM patients p
-                  JOIN villages v ON v.id = p.village_id
-                  join patient_ailment_details pad on pad.patient_id = p.id
+      select patient_id, patient_name, village_id, village_name, age, gender, replace(cdno::text,'\"','') as cdno
+        from (
+            SELECT p.id patient_id,p.name patient_name
+                ,CASE
+                    WHEN v.parent_village_id != 0
+                        THEN (SELECT id FROM villages WHERE id=v.parent_village_id)
+                    ELSE v.id
+                 END village_id
+                ,CASE
+                    WHEN v.parent_village_id != 0
+                        THEN (SELECT name FROM villages WHERE id=v.parent_village_id)
+                    ELSE v.name
+                END village_name,
+                p.age,
+                p.gender,
+                pad.patient_ailment_details->'dm_no' cdno
+                FROM patients p
+                    JOIN villages v ON v.id = p.village_id
+                    left outer join patient_ailment_details pad on pad.patient_id = p.id
     "
 
     query_2 = ""
@@ -58,6 +60,7 @@ class ReportsController < ApplicationController
 
     query_3 = "
               order by p.name asc
+        ) tmp
     "
 
     village_id = "all_villages" if !village_id

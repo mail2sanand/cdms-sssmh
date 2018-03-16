@@ -12,6 +12,9 @@ class CreatePatients < ActiveRecord::Migration[5.1]
       t.string :bmNo
       t.string :relationName
 
+      t.string :mandal
+      t.string :district
+
       t.date :dateOfBirth
       t.string :annualIncome
 

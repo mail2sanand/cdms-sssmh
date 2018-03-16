@@ -154,6 +154,8 @@ ActiveRecord::Schema.define(version: 20180103201537) do
     t.string "aadharNo"
     t.string "bmNo"
     t.string "relationName"
+    t.string "mandal"
+    t.string "district"
     t.date "dateOfBirth"
     t.string "annualIncome"
     t.integer "alive"

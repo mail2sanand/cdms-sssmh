@@ -34,10 +34,13 @@ class DmController < ApplicationController
       # We will have to error that there is no Visit Selected.
     else
       # puts "The patients visit isn't a Number but a Date : #{patientVisit}"
+      patient_village = Village.find(patient.village_id)
+      visited_at = (patient_village.parent_village_id == 0 ? patient_village.id : patient_village.parent_village_id)
+
       newVisit = Visit.find_or_create_by({
            :patient_id => patient.id,
            :visited_on => patientVisit,
-           :visited_at => Village.find(patient.village_id).parent_village_id
+           :visited_at => visited_at
        })
       # puts "================>>>>>newVisit : #{newVisit.inspect}"
 

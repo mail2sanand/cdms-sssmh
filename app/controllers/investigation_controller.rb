@@ -18,10 +18,14 @@ class InvestigationController < ApplicationController
     elsif patientVisit.empty?
       # We will have to error that there is no Visit Selected.
     else
+      patient_village = Village.find(patient.village_id)
+      visited_at = (patient_village.parent_village_id == 0 ? patient_village.id : patient_village.parent_village_id)
+
       newVisit = Visit.find_or_create_by({
         :patient_id => patient.id,
         :visited_on => patientVisit,
-        :visited_at => Village.find(patient.village_id).parent_village_id
+        # :visited_at => Village.find(patient.village_id).parent_village_id
+        :visited_at => visited_at
       })
 
       ailments = Ailment.find_by_name("Diabetes").id

@@ -15,7 +15,9 @@ function loadVillages(){
 function selectRespectiveNodalVillage(sub_village_id) {
     // console.log(subVillageNodalVillageMapping);
     nodal_village = subVillageNodalVillageMapping[sub_village_id];
-    console.log(nodal_village);
+    if(nodal_village == 0){
+        nodal_village = parseInt(sub_village_id);
+    }
 
     $('#input_pgd_nodal_village_id').val(nodal_village);
 }
@@ -311,7 +313,7 @@ function firstWordCap(stringToConvert){
                     }
                 },
                 error:function (data) {
-                    console.log(data);
+                    // console.log(data);
                 }
             })
 
@@ -678,36 +680,37 @@ function firstWordCap(stringToConvert){
     function populateVillageAndPatientsForSearch(patientsSearchArray) {
         patientsSearchArray.forEach(function (each_patients_search) {
             var village_name = each_patients_search.name;
-            var patients_in_this_village = each_patients_search.patients.split(",");
+            if(each_patients_search.patients) {
+                var patients_in_this_village = each_patients_search.patients.split(",");
 
-            var patients_search_list_block_div = $('#patients_search_list_block_div');
-            patients_search_list_block_div.append($('<div/>')
-                .attr("id","patient_search_village_"+village_name)
-                .attr("align","left")
-                .attr("style","color:red;margin-left:15px;margin-bottom:10px;padding-left:0px;margin-top:4px;height:auto;")
-                .append(
-                    $('<span/>')
-                        .text(village_name)
-                )
-            );
-
-            patients_in_this_village.forEach(function (each_patient) {
-                var patient_details = each_patient.split("_");
-                var patient_name = patient_details[0]+" ("+patient_details[1]+")";
-                var patient_id = patient_details[2];
-
-                $("#patient_search_village_"+village_name).append($('<div/>')
-                    .attr("id","patient_search_"+patient_details[0])
-                    .attr("align","left")
-                    .attr("style","color:purple;margin-left:15px;padding-left:0px;margin-top:4px;border:0px dotted red;height:auto;cursor:pointer;")
-                    .attr("onclick","loadPatientDetails("+patient_id+")")
+                var patients_search_list_block_div = $('#patients_search_list_block_div');
+                patients_search_list_block_div.append($('<div/>')
+                    .attr("id", "patient_search_village_" + village_name)
+                    .attr("align", "left")
+                    .attr("style", "color:red;margin-left:15px;margin-bottom:10px;padding-left:0px;margin-top:4px;height:auto;")
                     .append(
                         $('<span/>')
-                            .text(patient_name)
+                            .text(village_name)
                     )
                 );
-            })
 
+                patients_in_this_village.forEach(function (each_patient) {
+                    var patient_details = each_patient.split("_");
+                    var patient_name = patient_details[0] + " (" + patient_details[1] + ")";
+                    var patient_id = patient_details[2];
+
+                    $("#patient_search_village_" + village_name).append($('<div/>')
+                        .attr("id", "patient_search_" + patient_details[0])
+                        .attr("align", "left")
+                        .attr("style", "color:purple;margin-left:15px;padding-left:0px;margin-top:4px;border:0px dotted red;height:auto;cursor:pointer;")
+                        .attr("onclick", "loadPatientDetails(" + patient_id + ")")
+                        .append(
+                            $('<span/>')
+                                .text(patient_name)
+                        )
+                    );
+                })
+            }
         })
     }
 

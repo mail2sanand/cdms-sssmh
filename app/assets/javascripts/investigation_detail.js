@@ -65,34 +65,55 @@
                         )
                 );
 
-                // var div_height = '4.5';
-                var div_height = '5';
-                $.each(investigationDetails,function(key){
-                    var code = key;
-                    div_height = (all_investigations_hash[key] == "textarea" ? "12" : div_height);
-                    var code_value = investigationDetails[key];
+
+                $('#investigation_details_div [id^="examination_header_"]').each(function (index,eachElement) {
+                    var eachElement_id = eachElement.id;
+                    var each_element_height = $(eachElement).height();
+
+                    var eachElement_code = eachElement_id.replace("examination_header_","");
+                    var eachElement_code_val = investigationDetails[eachElement_code]
+                    var invDetails_code_value = investigationDetails[eachElement_code];
+                    var pointed_list_flag = 0;
+
+                    if(eachElement_code_val && isNaN(eachElement_code_val) && eachElement_code_val.match(/\d+\.\s+/)){
+                        pointed_list_flag = 1;
+                        invDetails_code_value = format_list(investigationDetails[eachElement_code]);
+                    }
 
                     $("#investigation_history_"+visit_date_div_id).append(
                         $('<div/>')
-                            .attr("id","history_visit_"+visit_date_div_id+"_"+code)
+                            .attr("id","history_visit_"+visit_date_div_id+"_"+eachElement_code)
                             .attr("align","center")
-                            .attr("style","margin-left:0px;padding-left:0px;width:180px;margin-top:0px;border-bottom:1px dotted green;height:"+div_height+"vh;")
+                            .attr("style","margin-left:0px;padding-left:0px;width:180px;margin-top:0px;border-bottom:1px dotted green;height:"+each_element_height+"px;")
                             .addClass("patient_visited_on_div")
-                            .append(
-                                $('<div/>')
-                                    .attr("id","inside_history_visit_"+visit_date_div_id+"_"+code)
-                                    // .attr("align","center")
-                                    .attr("style","margin-left: 0px;margin-top: 5px;border-right: 0px solid green;border: 0px dotted green;height: 3vh;")
-                                    .append(
-                                        $('<span/>')
-                                            .html(code_value)
-                                    )
-                            )
+                    )
+
+                    if(pointed_list_flag == 1){
+                        $("#history_visit_"+visit_date_div_id+"_"+eachElement_code).append(
+                            $('<div/>')
+                                .attr("id","inside_history_visit_"+visit_date_div_id+"_"+eachElement_code)
+                                .attr("style","margin-left: 0px;margin-left:5px;margin-top: 5px;" +
+                                    "border-right: 0px solid green;border: 0px dotted green;" +
+                                    "text-align:left;overflow:auto;height: 12vh;")
+                        )
+                    }else{
+                        $("#history_visit_"+visit_date_div_id+"_"+eachElement_code).append(
+                            $('<div/>')
+                                .attr("id","inside_history_visit_"+visit_date_div_id+"_"+eachElement_code)
+                                .attr("style","margin-left: 0px;margin-top: 5px;border-right: 0px solid green;border: 0px dotted green;height: 3vh;")
+                        )
+                    }
+
+                    $("#inside_history_visit_"+visit_date_div_id+"_"+eachElement_code).append(
+                        $('<span/>')
+                            .html(invDetails_code_value)
                     )
 
                 })
 
             })
+
+
         }
 
     }

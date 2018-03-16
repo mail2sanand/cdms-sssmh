@@ -63,7 +63,7 @@
 <%all_investigations = get_investigations_from_helper%>
 <input id="all_investigations_value" type="hidden" value="<%=all_investigations.to_json%>"/>
 
-<div id="investigation_details_for_patient_div" style="position:relative;height:87vh;border:0px solid green;width:100%;margin-left:0px;float:left;">
+<div id="investigation_details_for_patient_div" style="position:relative;height:95vh;border:0px solid green;width:100%;margin-left:0px;float:left;">
 
   <div id="investigation_details_left_block" style="float: left;width:28%;border-right: 1px solid red;height: auto;">
 
@@ -98,7 +98,7 @@
 
     </div>
 
-    <div class="ailment_mid_divs" id="investigation_details_div" style="height:85vh;overflow-y:auto;border:0px solid red;width:95%">
+    <div class="ailment_mid_divs" id="investigation_details_div" style="height:90vh;overflow-y:auto;border:0px solid red;width:95%">
 
       <%all_investigations.each do|each_investigation|%>
 
@@ -111,7 +111,7 @@
                     <%input_size = 20%>
                 <%when "textarea"%>
                     <%input_size = "textarea"%>
-                    <%div_height = 12%>
+                    <%div_height = 14%>
                 <%end%>
           <%end%>
 
@@ -149,7 +149,7 @@
       <b>History of Investigation Details</b>
     </div>
     <div id="seperate_investigation_details_div_block" style="height:auto;width:98%;border: 0px solid darkviolet;overflow-x: auto;">
-      <div id="seperate_investigation_details_div" style="border: 1px solid green;height: 88vh;overflow-y: auto;"></div>
+      <div id="seperate_investigation_details_div" style="border: 1px solid green;height: 92vh;overflow-y: auto;"></div>
     </div>
 
   </div>
