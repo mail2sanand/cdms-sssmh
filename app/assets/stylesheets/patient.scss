@@ -134,8 +134,11 @@ div#patient_crud_div i {
 
 #patient_detail_main div{
   height: 56vh;
-  background-color: #dadfed;
+  background-color: whitesmoke;
 }
+
+//background-color: #dadfed;
+
 
 .patients_details_general div{
   float:left;
@@ -259,8 +262,10 @@ input:focus {
 }
 
 #submitButtonsBlock{
-  width: 99%;
+  width: 67%;
   margin-bottom: 10px;
+  position: absolute;
+  bottom: 15px;
 }
 
 .patientSearchDetailClass{

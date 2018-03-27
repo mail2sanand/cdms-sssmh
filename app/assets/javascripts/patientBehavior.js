@@ -83,11 +83,10 @@ function initialPopulatePatients(loadPatientsDiv,allPatients){
 function createPatientSearchNode(patientDetail){
     var eachPatientDivId = 'patSearch_'+patientDetail.patient_name+'_'+patientDetail.patient_id+'_'+patientDetail.village_id;
     var eachPatientName = firstWordCap(patientDetail.patient_name);
-    var eachPatientGender = patientDetail.gender ? "M " : "F ";
-    var eachPatientAge = patientDetail.age;
     var eachPatientCDNo = patientDetail.cdno;
     var eachPatientDisplayText = eachPatientName+' ('+ eachPatientCDNo +')';
-    var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.patient_id+");'> > "+eachPatientDisplayText+"</div>";
+    var eachPatientBlock = "<div id='"+eachPatientDivId+"' class='patientSearchDetailClass' onclick='loadPatientDetails("+patientDetail.patient_id+");'> " +
+        "<i class='fa fa-user' style='font-size: 13px;'></i>"+eachPatientDisplayText+"</div>";
     return eachPatientBlock;
 }
 
@@ -351,6 +350,7 @@ function firstWordCap(stringToConvert){
         if(patientDetails.habits.length == 0){
             loadNonEditEmptyHabitsTemplate();
         }else{
+            loadNonEditEmptyHabitsTemplate();
             loadNonEditHabitsTemplate(patientDetails.habits);
         }
 

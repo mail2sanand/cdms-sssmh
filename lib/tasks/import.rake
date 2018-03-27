@@ -1,9 +1,13 @@
 namespace :import do
 
+  # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData"
+  folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_28_Mar_2018"
+  # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patient42"
+
   desc "Import All Users"
   task patients: :environment do
     # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/new_data.xlsx"
-    filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patients_data.xlsx"
+    filename = "#{folder_at_access}/Patients_data.xlsx"
 
     alternate_village_hash = {
         "Kondakamarala" => "Kondakamarla",
@@ -88,13 +92,144 @@ namespace :import do
   end
 
   desc "Import Index Sheet Data"
-  task :index_data => [:patient_history,:examination_findings,:inv_det_data]
+  task :index_data => [:patient_history,:examination_findings,:inv_det_data,:habits]
+
+  desc "Import Habits of Patient"
+  task habits: :environment do
+    puts "Processing : Patient Habits\n"
+    filename = "#{folder_at_access}/dbo_Answers_original.xlsx"
+
+    latest_patient_history_array = {}
+
+    smoking_habit_id = Habit.find_by(:code => "smoking").id
+    alcohol_habit_id = Habit.find_by(:code => "alcohol").id
+    tobacco_chewing_habit_id = Habit.find_by(:code => "tobacco_chewing").id
+    non_veg_food_habit_id = Habit.find_by(:code => "non_veg_food").id
+
+    xsls = Roo::Excelx.new(filename)
+    sheet_0 = xsls.sheet(2)
+
+    (2..sheet_0.last_row).each do |each_row|
+      sheet_0_each_row = sheet_0.row(each_row)
+
+      next unless sheet_0_each_row[1]
+      habit_name = sheet_0_each_row[1].downcase
+      patient_id = sheet_0_each_row[2]
+
+      new_habit_hash = {
+          "smoking" => "",
+          "alcohol" => "",
+          "tobacco_chewing" => "",
+          "non_veg_food" => ""
+      }
+
+      habit_name.downcase!
+      puts "Habit : #{habit_name} \n"
+
+      if(habit_name =~ /good/)
+        next
+      end
+
+      if(habit_name =~ /smo/)
+        new_habit_hash["smoking"] += "Smoker"
+      end
+
+      if(habit_name =~ /alc/)
+        new_habit_hash["alcohol"] += "Alcoholic"
+      end
+
+      if(habit_name =~ /tbc|tob/)
+        new_habit_hash["tobacco_chewing"] += "Tobacco"
+      end
+
+      if(habit_name =~ /nv/)
+        new_habit_hash["non_veg_food"] += "Non-Veg"
+      end
+
+      if(habit_name =~ /ex-/)
+        new_habit_hash.each do |key,value|
+          if value != ""
+            new_habit_hash[key] = "Ex-"+value
+          end
+        end
+      end
+
+      if new_habit_hash["smoking"] != ""
+        smoking_habit = PatientHabit.find_or_create_by(
+            :patient_id => patient_id,
+            :habit_id => smoking_habit_id
+        )
+        smoking_habit.update(:comment => new_habit_hash["smoking"])
+      end
+
+      if new_habit_hash["alcohol"] != ""
+        alcohol_habit = PatientHabit.find_or_create_by(
+            :patient_id => patient_id,
+            :habit_id => alcohol_habit_id
+        )
+        alcohol_habit.update(:comment => new_habit_hash["alcohol"])
+      end
+
+      if new_habit_hash["tobacco_chewing"] != ""
+        tobacco_chewing_habit = PatientHabit.find_or_create_by(
+            :patient_id => patient_id,
+            :habit_id => tobacco_chewing_habit_id
+        )
+        tobacco_chewing_habit.update(:comment => new_habit_hash["tobacco_chewing"])
+      end
+
+      if new_habit_hash["non_veg_food"] != ""
+        non_veg_food_habit = PatientHabit.find_or_create_by(
+            :patient_id => patient_id,
+            :habit_id => non_veg_food_habit_id
+        )
+        non_veg_food_habit.update(:comment => new_habit_hash["non_veg_food"])
+      end
+
+
+    end
+
+  end
+
+
+  desc "Import Habits of Patient"
+  task diet_excercise: :environment do
+    puts "Processing : Patient Habits\n"
+    filename = "#{folder_at_access}/dbo_Answers_original.xlsx"
+
+    excercise_id = Habit.find_by(:code => "excercise").id
+    diet_id = Habit.find_by(:code => "diet").id
+
+    xsls = Roo::Excelx.new(filename)
+    sheet_0 = xsls.sheet(3)
+
+    (2..sheet_0.last_row).each do |each_row|
+      sheet_0_each_row = sheet_0.row(each_row)
+
+      next unless sheet_0_each_row[1]
+      habit_name = sheet_0_each_row[1].downcase
+      patient_id = sheet_0_each_row[2]
+
+      excercise_habit = PatientHabit.find_or_create_by(
+          :patient_id => patient_id,
+          :habit_id => excercise_id
+      )
+      excercise_habit.update(:comment => habit_name)
+
+      diet_habit = PatientHabit.find_or_create_by(
+          :patient_id => patient_id,
+          :habit_id => diet_id
+      )
+      diet_habit.update(:comment => habit_name)
+
+    end
+
+  end
 
   desc "Import All Patient's History"
   task patient_history: :environment do
     puts "Processing : Patient History\n"
-    filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Index_sheet_history_details.xlsx"
-    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patient42/Index_history_Details_selected_patients.xlsx"
+    filename = "#{folder_at_access}/Index_sheet_history_details.xlsx"
     latest_patient_history_array = {}
 
     xsls = Roo::Excelx.new(filename)
@@ -188,7 +323,8 @@ namespace :import do
   desc "Import All Examination Findings"
   task examination_findings: :environment do
     puts "Processing : Patient Examination Findings\n"
-    filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Index_exam_findings.xlsx"
+    filename = "#{folder_at_access}/Index_exam_findings.xlsx"
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Index_exam_findings.xlsx"
 
     xsls = Roo::Excelx.new(filename)
     sheet_0 = xsls.sheet(0)
@@ -258,7 +394,8 @@ namespace :import do
   desc "Import Investigation Details Data from excel Sheet"
   task inv_det_data: :environment do
     puts "Processing : Patient Investigation Details Data\n"
-    filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Old_Investigations_Data.xlsx"
+    filename = "#{folder_at_access}/Old_Investigations_Data.xlsx"
+    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Old_Investigations_Data.xlsx"
 
     # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Index_Sheet_Data/Patient_81_Habibunissa.xlsx"
 
@@ -379,11 +516,7 @@ namespace :import do
 
   desc "Import all Review Sheet Data"
   task review_data: :environment do
-    filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data_original.xlsx"
-    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patient42/Review_Sheet_Data_selected_patients.xlsx"
-
-    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data/habibunissa_1.xlsx"
-    # filename = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Review_Sheet_Data/patient_42_to_50.xlsx"
+    filename = "#{folder_at_access}/Review_Sheet_Data_original.xlsx"
     review_comorbid_details = {}
     ailment_id = Ailment.find_by_name("Diabetes").id
 
@@ -446,28 +579,6 @@ namespace :import do
                  :examination_id => 0
               })
 
-          # Check if there is a visit for InvestigationDetails on this Created Date. Else create a new
-          # visit and save chronic_complications
-          #     chronic_complications = sheet_0_each_row[4]
-          #     patientInvestigationDetail =
-          #         InvestigationDetail.find_or_create_by({
-          #            :patient_id => patient_id,
-          #            :visit_id => review_visit.id
-          #         })
-
-              # investigation_details_for_this_visit = patientInvestigationDetail.investigation_details
-              # if(investigation_details_for_this_visit)
-              #   investigation_details_for_this_visit["chronic_complication"] = chronic_complications
-              # else
-              #   investigation_details_for_this_visit = get_default_investigation_details_hash.merge(
-              #       {"chronic_complication" => chronic_complications}
-              #   )
-              # end
-              #
-              # # puts "investigation_details_for_this_visit ======>> : #{investigation_details_for_this_visit}"
-              # patientInvestigationDetail.update(
-              #     :investigation_details => investigation_details_for_this_visit
-              # )
 
           unless(review_comorbid_details[patient_id])
             review_comorbid_details[patient_id] = {}

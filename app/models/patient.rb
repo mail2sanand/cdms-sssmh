@@ -3,6 +3,7 @@ class Patient < ApplicationRecord
   # belongs_to :ailment
 
   has_many :visits
+  # has_one :patient_ailment_detail, :foreign_key => "patient_id"
 
   attr_accessor :patient_photo,:patient_photo_thumb
 

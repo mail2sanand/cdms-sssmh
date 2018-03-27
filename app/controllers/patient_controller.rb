@@ -220,8 +220,15 @@ class PatientController < ApplicationController
 
     patientFile = print_patient_details_internal(patient_id,print,ailment)
 
+    pad = PatientAilmentDetail.find_by(:patient_id => patient_id)
+    dm_no = pad.patient_ailment_details["dm_no"]
+    patient_name = pad.patient.name
+
+    filename = patient_name + "-" + dm_no
+
     send_file(
         patientFile,
+        filename: filename,
         type: "application/pdf",
         disposition: 'inline'
     )
@@ -364,12 +371,15 @@ class PatientController < ApplicationController
     report_details[:history][:habits] = {}
     patient_habits =
         PatientHabit
-            .joins("inner join habits h on h.id = patient_habits.habit_id")
-            .where(:patient_id => patient_id)
+            .joins("right outer join habits h on h.id = patient_habits.habit_id and patient_id = #{patient_id}")
             .select("patient_habits.*,h.code,h.name")
 
     patient_habits.each do|each_patient_habit|
-      report_details[:history][:habits][each_patient_habit.name] = (each_patient_habit.comment!="" ? "Yes" : "")
+      each_patient_comment = each_patient_habit.comment
+      each_patient_comment.downcase! if each_patient_comment
+      report_details[:history][:habits][each_patient_habit.name] =
+          ((each_patient_comment and each_patient_comment != "") ?
+               (each_patient_comment =~ /^non/ ? each_patient_comment.capitalize : "Yes") : "")
     end
 
     # Patient Other History Details
@@ -591,7 +601,7 @@ class PatientController < ApplicationController
       one_month_examination_detail[:ppbs] = latest_visit_examination.examination_details["ppbs"]
       one_month_examination_detail[:rbs] = latest_visit_examination.examination_details["rbs"]
 
-      report_details[:current_medicine] = latest_visit_examination.examination_details["current_medicine"]
+      report_details[:current_medicine] = format_current_medicine(latest_visit_examination.examination_details["current_medicine"])
       report_details[:cmc][:chronic_complications] = latest_visit_examination.examination_details["chronic_complication"]
 
     else
@@ -625,6 +635,24 @@ class PatientController < ApplicationController
     report_details[:bs_examination_details] = bs_examination_details
 
     createPatientReviewReport(report_details, patient_id, ailment)
+  end
+
+  def format_current_medicine(current_medicine)
+    current_medicine_array = current_medicine.split(/\d+\.\s+/);
+
+    i=1;
+    new_formatted_text = "";
+
+    current_medicine_array.each do |each_current_medicine|
+      if each_current_medicine == ""
+        next
+      end
+
+      new_formatted_text = new_formatted_text + "\n" + i.to_s + ". " + each_current_medicine
+      i = i+1
+    end
+
+    new_formatted_text.sub!("\n","");
   end
 
   def createPatientReviewReport(report_details, patient_id, ailment)
