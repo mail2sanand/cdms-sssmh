@@ -1,7 +1,9 @@
 namespace :import do
 
-  # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData"
   folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_28_Mar_2018"
+  # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_28_Mar_2018/Selected_Patients"
+
+  # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData"
   # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/Patient42"
 
   desc "Import All Users"
@@ -92,7 +94,7 @@ namespace :import do
   end
 
   desc "Import Index Sheet Data"
-  task :index_data => [:patient_history,:examination_findings,:inv_det_data,:habits]
+  task :index_data => [:patient_history,:examination_findings,:inv_det_data,:habits,:diet_excercise]
 
   desc "Import Habits of Patient"
   task habits: :environment do
@@ -191,10 +193,9 @@ namespace :import do
 
   end
 
-
   desc "Import Habits of Patient"
   task diet_excercise: :environment do
-    puts "Processing : Patient Habits\n"
+    puts "Processing : Patient Diet Excercises\n"
     filename = "#{folder_at_access}/dbo_Answers_original.xlsx"
 
     excercise_id = Habit.find_by(:code => "excercise").id
@@ -336,13 +337,6 @@ namespace :import do
 
       next if(patient_array.include?(patient_id))
 
-      # height = sheet_0_each_row[4] ? sheet_0_each_row[4] : ""
-      # weight = sheet_0_each_row[5] ? sheet_0_each_row[5] : ""
-      # bmi = sheet_0_each_row[6] ? sheet_0_each_row[6] : ""
-      # waist_circumfrence = sheet_0_each_row[7] ? sheet_0_each_row[7] : ""
-      # pulse = sheet_0_each_row[8] ? sheet_0_each_row[8] : ""
-      # bp = sheet_0_each_row[13] ? sheet_0_each_row[13] : ""
-
       height = return_empty_on_null_or_0(sheet_0_each_row[4])
       weight = return_empty_on_null_or_0(sheet_0_each_row[5])
       bmi = return_empty_on_null_or_0(sheet_0_each_row[6])
@@ -422,10 +416,10 @@ namespace :import do
         #
         # lipids_date = lipids_date_time.strftime('%Y-%m-%d')
         dates_and_data[lipids_date.to_s] ||= {}
-        dates_and_data[lipids_date.to_s]["lipid_tc"] = t_c
-        dates_and_data[lipids_date.to_s]["lipid_tg"] = t_g
-        dates_and_data[lipids_date.to_s]["lipid_hdl"] = hdl
-        dates_and_data[lipids_date.to_s]["lipid_ldl"] = ldl
+        dates_and_data[lipids_date.to_s]["lipid_tc"] = return_empty_on_null_or_0(t_c)
+        dates_and_data[lipids_date.to_s]["lipid_tg"] = return_empty_on_null_or_0(t_g)
+        dates_and_data[lipids_date.to_s]["lipid_hdl"] = return_empty_on_null_or_0(hdl)
+        dates_and_data[lipids_date.to_s]["lipid_ldl"] = return_empty_on_null_or_0(ldl)
       end
 
       hb1ac_date = sheet_0_each_row[25]
@@ -568,9 +562,11 @@ namespace :import do
               default_examination_details_hash["fbs"] = return_empty_on_null_or_0(sheet_0_each_row[8])
               default_examination_details_hash["ppbs"] = return_empty_on_null_or_0(sheet_0_each_row[9])
               default_examination_details_hash["rbs"] = ""
-              default_examination_details_hash["chronic_complication"] = sheet_0_each_row[4] ? sheet_0_each_row[4] : ""
-              default_examination_details_hash["current_medicine"] = sheet_0_each_row[12] ? sheet_0_each_row[12] : ""
-              default_examination_details_hash["clinical_notes"] = ""
+              default_examination_details_hash["chronic_complication"] = return_empty_on_null_or_0(sheet_0_each_row[4])
+              default_examination_details_hash["current_medicine"] = return_empty_on_null_or_0(sheet_0_each_row[12])
+
+              clinical_notes = sheet_0_each_row[20]
+              default_examination_details_hash["clinical_notes"] = return_empty_on_null_or_0(clinical_notes)
 
               ExaminationDetail.create({
                  :patient_id => patient_id,
@@ -582,6 +578,7 @@ namespace :import do
 
           unless(review_comorbid_details[patient_id])
             review_comorbid_details[patient_id] = {}
+            review_comorbid_details[patient_id]["created_date"] = created_date
             review_comorbid_details[patient_id]["comorbid_diabteties_type_and_from"] = sheet_0_each_row[17]
             review_comorbid_details[patient_id]["comorbid_htn_and_from"] = sheet_0_each_row[18]
             review_comorbid_details[patient_id]["comorbid_cad"] = sheet_0_each_row[19]
@@ -594,7 +591,14 @@ namespace :import do
 
       review_comorbid_details.each do |patient_id,comorbid_condition_details|
 
-    # For Diabetes Comorbid Condition
+        created_date = comorbid_condition_details["created_date"]
+        puts " ========>>>> created_date : #{created_date}"
+
+        created_date_year = Date.strptime(created_date,"%Y-%m-%d").year
+        puts " ========>>>> Year : #{created_date_year}"
+
+
+        # For Diabetes Comorbid Condition
         comorbid_diabteties_type_and_from =
             comorbid_condition_details["comorbid_diabteties_type_and_from"]
 
@@ -608,9 +612,15 @@ namespace :import do
           # if match = comorbid_diabteties_type_and_from.match(/(T1|T2).+(\d+)/)
           if match = comorbid_diabteties_type_and_from.match(/^(T1|T2)\s+.+\s+(\d+)$/)
             diabetes_details = match.captures
-            comorbid_condition_details_for_diabetes["ailment_type"] = "Diabetes Type " + (diabetes_details[0] == "T1" ? "1" : "2")
+            comorbid_condition_details_for_diabetes["ailment_type"] =
+                "Diabetes Type " + (diabetes_details[0] == "T1" ? "1" : "2")
+
+            # comorbid_condition_details_for_diabetes["suffering_since"] =
+            #     calculate_year_with_age(diabetes_details[1])
+
             comorbid_condition_details_for_diabetes["suffering_since"] =
-                calculate_year_with_age(diabetes_details[1])
+                created_date_year - diabetes_details[1].to_i
+
           end
         end
 
@@ -623,26 +633,35 @@ namespace :import do
 
     # For HTN Comorbid Condition
         comorbid_htn_and_from = comorbid_condition_details["comorbid_htn_and_from"]
-        comorbid_condition_details_for_htn = {
-            "suffering_since" => "",
-            "details" => ""
-        }
+        if(comorbid_htn_and_from.class == String and comorbid_htn_and_from != "NULL")
 
-        if(comorbid_htn_and_from.class == String)
+          comorbid_condition_details_for_htn = {
+              "suffering_since" => "",
+              "details" => ""
+          }
+
           if(comorbid_htn_and_from.include?("month"))
-            comorbid_condition_details_for_htn["suffering_since"] = calculate_year_with_age(1)
+            comorbid_condition_details_for_htn["suffering_since"] =
+                calculate_year_with_age(1)
           elsif match = comorbid_htn_and_from.match(/(\d+).*/)
             htn_details = match.captures
-            comorbid_condition_details_for_htn["suffering_since"] =
-                calculate_year_with_age(htn_details[0])
-          end
-        end
 
-        ComorbidCondition.create({
-           :patient_id => patient_id,
-           :sub_ailment_id => Ailment.find_by_name("Hypertension").id,
-           :comorbid_condition_details => comorbid_condition_details_for_htn.to_json
-        })
+            # comorbid_condition_details_for_htn["suffering_since"] =
+            #     calculate_year_with_age(htn_details[0])
+
+            comorbid_condition_details_for_htn["suffering_since"] =
+                created_date_year - htn_details[0].to_i
+
+          end
+
+          ComorbidCondition.create({
+               :patient_id => patient_id,
+               :sub_ailment_id => Ailment.find_by_name("Hypertension").id,
+               :comorbid_condition_details => comorbid_condition_details_for_htn.to_json
+          })
+
+
+        end
 
 
     # For CAD Comorbid Condition
@@ -652,8 +671,8 @@ namespace :import do
             "details" => ""
         }
 
+        if(comorbid_cad_and_from.class == String and comorbid_cad_and_from != "NULL")
 
-        if(comorbid_cad_and_from.class == String)
           if match = comorbid_cad_and_from.match(/^(\d*)\s*(.+)/)
             cad_details = match.captures
             cad_suffering_since = cad_details[0]
@@ -663,18 +682,21 @@ namespace :import do
             end
             cad_comment.gsub!(/[yr|Yrs.|month|NULL]\s*/,'')
 
+            # comorbid_condition_details_for_cad["suffering_since"] =
+            #     calculate_year_with_age(cad_suffering_since) if cad_suffering_since.to_i > 0
             comorbid_condition_details_for_cad["suffering_since"] =
-                calculate_year_with_age(cad_suffering_since) if cad_suffering_since.to_i > 0
+                created_date_year - cad_suffering_since.to_i if cad_suffering_since.to_i > 0
 
             comorbid_condition_details_for_cad["details"] = cad_comment
           end
-        end
 
-        ComorbidCondition.create({
-           :patient_id => patient_id,
-           :sub_ailment_id => Ailment.find_by_name("Cardiac Ailments").id,
-           :comorbid_condition_details => comorbid_condition_details_for_cad.to_json
-        })
+          ComorbidCondition.create({
+               :patient_id => patient_id,
+               :sub_ailment_id => Ailment.find_by_name("Cardiac Ailments").id,
+               :comorbid_condition_details => comorbid_condition_details_for_cad.to_json
+          })
+
+        end
 
       end
     end
@@ -695,7 +717,7 @@ namespace :import do
 
   def return_empty_on_null_or_0(parameter)
     return_parameter = parameter
-    if(!parameter or parameter == 0)
+    if(!parameter or parameter == 0 or parameter == "NULL")
       return_parameter = ""
     end
 

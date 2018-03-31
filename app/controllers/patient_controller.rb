@@ -378,8 +378,14 @@ class PatientController < ApplicationController
       each_patient_comment = each_patient_habit.comment
       each_patient_comment.downcase! if each_patient_comment
       report_details[:history][:habits][each_patient_habit.name] =
-          ((each_patient_comment and each_patient_comment != "") ?
-               (each_patient_comment =~ /^non/ ? each_patient_comment.capitalize : "Yes") : "")
+          (
+            (each_patient_comment and each_patient_comment != "") ?
+               (each_patient_comment =~ /^non/ ? each_patient_comment.capitalize :
+                    (
+                      each_patient_comment =~ /^ex/ ? each_patient_comment.capitalize : "Yes"
+                     )
+               ) : ""
+          )
     end
 
     # Patient Other History Details

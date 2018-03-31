@@ -191,7 +191,7 @@ class PatientReviewTemplate < Prawn::Document
     chronic_complications_text = cmc[:chronic_complications]
 
     cmc_replace_hash.each do|key,value|
-      chronic_complications_text = chronic_complications_text.gsub(key,value)
+      chronic_complications_text = (chronic_complications_text ? chronic_complications_text.gsub(key,value) : "")
     end
 
     patient_cmc_details = ([

@@ -91,6 +91,7 @@ function createPatientSearchNode(patientDetail){
 }
 
 function loadPatientDetails(patientId) {
+    loadNonEditEmptyTemplates();
     $.ajax({
         url:'/get_patient_detail/'+patientId+'.json',
         method:"GET",
