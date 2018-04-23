@@ -64,11 +64,33 @@ class DmController < ApplicationController
 
   def get_all_patients_dm_details
     patientId = params[:id]
-    parsedDate = DateTime.parse(params[:visit]).strftime("%Y-%m-%d")
+    visit = params[:visit]
 
-    patientDMDetail =
-        ExaminationDetail.joins(:visit)
-            .where("examination_details.patient_id=#{patientId} and visited_on='#{parsedDate}'").first.examination_details
+    patientDMDetail = nil
+
+    if(visit == "0")
+      patientDMDetail =
+          {
+             "weight"=>"", "pulse"=>"", "bp"=>"", "hypoglycemic_attacks"=>"", "infective_focus"=>"",
+             "fbs"=>"", "ppbs"=>"", "rbs"=>"", "chronic_complication"=>"", "current_medicine"=>"",
+             "clinical_notes"=>""
+          }
+
+      latestPatientDMRecord =
+          ExaminationDetail.joins(:visit)
+              .where(:patient_id => patientId,:examination_id => 0)
+              .order("visited_on DESC").first.examination_details
+
+      patientDMDetail["current_medicine"] = latestPatientDMRecord["current_medicine"]
+      patientDMDetail["chronic_complication"] = latestPatientDMRecord["chronic_complication"]
+    else
+      parsedDate = DateTime.parse(visit).strftime("%Y-%m-%d")
+
+      patientDMDetail =
+          ExaminationDetail.joins(:visit)
+              .where("examination_details.patient_id=#{patientId} and visited_on='#{parsedDate}'").first.examination_details
+    end
+
 
     respond_to do |format|
       format.html

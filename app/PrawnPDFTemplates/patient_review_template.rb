@@ -20,7 +20,7 @@ class PatientReviewTemplate < Prawn::Document
 
     move_down 15
 
-    patient_general_details_block(report_details[:pgd],report_details[:dm_details])
+    patient_general_details_block(report_details[:pgd],report_details[:dm_details], report_details[:village_date])
 
     move_down 10
 
@@ -80,13 +80,13 @@ class PatientReviewTemplate < Prawn::Document
 
   end
 
-  def patient_general_details_block(pgd_array,dm_details)
+  def patient_general_details_block(pgd_array,dm_details,village_date)
     puts "pgd_array : #{pgd_array.inspect}"
     dm_number = dm_details["dm_no"]
     # (dm_details ?  : "")
 
     pgd = pgd_array.first
-    date = Time.now.strftime('%d %b, %Y')
+    village_date = Time.now.strftime('%d %b, %Y') if village_date == ""
 
     dob_age =
         (pgd.dateOfBirth ? "#{pgd.dateOfBirth.strftime("%e %b %Y")} - #{ApplicationController.new.calculate_age(Date.strptime(pgd.dateOfBirth.to_s),Date.today)} years" : "")
@@ -95,7 +95,7 @@ class PatientReviewTemplate < Prawn::Document
     patient_general_details = ([
         [
             {
-                :content => "<b>Date :</b>  #{date}",
+                :content => "<b>Date :</b>  #{village_date}",
                 :width => 95,
                 :height => 30
             },

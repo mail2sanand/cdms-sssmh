@@ -96,8 +96,6 @@ function getSelectedPatients() {
         }
     })
 
-    village_id = $('#report_select_id option:selected').text()
-
     selectedPatientsIds = selectedPatientsIds.replace(/_(\s+)?$/,'');
 
     return selectedPatientsIds;
@@ -106,6 +104,8 @@ function getSelectedPatients() {
 function printReportsDetailsPage(report_type) {
     var all_selected_patients = getSelectedPatients();
     var selected_ailment = $('#ailment_combo_for_reports').val();
+
+    var village_id = $('#report_nodal_village_select_id option:selected').text()
 
     // AJAX request to Print the selected Patients
     window.open('/print_village_report/'+all_selected_patients+'/'+village_id+'/'+report_type+'/'+selected_ailment, '_blank')

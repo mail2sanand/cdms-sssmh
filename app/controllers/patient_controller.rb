@@ -218,7 +218,7 @@ class PatientController < ApplicationController
     print = params[:print]
     ailment = params[:ailment]
 
-    patientFile = print_patient_details_internal(patient_id,print,ailment)
+    patientFile = print_patient_details_internal(patient_id,print,ailment,"")
 
     pad = PatientAilmentDetail.find_by(:patient_id => patient_id)
     dm_no = pad.patient_ailment_details["dm_no"]
@@ -235,7 +235,7 @@ class PatientController < ApplicationController
 
   end
 
-  def print_patient_details_internal(patient_id,print,ailment)
+  def print_patient_details_internal(patient_id,print,ailment,village_date)
     patient = Patient.find(patient_id)
     patientLastUpdatedTime = patient.updated_at
 
@@ -251,12 +251,12 @@ class PatientController < ApplicationController
     report_method_name = "generate_#{print}_data_for_patient_report"
 
     patientFile = ""
-    if(patientReport.length == 0)
-      patientFile = send(report_method_name.to_sym, patient_id,ailment)
+    if(patientReport.length == 0 or from_report)
+      patientFile = send(report_method_name.to_sym, patient_id,ailment,village_date)
       # patientFile = generate_review_data_for_patient_report(patient_id)
     else
       if(patientReport.updated_at < patientLastUpdatedTime)
-        patientFile = send(report_method_name.to_sym, patient_id,ailment)
+        patientFile = send(report_method_name.to_sym, patient_id,ailment,village_date)
         # patientFile = generate_review_data_for_patient_report(patient_id)
       else
         patientFile = patientReport.report_file_path
@@ -266,12 +266,12 @@ class PatientController < ApplicationController
     patientFile
   end
 
-  def generate_index_data_for_patient_report(patient_id,ailment)
+  def generate_index_data_for_patient_report(patient_id,ailment,village_date)
     ailment_record = Ailment.find(ailment)
-    send("generate_index_data_for_patient_report_for_#{ailment_record.name.downcase}",patient_id,ailment)
+    send("generate_index_data_for_patient_report_for_#{ailment_record.name.downcase}",patient_id,ailment,village_date)
   end
 
-  def generate_index_data_for_patient_report_for_diabetes(patient_id,ailment)
+  def generate_index_data_for_patient_report_for_diabetes(patient_id,ailment,village_date)
 
     report_details = {}
     patient_ailment = PatientAilmentDetail.find_by(
@@ -434,11 +434,11 @@ class PatientController < ApplicationController
     #
     # puts "====================================\n"
 
-    createPatientIndexReport(report_details, patient_id, ailment)
+    createPatientIndexReport(report_details, patient_id, ailment,village_date)
 
   end
 
-  def createPatientIndexReport(report_details, patient_id, ailment)
+  def createPatientIndexReport(report_details, patient_id, ailment,village_date)
     # Find if a Review Report exists for this patient
     patient_report = Report.where(
           :patient_id => patient_id,
@@ -450,6 +450,7 @@ class PatientController < ApplicationController
     report_details[:ailment_details] = {
         :ailment_name => Ailment.find(ailment).botanical_name
     }
+    report_details[:village_date] = village_date
 
     # This is the Block to generate the PDF from the patient's Data
     # patientReviewDoc = PatientIndexTemplate.new(report_details, [10,10,10,50] )
@@ -482,7 +483,7 @@ class PatientController < ApplicationController
     patientFile
   end
 
-  def generate_review_data_for_patient_report(patient_id,ailment)
+  def generate_review_data_for_patient_report(patient_id,ailment,village_date)
     puts "patient_id,ailment : #{patient_id} : #{ailment}"
     report_details = Hash.new
 
@@ -513,6 +514,8 @@ class PatientController < ApplicationController
     report_details[:ailment_details] = {
         :ailment_name => Ailment.find(ailment).botanical_name
     }
+
+    report_details[:village_date] = village_date
 
     # report_details[:pgd] =
     #     Patient.joins(:village).where(:id => patient_id).select("patients.*,villages.name as village_name")

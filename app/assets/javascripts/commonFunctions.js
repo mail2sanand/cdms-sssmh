@@ -135,6 +135,10 @@ function calculate_and_display_year(element,replace) {
 }
 
 function format_list(text_to_be_formatted) {
+    if(text_to_be_formatted){
+        text_to_be_formatted = text_to_be_formatted.replace(/<br>/g,"");
+    }
+
     var text_to_be_formatted_array = text_to_be_formatted.split(/\d+\.\s+/);
 
     var i=1;

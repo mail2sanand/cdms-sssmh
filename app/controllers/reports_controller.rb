@@ -151,15 +151,23 @@ class ReportsController < ApplicationController
     print = params[:print]
     village_name = (village_name == "Select a Village" ? "All Villages" : village_name)
 
-    combined_village_pdf = CombinePDF.new
+    village_date_order = Village.find_by_name(village_name).displayOrder
+
+    #Calculate and Format the Date
+    year_month = Date.today
+    year = year_month.year
+    month = year_month.month + 1
+    village_date = Date.new(year,month,village_date_order).strftime("%d %b, %Y")
+
+        combined_village_pdf = CombinePDF.new
     villageFilePath = ""
 
     if(params[:print] == "review")
       # Select only those Patients whose details have been updated a month ago
       filtered_patients = []
       filtered_patients_records =
-          Patient.where("id in (#{params[:patient_ids].gsub('_',',')}) and
-        updated_at >= (CURRENT_DATE - INTEGER '31') AND updated_at <= CURRENT_TIMESTAMP")
+          Patient.where("patients.id in (#{params[:patient_ids].gsub('_',',')}) and
+        patients.updated_at >= (CURRENT_DATE - INTEGER '31') AND patients.updated_at <= CURRENT_TIMESTAMP")
 
       filtered_patients_records.map{|i| filtered_patients << i.id.to_s} if filtered_patients_records.length > 0
 
@@ -173,10 +181,17 @@ class ReportsController < ApplicationController
     puts "patient_ids : #{patient_ids.inspect}"
 
     if(patient_ids.length > 0)
+
+      # limit_patients = Array.new
+      # limit_patients << patient_ids.first
+      # limit_patients << patient_ids.second
+      #
+      # limit_patients.each do |each_patient|
+
       patient_ids.each do |each_patient|
-        patientFile =
+          patientFile =
             @@patientsController.print_patient_details_internal(
-                each_patient,print,ailment_id)
+                each_patient,print,ailment_id,village_date)
 
         combined_village_pdf << CombinePDF.load(patientFile)
       end

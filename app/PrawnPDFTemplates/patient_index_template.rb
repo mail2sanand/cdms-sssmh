@@ -19,6 +19,7 @@ class PatientIndexTemplate < Prawn::Document
     stroke_color "060606"
 
     ailment_details = report_details[:ailment_details]
+    village_date = report_details[:village_date]
 
     move_down 10
 
@@ -27,7 +28,7 @@ class PatientIndexTemplate < Prawn::Document
 
     move_down 12
 
-    patient_general_details_block(report_details[:pgd],report_details[:dm_details])
+    patient_general_details_block(report_details[:pgd],report_details[:dm_details],village_date)
 
     move_down 5
 
@@ -292,7 +293,7 @@ class PatientIndexTemplate < Prawn::Document
 
   end
 
-  def patient_general_details_block(pgd_array,dm_details)
+  def patient_general_details_block(pgd_array,dm_details,village_date)
     dm_number = dm_details["dm_no"]
         # (dm_details ?  : "")
 
@@ -305,7 +306,7 @@ class PatientIndexTemplate < Prawn::Document
     patient_general_details = ([
         [
             {
-                :content => "<b>Date : </b> ",
+                :content => "<b>Date : </b> <br>#{village_date} ",
                 :width => 80,
                 :height => 30
             },

@@ -680,7 +680,7 @@ namespace :import do
             if(cad_comment.include? "month")
               cad_suffering_since = 1
             end
-            cad_comment.gsub!(/[yr|Yrs.|month|NULL]\s*/,'')
+            cad_comment.gsub!(/yr|Yrs.|month|NULL\s*/,'')
 
             # comorbid_condition_details_for_cad["suffering_since"] =
             #     calculate_year_with_age(cad_suffering_since) if cad_suffering_since.to_i > 0

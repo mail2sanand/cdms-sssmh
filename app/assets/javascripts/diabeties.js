@@ -134,23 +134,6 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
                     dmDetails_code_value = format_list(dmDetails[eachElement_code]);
                 }
 
-// $("#dm_history_"+visit_date_div_id).append(
-//     $('<div/>')
-//         .attr("id","history_visit_"+visit_date_div_id+"_"+eachElement_code)
-//         .attr("align","center")
-//         .attr("style","margin-left:0px;padding-left:0px;width:180px;margin-top:0px;border-bottom:1px dotted green;height:"+each_element_height+"px;")
-//         .addClass("patient_visited_on_div")
-//         .append(
-//             $('<div/>')
-//                 .attr("id","inside_history_visit_"+visit_date_div_id+"_"+eachElement_code)
-//                 .attr("style","margin-left: 0px;margin-top: 5px;border-right: 0px solid green;border: 0px dotted green;height: 3vh;")
-//                 .append(
-//                     $('<span/>')
-//                         .html(dmDetails_code_value)
-//                 )
-//         )
-// )
-
                 $("#dm_history_"+visit_date_div_id).append(
                     $('<div/>')
                         .attr("id","history_visit_"+visit_date_div_id+"_"+eachElement_code)
@@ -193,7 +176,13 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
 
 
 function loadPatientDMDetails(selectedVisitOption) {
-    var parsedSelectedVisitDate = $.datepicker.parseDate("M dd, yy",selectedVisitOption)
+    var parsedSelectedVisitDate;
+
+    if(selectedVisitOption == "0"){
+        parsedSelectedVisitDate = "0";
+    }else{
+        parsedSelectedVisitDate = $.datepicker.parseDate("M dd, yy",selectedVisitOption)
+    }
 
     $.ajax({
         url:'/get_all_patients_dm_details/'+$('#input_pgd_id').val()+'/'+parsedSelectedVisitDate+'.json',
@@ -205,6 +194,11 @@ function loadPatientDMDetails(selectedVisitOption) {
 }
 
 function loadPatientDMDetailsData(dmDetailsForPatient) {
+    var current_medicine = dmDetailsForPatient["current_medicine"];
+    if(current_medicine.match(/\d+\.\s+/)){
+        dmDetailsForPatient["current_medicine"] = format_list(current_medicine)
+    }
+
     populateInputsAndSpans(dmDetailsForPatient,'input_dm_details_','span_dm_details_',false,'');
 }
 

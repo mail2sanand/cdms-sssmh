@@ -385,6 +385,11 @@ function firstWordCap(stringToConvert){
             $('#'+ailment_prefix+'_visit_calendar_icon').show()
             $('#'+ailment_prefix+'_details_visit').val("");
             $('#'+ailment_prefix+'_visit_date_0').html("Select New Visit");
+
+            if(ailment_prefix.indexOf("dm") != -1){
+                loadPatientDMDetails(selectedVisitOption);
+            }
+
         }else if(selectedVisitOption != "-1"){
             $('#'+ailment_prefix+'_details_visit').val($.datepicker.parseDate("M dd, yy",selectedVisitOption));
             $('#'+ailment_prefix+'_visit_date_0').html(selectedVisitOption);
