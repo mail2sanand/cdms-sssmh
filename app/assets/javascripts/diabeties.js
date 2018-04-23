@@ -19,7 +19,7 @@ function resetDMDetailVisitsCombo() {
         }
     })
 
-    $('#dm_visit_calendar_icon').hide()
+    // $('#dm_visit_calendar_icon').hide()
     $('#dm_details_visit').val("");
     // $('#visit_date').html("");
 }
