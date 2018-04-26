@@ -218,7 +218,10 @@ class PatientController < ApplicationController
     print = params[:print]
     ailment = params[:ailment]
 
-    patientFile = print_patient_details_internal(patient_id,print,ailment,"")
+    village_id = Patient.nodal_village(patient_id).village_id
+    display_order = Village.find(village_id).displayOrder
+
+    patientFile = print_patient_details_internal(patient_id,print,ailment,calculate_next_month_village_date(display_order))
 
     pad = PatientAilmentDetail.find_by(:patient_id => patient_id)
     dm_no = pad.patient_ailment_details["dm_no"]

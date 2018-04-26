@@ -151,15 +151,14 @@ class ReportsController < ApplicationController
     print = params[:print]
     village_name = (village_name == "Select a Village" ? "All Villages" : village_name)
 
-    village_date_order = Village.find_by_name(village_name).displayOrder
+    if(village_name == "Expired Patients")
+      village_date = ""
+    else
+      village_date_order = Village.find_by_name(village_name).displayOrder
+      village_date = calculate_next_month_village_date(village_date_order)
+    end
 
-    #Calculate and Format the Date
-    year_month = Date.today
-    year = year_month.year
-    month = year_month.month + 1
-    village_date = Date.new(year,month,village_date_order).strftime("%d %b, %Y")
-
-        combined_village_pdf = CombinePDF.new
+    combined_village_pdf = CombinePDF.new
     villageFilePath = ""
 
     if(params[:print] == "review")
