@@ -45,7 +45,7 @@ class PatientReviewTemplate < Prawn::Document
         [
             {:content => "<b>SRI SATHYA SAI MOBILE HOSPITAL</b><br><br>",
              :colspan => 3, :align => :center,:padding => 0, :borders => [:bottom],:border_width => 0, :height => 15,
-             :size => 10
+             :size => 13
             },
         ],
         [
