@@ -138,7 +138,14 @@ Village.create([
   {:id=>115,:name=>"Yadalankapalli",:parent_village_id=>3},
   {:id=>116,:name=>"Yerrapalli",:parent_village_id=>12},
   {:id=>117,:name=>"Yerronipalli",:parent_village_id=>5},
-  {:id=>118,:name=>"Yerravankapalli",:parent_village_id=>10}
+  {:id=>118,:name=>"Yerravankapalli",:parent_village_id=>10},
+  {:id=>120,:name=>"Kadiri",:parent_village_id=>10},
+  {:id=>121,:name=>"Cheruvumunappagaripalli",:parent_village_id=>2},
+  {:id=>122,:name=>"Siddharamapuram",:parent_village_id=>4},
+  {:id=>123,:name=>"Narasingramapalli",:parent_village_id=>15},
+  {:id=>124,:name=>"Ontikonda",:parent_village_id=>15},
+  {:id=>125,:name=>"Nagasamudram",:parent_village_id=>15},
+  {:id=>126,:name=>"Venkatampalli",:parent_village_id=>15}
 ])
 
 

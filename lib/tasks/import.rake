@@ -1,6 +1,7 @@
 namespace :import do
 
-  folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_28_Mar_2018"
+  folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_27_Apr_2018"
+  # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_28_Mar_2018"
   # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData_28_Mar_2018/Selected_Patients"
 
   # folder_at_access = "/Users/srinianand/Personal/sssmh/cdms-new_app/DB_Data_Migration-Heroku/FullData"
@@ -26,6 +27,7 @@ namespace :import do
         "Pedapalli" => "Peddapalli",
         "Veeranjanepalli" => "Veeranjinapalli",
         "Vengalamacheruvu" => "Vengalamcheruvu",
+        "Vengalammacheruvu" => "Vengalamcheruvu",
         "Kambalaparthy" => "Kambalaparthi",
         "Amagondapalem" => "Ammagundapalem",
         "Vankarkunta" => "Vankarakunta"
@@ -529,6 +531,9 @@ namespace :import do
 
           created_date = convertIntoProperDateFormat(sheet_0_each_row[14]) #DateTime.strptime(sheet_0_each_row[14].to_s,'%Y-%d-%m').strftime('%Y-%m-%d')
           puts "Processing : #{patient_id} : #{created_date}"
+
+          created_date_split = created_date.split("-")
+          next if ((Date.today.month - 1) < created_date_split[1].to_i) and (created_date_split[0] == "2018")
 
           begin
             patient = Patient.find(patient_id)

@@ -88,15 +88,17 @@ class ComorbidConditionController < ApplicationController
       comorbid_condition_details_json = JSON.parse(comorbid_condition_details) if comorbid_condition_details
 
       if comorbid_condition_details_json["suffering_since"] != "0"
-        display_detail_1 = "Suffering"
+        # display_detail_1 = "Suffering"
+        display_detail_1 = ""
 
-        if(comorbid_condition_details_json["ailment_type"])
-          display_detail_1 = "#{display_detail_1} from #{comorbid_condition_details_json["ailment_type"]}"
-        end
+        # if(comorbid_condition_details_json["ailment_type"])
+        #   display_detail_1 = "#{display_detail_1} from #{comorbid_condition_details_json["ailment_type"]}"
+        # end
+        #
 
-        display_detail_1 = "#{display_detail_1} since #{comorbid_condition_details_json['suffering_since']}"
-
-        display_detail_1 = "#{display_detail_1}  -- #{comorbid_condition_details_json["details"]}" if comorbid_condition_details_json["details"]
+        display_detail_1 = "Suffering since #{comorbid_condition_details_json['suffering_since']}" if !comorbid_condition_details_json['suffering_since'].to_s.empty?
+        display_detail_1 += "  -- " if !display_detail_1.empty? and !comorbid_condition_details_json["details"].empty?
+        display_detail_1 += comorbid_condition_details_json["details"] if !comorbid_condition_details_json["details"].empty?
 
         if comorbid_condition_details_json['suffering_since'] == ""
           patientCMCDetailsJson["#{each_patientCMCDetail.code}__suffering_since_years"] = ""

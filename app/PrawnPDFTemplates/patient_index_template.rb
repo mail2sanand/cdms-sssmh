@@ -83,7 +83,7 @@ class PatientIndexTemplate < Prawn::Document
           table get_table_block(examination_findings,
                                 {"cell_height"=>33,"border"=>0}),
                 :cell_style => {
-                    :inline_format => true, :size => 9, :align => :left,:padding => 0,
+                    :inline_format => true, :size => 9, :align => :left,:padding => [5,0,0,0],
                     :width => 143, :valign => :top,:border_width => 1
                 },
                 :position => :left
@@ -266,7 +266,7 @@ class PatientIndexTemplate < Prawn::Document
         [
             {:content => "<b>SRI SATHYA SAI MOBILE HOSPITAL</b><br><br>",
              :colspan => 3, :align => :center,:padding => 0, :borders => [:bottom],:border_width => 0, :height => 15,
-             :size => 10
+             :size => 13
             },
         ],
         [

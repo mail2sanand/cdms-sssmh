@@ -329,7 +329,18 @@ class PatientReviewTemplate < Prawn::Document
     patient_four_month_details = ([
       [
           {
-              :content=>"<b>Visit</b>",:border_width => 1,:height=>20,:width=>60 #, :rowspan=>2
+              :content=>"<b>Blood Sugar Level (mm/Hg)</b>",:border_width => 1,:height=>17,:width=>60 , :colspan=>4, :align => :center
+          },
+          {
+              :content=>"",:width=>5, :border_width => 0
+          },
+          {
+              :content=>"<b>Clinical Notes</b>", :border_width => 1, :rowspan=>6,:width => 340
+          }
+      ],
+      [
+          {
+              :content=>"<b>Visit</b>",:border_width => 1,:height=>18,:width=>60 #, :rowspan=>2
           },
           {
               :content=>"<b>FBS<br>(mg/dl)</b>",:width=>35, :border_width => 1 #, :rowspan=>2
@@ -339,12 +350,6 @@ class PatientReviewTemplate < Prawn::Document
           },
           {
               :content=>"<b>RBS<br>(mg/dl)</b>",:width=>35, :border_width => 1#, :rowspan=>2
-          },
-          {
-              :content=>"",:width=>5, :border_width => 0
-          },
-          {
-              :content=>"<b>Clinical Notes</b>", :border_width => 1, :rowspan=>5,:width => 320
           }
       ],
       [
@@ -407,7 +412,7 @@ class PatientReviewTemplate < Prawn::Document
         ],
         [
             {:content => "#{treatment_advised}", :border_width => 1,:size => 9},
-            {:content => "", :border_width => 1,:height => 260}
+            {:content => "", :border_width => 1,:height => 250}
         ]
     ])
 

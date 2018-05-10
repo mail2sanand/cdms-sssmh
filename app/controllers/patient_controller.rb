@@ -419,9 +419,21 @@ class PatientController < ApplicationController
 
     report_details[:examination_findings] = {}
     patient_index_examination_findings.each do |each_patient_index_examination_finding|
-      puts "each_patient_index_examination_finding :",each_patient_index_examination_finding.inspect
+      # puts "each_patient_index_examination_finding :",each_patient_index_examination_finding.inspect
+      each_patient_index_examination_finding_result = ""
+      each_patient_index_examination_finding_result += "#{each_patient_index_examination_finding["examination_finding"]}"
+      if(each_patient_index_examination_finding_result.empty?)
+        each_patient_index_examination_finding_result +=
+            "             #{each_patient_index_examination_finding["units"]}"
+      else
+        each_patient_index_examination_finding_result +=
+            " #{each_patient_index_examination_finding["units"]}"
+      end
+      # report_details[:examination_findings][each_patient_index_examination_finding["name"]] =
+      #     "#{each_patient_index_examination_finding["examination_finding"]} #{each_patient_index_examination_finding["units"]}"
+
       report_details[:examination_findings][each_patient_index_examination_finding["name"]] =
-          "#{each_patient_index_examination_finding["examination_finding"]} #{each_patient_index_examination_finding["units"]}"
+          each_patient_index_examination_finding_result
     end
 
     # puts "====================================\n"
@@ -569,7 +581,11 @@ class PatientController < ApplicationController
 
     report_details[:cmc][:cad] = ""
     if(to_parse)
-      report_details[:cmc][:cad] = JSON.parse(to_parse)["details"]
+      cad_detail = ""
+      json_parsed_cad = JSON.parse(to_parse)
+      cad_detail += "Suffering since : #{json_parsed_cad['suffering_since']} - " if !json_parsed_cad["suffering_since"].to_s.empty?
+      cad_detail += json_parsed_cad["details"]
+      report_details[:cmc][:cad] = cad_detail
     end
 
     latest_inv_detail_with_cc =
