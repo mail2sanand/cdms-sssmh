@@ -2,22 +2,27 @@
     <!--<script src="assets/jsgrid-date.js"></script>-->
     <script>
         $(function() {
-            $("#dm_datepicker").datepicker();
+            $("#dm_datepicker").datepicker({
+                dateFormat: 'M d'
+//                defaultDate: 'May 10, 2018'
+            });
         });
 
-        $("#dm_visit_calendar_icon").click(function() {
-            $('#dm_datepicker').datepicker("show");
-        });
 
+//
+//        $("#dm_visit_calendar_icon").click(function() {
+//            $('#dm_datepicker').datepicker("show");
+//        });
+//
         $("#dm_datepicker").change(function() {
             var dateTypeVar = $('#dm_datepicker').datepicker('getDate');
-            console.log(dateTypeVar);
+//            console.log(dateTypeVar);
 
             var selected_visit = $.datepicker.formatDate('M d, yy', dateTypeVar);
             $('#dm_details_visit').val(dateTypeVar);
             $('#dm_visit_date_0').html(selected_visit);
         });
-
+//
         var dm_visit_date_div = $('#dm_date_row_div');
         dm_visit_date_div.append($('<div/>')
             .attr("id","dm_visit_date_0")
@@ -28,6 +33,14 @@
                     .text("Select New Visit")
             )
         );
+
+//        function changeVisitOptionForDM() {
+//            if(selectedVisitOption == "0") {
+//                $('#dm_datepicker').show();
+//                loadPatientDMDetails(selectedVisitOption);
+//            }
+//        }
+
 
     </script>
 
@@ -79,24 +92,30 @@
             <!--</div>-->
           <!--</div>-->
 
-          <div id="dm_header_visit_div" style="margin-left:6px;margin-top:4px;float:right;width: 90%;border-right:0px solid green;height:4.1vh;">
+          <div id="dm_header_visit_div" style="margin-left:6px;margin-top:4px;/*float:right*/;width: 93%;border-right:0px solid green;height:4.1vh;">
             <!--<div id="dm_header_visit_div" style="margin-left:6px;margin-top:5px;float:left;width:20%;border:1px solid green;height:4vh;">-->
             <div id="diabetes_new_visit_div" style="width:100%;height:4.1vh;border:0px solid green;border-bottom:1px solid green;" >
               <!--<input type="hidden" name="dm_details[patient_visit]" value="0">-->
               <div style="margin-left:20px;width:65%;float:left;height:auto;border:0px solid green;">
                 <select id="dm_patient_visits_select_id" onchange="changeVisitOption(this.value,'dm');">
+                <!--<select id="dm_patient_visits_select_id" onchange="changeVisitOptionForDM(this.value);">-->
                   <option value="-1" selected>Select a Visit</option>
                   <option value="0">New Visit</option>
                 </select>
               </div>
 
               <div id="diabetes_new_visit_calendar" style="border:0px solid green;height:auto;float:left;margin-left:2px;" align="left">
-                <i style="display:none;" class="fa fa-calendar" id="dm_visit_calendar_icon" title="Select Date of Visit"></i>
-                <input size="1" type="text" id="dm_datepicker" style="visibility:hidden;">
+                <!--<i style="display:none;" class="fa fa-calendar" id="dm_visit_calendar_icon" title="Select Date of Visit" onclick="showDatePickerDiabetes();"></i>-->
+                <!--<input size="1" type="text" id="dm_datepicker" style="visibility:hidden;">-->
+                <input size="8" type="text" id="dm_datepicker" style="visibility:visible;display:none;">
               </div>
+
             </div>
 
             <div id="dm_date_row_div" style="height:2vh;width:100%;border:0px solid red;">
+              <!--<input size="1" type="text" id="dm_datepicker" style="visibility:visible;">-->
+              <!--<input type="text" size="15" id="dm_datepicker" style="visibility:visible;display: none;">-->
+
               <!--<div id="visit_date" style="margin-left:60px;padding-left:40px;margin-top:0px;float:left;width:25%;border:1px dotted green;height:auto;"></div>-->
             </div>
 

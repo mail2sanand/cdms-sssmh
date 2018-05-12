@@ -95,7 +95,45 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
         // $(seperate_dm_details_div).css("width",total_width+"%");
         $(seperate_dm_details_div).css("width",total_width+"px");
 
+        // Block for the Floating Dates.
+        // $('#dm_details_for_patient_div_parent').append($('<div/>')
+        //     .attr("id","main_floating_dates_1")
+        //     .attr("style","left:37%;width:60%;overflow-x:auto;height:6vh;position:absolute;z-index:10;border:0px solid green;")
+        //     .append($('<div/>')
+        //         .attr("id","main_floating_dates")
+        //         .attr("style","height:6vh;border:0px solid red;width:"+total_width+"px")
+        //     )
+        // )
+        //
+        // var main_floating_dates_div = $('#main_floating_dates');
+        // patientDMDetails.forEach(function (eachPatientDMDetail) {
+        //     var parsed_visited_date = $.datepicker.parseDate("yy-mm-dd", eachPatientDMDetail.visited_on);
+        //     var formatted_visit_date = $.datepicker.formatDate('M d, yy', parsed_visited_date);
+        //
+        //     var dmDetails = eachPatientDMDetail.examination_details;
+        //     visit_date_div_id++;
+        //
+        //     main_floating_dates_div.append($('<div/>')
+        //         .attr("id", "dm_history_fl_" + visit_date_div_id)
+        //         .attr("align", "center")
+        //         .attr("style", "margin-left:20px;padding-left:0px;margin-top:0px;float:left;width:180px;border:1px dotted green;height:auto;")
+        //         .addClass("patient_visited_on_div")
+        //     );
+        //
+        //     $("#dm_history_fl_" + visit_date_div_id).append(
+        //         $('<div/>')
+        //             .attr("id", "visit_date_fl_" + visit_date_div_id)
+        //             .attr("style", "height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
+        //             .attr("align", "center")
+        //             .append(
+        //                 $('<span/>')
+        //                     .text(formatted_visit_date)
+        //             )
+        //     );
+        // });
+
         patientDMDetails.forEach(function (eachPatientDMDetail) {
+
             var parsed_visited_date = $.datepicker.parseDate("yy-mm-dd",eachPatientDMDetail.visited_on);
             var formatted_visit_date =  $.datepicker.formatDate('M d, yy', parsed_visited_date);
 
@@ -112,13 +150,55 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
             $("#dm_history_"+visit_date_div_id).append(
                 $('<div/>')
                     .attr("id","visit_date_"+visit_date_div_id)
-                    .attr("style","height: 2.5vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
+                    .attr("style","height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
                     .attr("align","center")
                     .append(
                         $('<span/>')
                             .text(formatted_visit_date)
                     )
             );
+
+            // seperate_dm_details_div.append(
+            // $("#dm_history_"+visit_date_div_id).append(
+            //     $('<div/>')
+            //         .attr("id","visit_date_"+visit_date_div_id)
+            //         .attr("style","height: 2.5vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;z-index:100;")
+            //         .attr("align","center")
+            //         .append(
+            //             $('<span/>')
+            //                 .text(formatted_visit_date)
+            //         )
+            // );
+
+            // $("#dm_history_"+visit_date_div_id).append(
+            //     $('<div/>')
+            //         .attr("id","dummy_visit_date_"+visit_date_div_id)
+            //         .attr("style","height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
+            //         .attr("align","center")
+            // );
+            //
+            // floatingMenu.add("visit_date_"+visit_date_div_id,
+            //     {
+            //         // Represents distance from left or right browser window
+            //         // border depending upon property used. Only one should be
+            //         // specified.
+            //         // targetLeft: 0,
+            //         targetRight: width_of_title,
+            //
+            //         // Represents distance from top or bottom browser window
+            //         // border depending upon property used. Only one should be
+            //         // specified.
+            //         targetTop: width_of_title,
+            //         // targetBottom: 0,
+            //
+            //         // Uncomment one of those if you need centering on
+            //         // X- or Y- axis.
+            //         // centerX: true,
+            //         // centerY: true,
+            //
+            //         // Remove this one if you don't want snap effect
+            //         snap: true
+            //     });
 
             $('#dm_details_div [id^="examination_header_"]').each(function (index,eachElement) {
                 var eachElement_id = eachElement.id;
@@ -200,5 +280,10 @@ function loadPatientDMDetailsData(dmDetailsForPatient) {
     }
 
     populateInputsAndSpans(dmDetailsForPatient,'input_dm_details_','span_dm_details_',false,'');
+}
+
+function showDatePickerDiabetes(){
+    console.log("sddsdsd sds d");
+    $('#dm_datepicker').datepicker("show");
 }
 

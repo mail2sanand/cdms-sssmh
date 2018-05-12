@@ -5,7 +5,27 @@
         api = $(".smartmenu").smartMenu({
             responsive:"switch-margin"
         });
+
+        // Functionality to Highlight Respective Menu
+        var current_page_url = location.href;
+        var current_page_url_array = current_page_url.split("/")
+        var current_page_function = current_page_url_array[current_page_url_array.length - 1];
+
+        console.log("----"+current_page_function+"----");
+
+        var header_menu_highlight = "header_menu";
+        $('#header_menu').attr('class','sm-content-full');
+        $('#header_menu_'+current_page_function).attr('class','sm-content-full sm-active');
+
+//        $("#links_welcome li").each(function (index,each_element) {
+//            var current_class = each_element.attr('class');
+//
+//        })
+
+
+//
     });
+
 </script>
 
 <script type="text/javascript" src="assets/javascripts/jquery.mousewheel.js"></script>
@@ -38,22 +58,22 @@
             </li>
 
             <!-- Simple item -->
-            <li class="sm-active" style="">
+            <li id="header_menu" class="sm-content-full sm-active" style="">
               <a href="/"><i class="fa fa-home"></i>Home</a>
             </li>
-            <li class="sm-content-full">
+            <li id="header_menu_villages" class="sm-content-full">
               <a href="/villages"><i class="fa fa-map"></i>Villages</a>
             </li>
-            <li class="sm-content-full">
+            <li id="header_menu_patients" class="sm-content-full">
               <a href="/patients"><i class="fa fa-address-book"></i>Patients</a>
             </li>
-            <li class="sm-content-full">
+            <li id="header_menu_reports" class="sm-content-full">
               <a href="/reports"><i class="fa fa-list-alt"></i>Reports</a>
             </li>
-            <li class="sm-right-item" style="">
+            <li id="header_menu_sign_out" class="sm-right-item" style="">
               <a rel="nofollow" data-method="delete" href="/users/sign_out"><i class="fa fa-sign-out"></i>Sign Out</a>
             </li>
-            <li class="sm-right-item" style="">
+            <li id="header_menu_account_profile" class="sm-right-item" style="">
               <a href="/account_profile"><i class="fa fa-hdd-o"></i>Account Profile</a>
             </li>
 

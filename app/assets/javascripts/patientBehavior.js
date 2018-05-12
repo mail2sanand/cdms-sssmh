@@ -381,12 +381,17 @@ function firstWordCap(stringToConvert){
 
 
     function changeVisitOption(selectedVisitOption,ailment_prefix) {
+        $('#dm_datepicker').hide();
+
         if(selectedVisitOption == "0"){
-            $('#'+ailment_prefix+'_visit_calendar_icon').show()
+            $('#'+ailment_prefix+'_visit_calendar_icon').show();
             $('#'+ailment_prefix+'_details_visit').val("");
             $('#'+ailment_prefix+'_visit_date_0').html("Select New Visit");
 
             if(ailment_prefix.indexOf("dm") != -1){
+                $('#dm_datepicker').show();
+                $("#dm_datepicker").datepicker("setDate",new Date());
+
                 loadPatientDMDetails(selectedVisitOption);
             }
 
@@ -538,7 +543,7 @@ function firstWordCap(stringToConvert){
             // }else if(iterate_with_code == "iterate_hash"){
             //
             }else{
-                console.log("==>"+span_key+eachpatientDetailKey+"==>"+eachpatientDetailValue);
+                // console.log("==>"+span_key+eachpatientDetailKey+"==>"+eachpatientDetailValue);
                 eachpatientDetailInputElement = $('#'+input_key+eachpatientDetailKey);
                 eachpatientDetailSpanElement = $('#'+span_key+eachpatientDetailKey);
 
@@ -551,7 +556,7 @@ function firstWordCap(stringToConvert){
             // console.log(eachpatientDetailInputElement);
             // console.log(eachpatientDetailValueAttribute);
 
-            console.log("Examination Details : ======>>");
+            // console.log("Examination Details : ======>>");
             if($(eachpatientDetailInputElement).is("input[type=file]")){
                 var file_element = $('#'+span_key+eachpatientDetailKey+"_src");
                 $(file_element).attr("src",eachpatientDetailValueAttribute);
