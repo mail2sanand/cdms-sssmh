@@ -74,6 +74,7 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
         var visit_date_div = $('#dm_date_row_div');
 
         $('#seperate_dm_details_div').empty();
+        $('#main_floating_dates_parent').remove();
         var seperate_dm_details_div = $('#seperate_dm_details_div');
         // var seperate_dm_details_div_width = 100;
         var seperate_dm_details_div_width = 500;
@@ -96,42 +97,17 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
         $(seperate_dm_details_div).css("width",total_width+"px");
 
         // Block for the Floating Dates.
-        // $('#dm_details_for_patient_div_parent').append($('<div/>')
-        //     .attr("id","main_floating_dates_1")
-        //     .attr("style","left:37%;width:60%;overflow-x:auto;height:6vh;position:absolute;z-index:10;border:0px solid green;")
-        //     .append($('<div/>')
-        //         .attr("id","main_floating_dates")
-        //         .attr("style","height:6vh;border:0px solid red;width:"+total_width+"px")
-        //     )
-        // )
-        //
-        // var main_floating_dates_div = $('#main_floating_dates');
-        // patientDMDetails.forEach(function (eachPatientDMDetail) {
-        //     var parsed_visited_date = $.datepicker.parseDate("yy-mm-dd", eachPatientDMDetail.visited_on);
-        //     var formatted_visit_date = $.datepicker.formatDate('M d, yy', parsed_visited_date);
-        //
-        //     var dmDetails = eachPatientDMDetail.examination_details;
-        //     visit_date_div_id++;
-        //
-        //     main_floating_dates_div.append($('<div/>')
-        //         .attr("id", "dm_history_fl_" + visit_date_div_id)
-        //         .attr("align", "center")
-        //         .attr("style", "margin-left:20px;padding-left:0px;margin-top:0px;float:left;width:180px;border:1px dotted green;height:auto;")
-        //         .addClass("patient_visited_on_div")
-        //     );
-        //
-        //     $("#dm_history_fl_" + visit_date_div_id).append(
-        //         $('<div/>')
-        //             .attr("id", "visit_date_fl_" + visit_date_div_id)
-        //             .attr("style", "height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
-        //             .attr("align", "center")
-        //             .append(
-        //                 $('<span/>')
-        //                     .text(formatted_visit_date)
-        //             )
-        //     );
-        // });
+        $('#dm_details_for_patient_div_parent').append($('<div/>')
+            .attr("id","main_floating_dates_parent")
+            .attr("style","left:37%;top:31%;width:60%;overflow-x:auto;height:6vh;position:absolute;z-index:1;border:0px solid green;")
+            // .attr("onscroll","div_on_scroll();")
+            .append($('<div/>')
+                .attr("id","main_floating_dates")
+                .attr("style","height:6vh;border:0px solid red;width:"+total_width+"px")
+            )
+        )
 
+        var main_floating_dates_div = $('#main_floating_dates');
         patientDMDetails.forEach(function (eachPatientDMDetail) {
 
             var parsed_visited_date = $.datepicker.parseDate("yy-mm-dd",eachPatientDMDetail.visited_on);
@@ -152,53 +128,31 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
                     .attr("id","visit_date_"+visit_date_div_id)
                     .attr("style","height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
                     .attr("align","center")
-                    .append(
-                        $('<span/>')
-                            .text(formatted_visit_date)
-                    )
+                    // .append(
+                    //     $('<span/>')
+                    //         .text(formatted_visit_date)
+                    // )
             );
 
-            // seperate_dm_details_div.append(
-            // $("#dm_history_"+visit_date_div_id).append(
-            //     $('<div/>')
-            //         .attr("id","visit_date_"+visit_date_div_id)
-            //         .attr("style","height: 2.5vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;z-index:100;")
-            //         .attr("align","center")
-            //         .append(
-            //             $('<span/>')
-            //                 .text(formatted_visit_date)
-            //         )
-            // );
+            // Floating Date Block
+                main_floating_dates_div.append($('<div/>')
+                    .attr("id", "fl_dm_history_" + visit_date_div_id)
+                    .attr("align", "center")
+                    .attr("style", "margin-left:20px;padding-left:0px;margin-top:0px;float:left;width:180px;border:1px dotted green;height:auto;")
+                    .addClass("patient_visited_on_div")
+                );
 
-            // $("#dm_history_"+visit_date_div_id).append(
-            //     $('<div/>')
-            //         .attr("id","dummy_visit_date_"+visit_date_div_id)
-            //         .attr("style","height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 1px dotted green;")
-            //         .attr("align","center")
-            // );
-            //
-            // floatingMenu.add("visit_date_"+visit_date_div_id,
-            //     {
-            //         // Represents distance from left or right browser window
-            //         // border depending upon property used. Only one should be
-            //         // specified.
-            //         // targetLeft: 0,
-            //         targetRight: width_of_title,
-            //
-            //         // Represents distance from top or bottom browser window
-            //         // border depending upon property used. Only one should be
-            //         // specified.
-            //         targetTop: width_of_title,
-            //         // targetBottom: 0,
-            //
-            //         // Uncomment one of those if you need centering on
-            //         // X- or Y- axis.
-            //         // centerX: true,
-            //         // centerY: true,
-            //
-            //         // Remove this one if you don't want snap effect
-            //         snap: true
-            //     });
+                $("#fl_dm_history_" + visit_date_div_id).append(
+                    $('<div/>')
+                        .attr("id", "fl_visit_date" + visit_date_div_id)
+                        .attr("style", "height: 3.1vh;margin-top: 4px;margin-bottom: 13px;font-weight:bold;border-bottom: 0px dotted green;background-color:yellow;")
+                        .attr("align", "center")
+                        .append(
+                            $('<span/>')
+                                .text(formatted_visit_date)
+                        )
+                );
+            // END OF Floating Date Block
 
             $('#dm_details_div [id^="examination_header_"]').each(function (index,eachElement) {
                 var eachElement_id = eachElement.id;
@@ -249,7 +203,6 @@ function loadNonEditDMDetailsTemplate(patientDMAllDetails) {
 
         // Process all Current Medicine for Listing
 
-
     }
 
 }
@@ -283,7 +236,15 @@ function loadPatientDMDetailsData(dmDetailsForPatient) {
 }
 
 function showDatePickerDiabetes(){
-    console.log("sddsdsd sds d");
+    // console.log("sddsdsd sds d");
     $('#dm_datepicker').datepicker("show");
+}
+
+function div_on_scroll() {
+    // console.log("In the div_on_scroll Function ... :) ");
+    var target = $('#main_floating_dates_parent');
+    var source = $('#seperate_dm_details_div_block');
+    target.scrollTop(source.scrollTop());
+    target.scrollLeft(source.scrollLeft());
 }
 

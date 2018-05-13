@@ -3,7 +3,9 @@
     <script>
         $(function() {
             $("#dm_datepicker").datepicker({
-                dateFormat: 'M d'
+                dateFormat: 'M d yy',
+                changeMonth: true,
+                changeYear: true,
 //                defaultDate: 'May 10, 2018'
             });
         });
@@ -33,14 +35,6 @@
                     .text("Select New Visit")
             )
         );
-
-//        function changeVisitOptionForDM() {
-//            if(selectedVisitOption == "0") {
-//                $('#dm_datepicker').show();
-//                loadPatientDMDetails(selectedVisitOption);
-//            }
-//        }
-
 
     </script>
 
@@ -202,10 +196,10 @@
 
     <div id="dm_details_right_block" style="float: left;width: 63%;border: 0px solid red;">
 
-      <div style="margin-left:6px;margin-top:12px;/* float:left; */width: 98%;border-right:0px solid green;border-bottom:1px solid green;height:2.9vh;" align="center">
+      <div id="dm_details_history_desc_block" style="margin-left:6px;margin-top:12px;/* float:left; */width: 98%;border-right:0px solid green;border-bottom:1px solid green;height:2.9vh;" align="center">
         <b>History of Diabetes Examination Parameters for this Patient</b>
       </div>
-      <div id="seperate_dm_details_div_block" style="height:auto;width:98%;border: 0px solid darkviolet;overflow-x: auto;">
+      <div id="seperate_dm_details_div_block" style="height:auto;width:98%;border: 0px solid darkviolet;overflow-x: auto;" onscroll="div_on_scroll();">
         <div id="seperate_dm_details_div" style="border: 1px solid green;height:auto;"></div>
       </div>
 
