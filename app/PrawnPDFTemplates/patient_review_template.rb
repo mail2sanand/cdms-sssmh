@@ -329,7 +329,7 @@ class PatientReviewTemplate < Prawn::Document
     patient_four_month_details = ([
       [
           {
-              :content=>"<b>Blood Sugar Level (mm/Hg)</b>",:border_width => 1,:height=>17,:width=>60 , :colspan=>4, :align => :center
+              :content=>"<b>Blood Sugar Level (mg/dl)</b>",:border_width => 1,:height=>17,:width=>60 , :colspan=>4, :align => :center
           },
           {
               :content=>"",:width=>5, :border_width => 0
