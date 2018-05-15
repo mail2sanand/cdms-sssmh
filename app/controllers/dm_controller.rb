@@ -4,10 +4,12 @@ class DmController < ApplicationController
   def update_dm_details_for_patient(dm_details, patient)
 
     patientVisit = dm_details.delete("visit")
+    patientVisit = DateTime.parse(patientVisit).strftime("%Y-%m-%d") if !patientVisit.empty? and patientVisit !~ /^\d+$/
+
     dm_no = dm_details.delete("dm_number")
     sssmh_care_from = dm_details.delete("sssmh_care_from")
 
-    puts " ========>>>>> sssmh_care_from : #{sssmh_care_from}"
+    # puts " ========>>>>> sssmh_care_from : #{sssmh_care_from}"
 
     # Create a record for the Patient Diabetes Number
     patient_ailment_detail = PatientAilmentDetail.find_or_create_by({

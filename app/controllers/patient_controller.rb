@@ -583,7 +583,7 @@ class PatientController < ApplicationController
     if(to_parse)
       cad_detail = ""
       json_parsed_cad = JSON.parse(to_parse)
-      cad_detail += "Suffering since : #{json_parsed_cad['suffering_since']} - " if !json_parsed_cad["suffering_since"].to_s.empty?
+      cad_detail += "Suffering since : #{json_parsed_cad['suffering_since']} - " if !json_parsed_cad["suffering_since"].to_s.empty? and json_parsed_cad['suffering_since'].to_i > 0
       cad_detail += json_parsed_cad["details"]
       report_details[:cmc][:cad] = cad_detail
     end
