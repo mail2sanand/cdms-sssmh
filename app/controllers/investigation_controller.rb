@@ -7,6 +7,7 @@ class InvestigationController < ApplicationController
   def update_investigation_details_for_patient(patient,investigationDetails)
 
     patientVisit = investigationDetails.delete("visit")
+    patientVisit = DateTime.parse(patientVisit).strftime("%Y-%m-%d") if !patientVisit.empty? and patientVisit !~ /^\d+$/
     # puts " =============>>>> patientVisit in InvestigationController : #{patientVisit}"
 
     investigationDetailsJSON = convertHashObjectToJSON(investigationDetails)
