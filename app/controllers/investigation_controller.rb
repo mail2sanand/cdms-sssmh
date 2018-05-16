@@ -37,7 +37,8 @@ class InvestigationController < ApplicationController
 
       patientInvestigationDetail = InvestigationDetail.find_or_create_by({
         :patient_id => patient.id,
-        :visit_id => patientVisitId
+        :visit_id => patientVisitId,
+        :ailment_id => Ailment.find_by(:name => "Diabetes").id
       })
 
       patientInvestigationDetail.update({:investigation_details => investigationDetailsJSON})
