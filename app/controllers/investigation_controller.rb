@@ -24,9 +24,9 @@ class InvestigationController < ApplicationController
 
       newVisit = Visit.find_or_create_by({
         :patient_id => patient.id,
-        :visited_on => patientVisit,
+        :visited_on => patientVisit
         # :visited_at => Village.find(patient.village_id).parent_village_id
-        :visited_at => visited_at
+        # :visited_at => visited_at
       })
 
       ailments = Ailment.find_by_name("Diabetes").id
@@ -37,11 +37,13 @@ class InvestigationController < ApplicationController
 
       patientInvestigationDetail = InvestigationDetail.find_or_create_by({
         :patient_id => patient.id,
-        :visit_id => patientVisitId,
-        :ailment_id => Ailment.find_by(:name => "Diabetes").id
+        :visit_id => patientVisitId
       })
 
-      patientInvestigationDetail.update({:investigation_details => investigationDetailsJSON})
+      patientInvestigationDetail.update({
+        :investigation_details => investigationDetailsJSON,
+        :ailment_id => Ailment.find_by(:name => "Diabetes").id
+      })
 
     end
 
