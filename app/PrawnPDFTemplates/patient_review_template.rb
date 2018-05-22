@@ -26,7 +26,7 @@ class PatientReviewTemplate < Prawn::Document
 
     patient_cmc_block(report_details[:cmc])
 
-    move_down 10
+    # move_down 5
 
     patient_investigation_details_block(report_details[:one_month_examination_detail],report_details[:bs_examination_details])
 
@@ -159,8 +159,8 @@ class PatientReviewTemplate < Prawn::Document
             },
             {
                 :content => "<b> Mandal : </b> #{pgd.mandal}",
-                :colspan => 2
-                # :width => 120,
+                :colspan => 2,
+                :width => 120
             },
             {
                 :content => "<b>District : </b> #{pgd.district}",
@@ -223,7 +223,7 @@ class PatientReviewTemplate < Prawn::Document
 
     move_down 10
 
-    bounding_box([5,cursor], :width=>580) do
+    bounding_box([5,cursor], :width=>537) do
       font("helvitica", :size => 9){
         text "<b>Chronic Complications </b>:  #{chronic_complications_text}",
              :inline_format => true
