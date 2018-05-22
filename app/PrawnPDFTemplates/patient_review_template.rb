@@ -97,48 +97,57 @@ class PatientReviewTemplate < Prawn::Document
             {
                 :content => "<b>Date :</b>  #{village_date}",
                 :width => 95,
-                :height => 30
+                :height => 30,
+                :size => 9
             },
             {
                 :content => "<b> CD No. : </b> #{pgd.cdno} <br> <b> DM No. : </b> #{dm_number}",
                 :width => 120,
-                :colspan => 3
+                :colspan => 3,
+                :size => 9
             },
             {
                 :content => "<b> Aadhaar No. : </b> #{pgd.aadharNo} <br> <b> Ref. No. : </b> #{pgd.bmNo}",
                 :width => 100,
-                :colspan => 2
+                :colspan => 2,
+                :size => 9
             },
             {
                 :content => "<b> SSSMH ID No. : </b> #{pgd.sssmhIdNo}",
                 :width => 50,
-                :colspan => 2
+                :colspan => 2,
+                :size => 9
                 # :width => 40,
             }
         ],
         [
+            # {:content => "<b>Treatment Advised</b>", :border_width => 1,:width=>300,:size => 12}
             {
-                :content => "<b>Name : </b> #{pgd.patient_name} ",
+                :content => "<b>Name :  #{pgd.patient_name}</b>",
                 :width => 80,
                 :height => 20,
-                :colspan => 4
+                :colspan => 4,
+                :size => 10
             },
             {
                 :content => "<b> Date Of Birth & Age</b> <br> #{dob_age}",
                 # :colspan => 2,
                 :rowspan => 2,
-                :width => 100
+                :width => 100,
+                :size => 9
             },
             {
                 :content => "<b>Gender : </b> #{(pgd.gender == 1 ? 'Male' : 'Female')}",
                 :rowspan => 2,
                 :colspan => 1,
+                :size => 9
                 # :width => 80
             },
             {
                 :content => "<b> Phone No. : </b> #{pgd.contact}",
                 :rowspan => 2,
-                :colspan => 2
+                :colspan => 2,
+                :size => 9
                 # :width => 40,
             }
         ],
@@ -147,7 +156,8 @@ class PatientReviewTemplate < Prawn::Document
                 :content => "<b>S/O,D/O,W/O : </b> #{pgd.relationName} ",
                 # :width => 100,
                 :height => 20,
-                :colspan => 4
+                :colspan => 4,
+                :size => 9
             }
         ],
         [
@@ -155,26 +165,30 @@ class PatientReviewTemplate < Prawn::Document
                 :content => "<b>Village : </b> #{pgd.village_name} ",
                 :width => 90,
                 :height => 30,
-                :colspan => 3
+                :colspan => 3,
+                :size => 9
             },
             {
                 :content => "<b> Mandal : </b> #{pgd.mandal}",
                 :colspan => 2,
-                :width => 120
+                :width => 120,
+                :size => 9
             },
             {
                 :content => "<b>District : </b> #{pgd.district}",
-                :colspan => 2
+                :colspan => 2,
+                :size => 9
                 # :width => 130
             },
             {
                 :content => "<b> Annual Income (Rs.): </b> #{pgd.annualIncome}",
+                :size => 9
                 # :width => 60,
             }
         ]    ])
 
     table patient_general_details,
-          :cell_style => { :inline_format => true, :size => 9},
+          :cell_style => { :inline_format => true},
           :position => 3,
           :width => 516
     # :row_colors => ['F0F0A3', nil, nil]
