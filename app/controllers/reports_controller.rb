@@ -166,8 +166,14 @@ class ReportsController < ApplicationController
       filtered_patients = []
       filtered_patients_records =
           Patient.where("patients.id in (#{params[:patient_ids].gsub('_',',')}) and
-        patients.updated_at >= (CURRENT_DATE - INTEGER '31') AND patients.updated_at <= CURRENT_TIMESTAMP")
+            extract(month  from now()) = extract(month from patients.updated_at)
+      ")
         .order("name ASC")
+
+      # Patient.where("patients.id in (#{params[:patient_ids].gsub('_',',')}) and
+      #   patients.updated_at >= (CURRENT_DATE - INTEGER '15') AND patients.updated_at <= CURRENT_TIMESTAMP")
+      #     .order("name ASC")
+
 
       filtered_patients_records.map{|i| filtered_patients << i.id.to_s} if filtered_patients_records.length > 0
 

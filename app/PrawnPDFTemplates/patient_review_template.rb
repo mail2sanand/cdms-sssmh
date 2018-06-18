@@ -230,7 +230,7 @@ class PatientReviewTemplate < Prawn::Document
 
     bounding_box([5,cursor], :width=>530) do
       font("helvitica", :size => 9){
-        text "<b> CAD : </b>  <u>#{cmc[:cad]}</u>",
+        text "<b> CAD : </b>  #{cmc[:cad]}",
              :inline_format => true
       }
     end
@@ -322,55 +322,57 @@ class PatientReviewTemplate < Prawn::Document
     last_but_4_visit = last_but_4_visit_record ? last_but_4_visit_record : empty_visit
         # bs_examination_details[bs_examination_details.length-1] ? bs_examination_details[bs_examination_details.length-2] : empty_visit
 
-
-
-    # puts "last But One : #{bs_examination_details[bs_examination_details.length-1]}"
-    # last_but_one_visit =
-    #     bs_examination_details[bs_examination_details.length-2] ? bs_examination_details[bs_examination_details.length-2] : empty_visit
-    #
-    # puts "last But Two : #{bs_examination_details[bs_examination_details.length-2]}"
-    # last_but_2_visit =
-    #     bs_examination_details[bs_examination_details.length-3] ? bs_examination_details[bs_examination_details.length-3] : empty_visit
-    #
-    # puts "last But Three : #{bs_examination_details[bs_examination_details.length-3]}"
-    # last_but_3_visit =
-    #     bs_examination_details[bs_examination_details.length-4] ? bs_examination_details[bs_examination_details.length-4] : empty_visit
-    #
-    # puts "last But Four : #{bs_examination_details[bs_examination_details.length-4]}"
-    # last_but_4_visit =
-    #     bs_examination_details[bs_examination_details.length-5] ? bs_examination_details[bs_examination_details.length-5] : empty_visit
-
     patient_four_month_details = ([
       [
           {
-              :content=>"<b>Blood Sugar Level (mg/dl)</b>",:border_width => 1,:height=>17,:width=>60 , :colspan=>4, :align => :center
+              # :content=>"<b>Blood Sugar Level (mg/dl)</b>",
+              :content=>"<b>BLOOD SUGAR LEVEL (mg/dl)</b>",
+              :border_width => 2,:height=>17,:width=>60 , :colspan=>4, :align => :center, :size => 8.6
           },
           {
               :content=>"",:width=>5, :border_width => 0
           },
           {
-              :content=>"<b>Clinical Notes</b>", :border_width => 1, :rowspan=>6,:width => 340
+              :content=>"<b>Clinical Notes</b>",
+              :border_width => 1, :rowspan=>6,:width => 340, :size => 8
           }
       ],
       [
           {
-              :content=>"<b>Visit</b>",:border_width => 1,:height=>18,:width=>60 #, :rowspan=>2
+              :content=>"<b>Visit</b>",
+              :border_width => 2,:height=>18,:width=>60, :size => 8.6 #, :rowspan=>2
           },
           {
-              :content=>"<b>FBS<br>(mg/dl)</b>",:width=>35, :border_width => 1 #, :rowspan=>2
+              :content=>"<b>FBS<br>(mg/dl)</b>",
+              :width=>35, :border_width => 2, :size => 8.6 #, :rowspan=>2
           },
           {
-              :content=>"<b>PPBS<br>(mg/dl)</b>",:width=>35, :border_width => 1#, :rowspan=>2
+              :content=>"<b>PPBS<br>(mg/dl)</b>",
+              :width=>35, :border_width => 2, :size => 8.6#, :rowspan=>2
           },
           {
-              :content=>"<b>RBS<br>(mg/dl)</b>",:width=>35, :border_width => 1#, :rowspan=>2
+              :content=>"<b>RBS<br>(mg/dl)</b>",
+              :width=>35, :border_width => 2, :size => 8.6#, :rowspan=>2
           }
       ],
       [
           {
-              :content=>"#{last_but_one_visit[:visit]}",:border_width => 1,:width=>30,:height => 20
+              :content=>"#{last_but_one_visit[:visit]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
           },
-          last_but_one_visit[:fbs],last_but_one_visit[:ppbs],last_but_one_visit[:rbs],
+          {
+              :content=>"#{last_but_one_visit[:fbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_one_visit[:ppbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_one_visit[:rbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          # last_but_one_visit[:fbs],last_but_one_visit[:ppbs],last_but_one_visit[:rbs],
           {
               :content=>"",:width=>10, :border_width => 0
           },
@@ -380,21 +382,60 @@ class PatientReviewTemplate < Prawn::Document
       ],
       [
           {
-              :content=>"#{last_but_2_visit[:visit]}",:border_width => 1,:width=>30,:height => 20
+              :content=>"#{last_but_2_visit[:visit]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
           },
-          last_but_2_visit[:fbs],last_but_2_visit[:ppbs],last_but_2_visit[:rbs]
+          {
+              :content=>"#{last_but_2_visit[:fbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_2_visit[:ppbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_2_visit[:rbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          }
+          # last_but_2_visit[:fbs],last_but_2_visit[:ppbs],last_but_2_visit[:rbs]
       ],
       [
           {
-              :content=>"#{last_but_3_visit[:visit]}",:border_width => 1,:width=>30,:height => 20
+              :content=>"#{last_but_3_visit[:visit]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
           },
-          last_but_3_visit[:fbs],last_but_3_visit[:ppbs],last_but_3_visit[:rbs]
+          {
+              :content=>"#{last_but_3_visit[:fbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_3_visit[:ppbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_3_visit[:rbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          }
+          # last_but_3_visit[:fbs],last_but_3_visit[:ppbs],last_but_3_visit[:rbs]
       ],
       [
           {
-              :content=>"#{last_but_4_visit[:visit]}",:border_width => 1,:width=>30,:height => 20
+              :content=>"#{last_but_4_visit[:visit]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
           },
-          last_but_4_visit[:fbs],last_but_4_visit[:ppbs],last_but_4_visit[:rbs]
+          {
+              :content=>"#{last_but_4_visit[:fbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_4_visit[:ppbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          },
+          {
+              :content=>"#{last_but_4_visit[:rbs]}",
+              :border_width => 2,:width=>30,:height => 20, :size => 8.6
+          }
+          # last_but_4_visit[:fbs],last_but_4_visit[:ppbs],last_but_4_visit[:rbs]
       ]
     ])
 
@@ -408,7 +449,8 @@ class PatientReviewTemplate < Prawn::Document
 
     bounding_box([5,cursor], :width=>500) do
       table patient_four_month_details,
-            :cell_style => { :inline_format => true, :size => 8},
+            # :cell_style => { :inline_format => true, :size => 8},
+            :cell_style => { :inline_format => true},
             # :position => :center,
             :width => 525
             # :width => 917
