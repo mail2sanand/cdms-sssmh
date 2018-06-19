@@ -42,6 +42,10 @@ class ReportsController < ApplicationController
       query_2 = "
                    WHERE alive = 0
       "
+    elsif(village_id == "-2")
+      query_2 = "
+                   WHERE alive = 2
+      "
     else
       query_2 = "
                    WHERE
@@ -151,7 +155,7 @@ class ReportsController < ApplicationController
     print = params[:print]
     village_name = (village_name == "Select a Village" ? "All Villages" : village_name)
 
-    if(village_name == "Expired Patients")
+    if(village_name == "Expired Patients" or village_name == "In-Active Patients")
       village_date = ""
     else
       village_date_order = Village.find_by_name(village_name).displayOrder

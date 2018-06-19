@@ -279,19 +279,19 @@ class PatientReviewTemplate < Prawn::Document
         [
             {:content => "<b>FBS</b>", :border_width => 0},
             {:content => ": <u>#{Prawn::Text::NBSP*20} mg/dl</u>", :border_width => 0},
-            {:content => "<b>Last Month : </b> <u>#{fbs ? fbs : Prawn::Text::NBSP*20} mg/dl</u>", :border_width => 0},
+            {:content => "<b>Last Month : </b> <u>#{fbs.empty? ? '---' : fbs} mg/dl</u>", :border_width => 0},
             {:content => "<b>Excercise : </b>", :border_width => 0},
             {:content => "<u>#{Prawn::Text::NBSP*30}</u>", :border_width => 0}
         ],
         [
             {:content => "<b>PPBS</b>", :border_width => 0},
             {:content => ": <u>#{Prawn::Text::NBSP*20} mg/dl</u>", :border_width => 0},
-            {:content => "<b>Last Month : </b> <u>#{ppbs ? ppbs : Prawn::Text::NBSP*10} mg/dl</u>", :border_width => 0, :colspan => 3}
+            {:content => "<b>Last Month : </b> <u>#{ppbs.empty? ? '---' : ppbs} mg/dl</u>", :border_width => 0, :colspan => 3}
         ],
         [
             {:content => "<b>RBS</b>", :border_width => 0},
             {:content => ": <u>#{Prawn::Text::NBSP*20} mg/dl</u>", :border_width => 0},
-            {:content => "<b>Last Month : </b> <u>#{rbs ? rbs : Prawn::Text::NBSP*10} mg/dl</u>", :border_width => 0, :colspan => 3}
+            {:content => "<b>Last Month : </b> <u>#{rbs.empty? ? '---' : rbs} mg/dl</u>", :border_width => 0, :colspan => 3}
         ]
     ])
 

@@ -40,6 +40,12 @@ class VillagesController < ApplicationController
         "name" => "Expired Patients"
     }
 
+    # Add In-Active Patients to the Nodal Villages List
+    nodal_villages_json << {
+        "id" => -2,
+        "name" => "In-Active Patients"
+    }
+
     respond_to do |format|
       format.html
       format.json { render json: nodal_villages_json}

@@ -26,7 +26,7 @@ class PatientController < ApplicationController
   def create
     puts "===================\n"
 
-    params[:pgd][:alive] = ( params[:pgd][:alive] == "on" ? 1 : 0)
+    # params[:pgd][:alive] = ( params[:pgd][:alive] == "on" ? 1 : 0)
     params[:pgd][:dateOfBirth] = "#{params[:pgd][:dateOfBirth]}"
 
     @newPatient = Patient.create(patient_params)
@@ -192,7 +192,9 @@ class PatientController < ApplicationController
     @@dmDetailsController.update_dm_details_for_patient(params[:dm_details], patientForEditing)
 
     # Update the Patient General Details
-    params[:pgd][:alive] = ( params[:pgd][:alive] == "on" ? 1 : 0)
+    puts "================>>>> Alive : #{params[:pgd][:alive]}"
+
+    # params[:pgd][:alive] = ( params[:pgd][:alive] == "on" ? 1 : 0)
     params[:pgd][:dateOfBirth] = "#{params[:pgd][:dateOfBirth]}"
 
     patientForEditing.update(patient_params)
