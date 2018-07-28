@@ -627,9 +627,9 @@ class PatientController < ApplicationController
       one_month_examination_detail[:weight] = latest_visit_examination.examination_details["weight"]
       one_month_examination_detail[:bp] = latest_visit_examination.examination_details["bp"]
       one_month_examination_detail[:pulse] = latest_visit_examination.examination_details["pulse"]
-      one_month_examination_detail[:fbs] = latest_visit_examination.examination_details["fbs"]
-      one_month_examination_detail[:ppbs] = latest_visit_examination.examination_details["ppbs"]
-      one_month_examination_detail[:rbs] = latest_visit_examination.examination_details["rbs"]
+      one_month_examination_detail[:fbs] = latest_visit_examination.examination_details["fbs"].to_s
+      one_month_examination_detail[:ppbs] = latest_visit_examination.examination_details["ppbs"].to_s
+      one_month_examination_detail[:rbs] = latest_visit_examination.examination_details["rbs"].to_s
 
       report_details[:current_medicine] = format_current_medicine(latest_visit_examination.examination_details["current_medicine"])
       report_details[:cmc][:chronic_complications] = latest_visit_examination.examination_details["chronic_complication"]
@@ -638,9 +638,9 @@ class PatientController < ApplicationController
       one_month_examination_detail[:weight] = index_visit.where("examinations.code = 'weight'").first ? index_visit.where("examinations.code = 'weight'").first.examination_finding : ""
       one_month_examination_detail[:bp] = index_visit.where("examinations.code = 'bp'").first ? index_visit.where("examinations.code = 'bp'").first.examination_finding : ""
       one_month_examination_detail[:pulse] = index_visit.where("examinations.code = 'pulse'").first ? index_visit.where("examinations.code = 'pulse'").first.examination_finding : ""
-      one_month_examination_detail[:fbs] = index_visit.where("examinations.code = 'fbs'").first ? index_visit.where("examinations.code = 'fbs'").first.examination_finding : ""
-      one_month_examination_detail[:ppbs] = index_visit.where("examinations.code = 'ppbs'").first ? index_visit.where("examinations.code = 'ppbs'").first.examination_finding : ""
-      one_month_examination_detail[:rbs] = index_visit.where("examinations.code = 'rbs'").first ? index_visit.where("examinations.code = 'rbs'").first.examination_finding : ""
+      one_month_examination_detail[:fbs] = index_visit.where("examinations.code = 'fbs'").first ? index_visit.where("examinations.code = 'fbs'").first.examination_finding.to_s : ""
+      one_month_examination_detail[:ppbs] = index_visit.where("examinations.code = 'ppbs'").first ? index_visit.where("examinations.code = 'ppbs'").first.examination_finding.to_s : ""
+      one_month_examination_detail[:rbs] = index_visit.where("examinations.code = 'rbs'").first ? index_visit.where("examinations.code = 'rbs'").first.examination_finding.to_s : ""
     end
 
     report_details[:one_month_examination_detail] = one_month_examination_detail
