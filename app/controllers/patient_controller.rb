@@ -668,21 +668,23 @@ class PatientController < ApplicationController
   end
 
   def format_current_medicine(current_medicine)
+    current_medicine.gsub!("<br>","");
     current_medicine_array = current_medicine.split(/\d+\.\s+/);
 
     i=1;
     new_formatted_text = "";
 
     current_medicine_array.each do |each_current_medicine|
-      if each_current_medicine == ""
-        next
-      end
+      next if each_current_medicine.empty?
 
-      new_formatted_text = new_formatted_text + "\n" + i.to_s + ". " + each_current_medicine
+      each_current_medicine.gsub!("\n","");
+      new_formatted_text +=  i.to_s + ". " + each_current_medicine
+      new_formatted_text += "\n" unless each_current_medicine.include?("\n")
       i = i+1
     end
 
-    new_formatted_text.sub!("\n","");
+    new_formatted_text
+    # new_formatted_text.sub!("\n","");
   end
 
   def createPatientReviewReport(report_details, patient_id, ailment)
