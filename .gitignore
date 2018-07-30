@@ -12,6 +12,7 @@ capybara-*.html
 rerun.txt
 pickle-email-*.html
 server.*
+.DS_Store
 
 # CDMS Generated Report
 /public/patientDetails/
