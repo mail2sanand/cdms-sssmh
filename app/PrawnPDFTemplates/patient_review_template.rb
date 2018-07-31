@@ -468,7 +468,7 @@ class PatientReviewTemplate < Prawn::Document
         ],
         [
             {:content => "#{treatment_advised}", :border_width => 1,:size => 9},
-            {:content => "", :border_width => 1,:height => 268}
+            {:content => "", :border_width => 1,:height => 250}
         ]
     ])
 
