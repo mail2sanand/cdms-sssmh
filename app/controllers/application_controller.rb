@@ -23,8 +23,12 @@ class ApplicationController < ActionController::Base
   def calculate_next_month_village_date(village_date_order)
     #Calculate and Format the Date
     year_month = Date.today
+
     year = year_month.year
-    month = year_month.month + 1
+
+    # In case the month is Dec, then default the next month to Jan and not month + 1
+    month = (year_month.month == 12 ? 1 : (year_month.month + 1))
+    
     return Date.new(year,month,village_date_order).strftime("%d %b, %Y")
   end
 
