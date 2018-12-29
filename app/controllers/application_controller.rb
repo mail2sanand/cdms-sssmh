@@ -24,11 +24,11 @@ class ApplicationController < ActionController::Base
     #Calculate and Format the Date
     year_month = Date.today
 
-    year = year_month.year
+    year = (year_month.month == 12 ? (year_month.year+1) : year_month.year)
 
     # In case the month is Dec, then default the next month to Jan and not month + 1
     month = (year_month.month == 12 ? 1 : (year_month.month + 1))
-    
+
     return Date.new(year,month,village_date_order).strftime("%d %b, %Y")
   end
 

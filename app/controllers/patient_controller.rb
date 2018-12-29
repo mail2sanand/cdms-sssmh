@@ -109,6 +109,9 @@ class PatientController < ApplicationController
   def get_patient_specific_detail(patientId)
     patientDetail = Patient.find(patientId)
 
+    village_id = Patient.nodal_village(patientId).village_id
+    display_order = Village.find(village_id).displayOrder
+
     # History Details
     patientCMCDetails = @@comorbidConditionController.get_cmc_details_for_patient(patientId)
     patientHabitDetails = PatientHabit.joins(:habit).where(:patient_id => patientId).select("patient_habits.*, habits.code")
@@ -136,7 +139,12 @@ class PatientController < ApplicationController
     )
 
     patient_age =
-        (patientDetail.dateOfBirth ? calculate_age( Date.strptime(patientDetail.dateOfBirth.to_s, '%Y-%m-%d'),Date.today()).to_s : "")
+        (patientDetail.dateOfBirth ? 
+          calculate_age( 
+            Date.strptime(patientDetail.dateOfBirth.to_s, '%Y-%m-%d'),
+            calculate_next_month_village_date(display_order).to_date
+          ).to_s : ""
+        )
 
     patientDetailJson = patientDetail.as_json.merge({
         "photo": patientDetail.photo.url,
@@ -558,8 +566,13 @@ class PatientController < ApplicationController
         # "cardiac_ailment" => "cad"
     }
 
+    village_id = Patient.nodal_village(patient_id).village_id
+    display_order = Village.find(village_id).displayOrder
+
+    next_village_report_date = calculate_next_month_village_date(display_order).to_date
+
     cmc_ailments.each do |each_cmc_ailment_key,each_cmc_ailment_value|
-      puts "each_cmc_ailment_key,each_cmc_ailment_value : #{each_cmc_ailment_key} , #{each_cmc_ailment_value}"
+      # puts "each_cmc_ailment_key,each_cmc_ailment_value : #{each_cmc_ailment_key} , #{each_cmc_ailment_value}"
       patient_cmc_details_for_each_ailment = patient_cmc_details.where("code = '#{each_cmc_ailment_key}'")
       to_parse = (patient_cmc_details_for_each_ailment.length > 0 ? patient_cmc_details_for_each_ailment.first.comorbid_condition_details : nil)
 
@@ -572,7 +585,14 @@ class PatientController < ApplicationController
               display_detail_1 = "#{cmc_ailment_details["ailment_type"]} for "
             end
 
-            report_details[:cmc][each_cmc_ailment_value.to_sym] = "#{display_detail_1}#{calculate_age_with_year(cmc_ailment_details['suffering_since'].to_i)} years"
+            # report_details[:cmc][each_cmc_ailment_value.to_sym] = 
+            #   "#{display_detail_1}#{calculate_age_with_year(cmc_ailment_details['suffering_since'].to_i)} years"
+
+            report_details[:cmc][each_cmc_ailment_value.to_sym] = "#{display_detail_1}#{
+                next_village_report_date.year - 
+                cmc_ailment_details['suffering_since'].to_i
+              } years"
+
           end
       end
     end
