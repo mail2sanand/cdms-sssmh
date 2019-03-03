@@ -106,9 +106,13 @@ class ReportsController < ApplicationController
     if(params[:print] == "review")
       # Select only those Patients whose details have been updated a month ago
       filtered_patients = []
+
+      to_date = Date.new(Date.today.year, month_for_printing, village_date_order)
+      from_date = to_date.prev_month + 1
+
       filtered_patients_records =
           Patient.where("patients.id in (#{params[:patient_ids].gsub('_',',')}) and
-            extract(month from patients.updated_at) = #{month_for_printing - 1}
+            patients.updated_at >= '#{from_date.strftime('%Y-%m-%d')}' and patients.updated_at <= '#{to_date.strftime('%Y-%m-%d')}'
       ").order("name ASC")
 
       # Patient.where("patients.id in (#{params[:patient_ids].gsub('_',',')}) and
