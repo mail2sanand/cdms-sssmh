@@ -81,15 +81,26 @@ class PatientReviewTemplate < Prawn::Document
   end
 
   def patient_general_details_block(pgd_array,dm_details,village_date)
-    puts "pgd_array : #{pgd_array.inspect}"
+    # puts "pgd_array : #{pgd_array.inspect}"
     dm_number = dm_details["dm_no"]
     # (dm_details ?  : "")
 
     pgd = pgd_array.first
     village_date = Time.now.strftime('%d %b, %Y') if village_date == ""
 
+    village_id = Patient.nodal_village(pgd.id).village_id
+    display_order = Village.find(village_id).displayOrder
+
+    new_a = ApplicationController.new
     dob_age =
-        (pgd.dateOfBirth ? "#{pgd.dateOfBirth.strftime("%e %b %Y")} - #{ApplicationController.new.calculate_age(Date.strptime(pgd.dateOfBirth.to_s),Date.today)} years" : "")
+        (pgd.dateOfBirth ? 
+          "#{pgd.dateOfBirth.strftime("%e %b %Y")} 
+            - #{new_a.calculate_age(
+                  Date.strptime(pgd.dateOfBirth.to_s, '%Y-%m-%d'),
+                  new_a.calculate_next_month_village_date(display_order).to_date
+                ).to_s} years" 
+          : ""
+        )
 
     puts "pgd : #{pgd.inspect}"
     patient_general_details = ([
