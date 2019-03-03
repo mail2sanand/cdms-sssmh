@@ -20,11 +20,12 @@ class ApplicationController < ActionController::Base
     Date.today.year - age
   end
 
-  def calculate_next_month_village_date(village_date_order)
+  def calculate_next_month_village_date(village_date_order,report_for_month_of = nil)
     #Calculate and Format the Date
     year_month = Date.today
     year = year_month.year
-    month = year_month.month + 1
+    month = (report_for_month_of ? report_for_month_of : (year_month.month + 1))
+
     return Date.new(year,month,village_date_order).strftime("%d %b, %Y")
   end
 

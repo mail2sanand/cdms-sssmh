@@ -29,12 +29,15 @@ Rails.application.routes.draw do
 
     get 'reports', to:'reports#index'
     get 'print_patient_details/:id/:print/:ailment', to: 'patient#print_patient_details'
-    get 'print_village_report/:patient_ids/:village_id/:print/:ailment_id',
+    get 'print_village_report/:patient_ids/:village_id/:print/:ailment_id/:month',
         to: 'reports#print_village_report'
 
     match 'get_all_patients_for_reports/:village_id/:nodal' => 'reports#get_all_patients_for_reports',
           :via => :get,
           :defaults => { :nodal => "false" }
+
+    # get 'filter_patients_ailments_level/:ailment_ids', 
+    #     to:'reports#filter_patients_ailments_level'
 
   # END of Reports
 

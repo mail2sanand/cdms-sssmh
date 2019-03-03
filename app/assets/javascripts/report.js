@@ -104,11 +104,12 @@ function getSelectedPatients() {
 function printReportsDetailsPage(report_type) {
     var all_selected_patients = getSelectedPatients();
     var selected_ailment = $('#ailment_combo_for_reports').val();
+    var month_for_printing = $('#date_month').val();
 
     var village_id = $('#report_nodal_village_select_id option:selected').text()
 
     // AJAX request to Print the selected Patients
-    window.open('/print_village_report/'+all_selected_patients+'/'+village_id+'/'+report_type+'/'+selected_ailment, '_blank')
+    window.open('/print_village_report/'+all_selected_patients+'/'+village_id+'/'+report_type+'/'+selected_ailment+'/'+month_for_printing, '_blank')
 }
 
 function showAndHideAllPatients(show_village) {

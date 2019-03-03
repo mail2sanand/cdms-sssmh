@@ -85,12 +85,12 @@
         </div>
 
         <div id='review_print' title="Print Review Sheets for Selected Patients" style='float:left;margin-right:10px;padding:0px;' class='custom_icons_print' id='custom_icons_R'>
-            <img src='/assets/review_print.png' class='print_icons_class' border='0' onclick='printReportsDetailsPage("review");'>
-          </div>
+          <img src='/assets/review_print.png' class='print_icons_class' border='0' onclick='printReportsDetailsPage("review");'>
+        </div>
 
-          <div id='index_print' title="Print Index Sheets for Selected Patients" style='float: right;margin-right:10px;padding:0px;' class='custom_icons_print' id='custom_icons_I'>
-            <img src='/assets/index_print.png' class='print_icons_class' border='0' onclick='printReportsDetailsPage("index");'>
-          </div>
+        <div id='index_print' title="Print Index Sheets for Selected Patients" style='float: right;margin-right:10px;padding:0px;' class='custom_icons_print' id='custom_icons_I'>
+          <img src='/assets/index_print.png' class='print_icons_class' border='0' onclick='printReportsDetailsPage("index");'>
+        </div>
 
         <!--<i class="fa fa-list-alt" style="font-size: 20px;margin-right: 20px;cursor: pointer;" title="Print Review Report" onclick="printSelectedPatients()"></i>-->
       </div>
@@ -106,10 +106,17 @@
         min-height: 60vh;
         font-family: "Open Sans",sans-serif;' align="center">
 
-      <div id="patient_search_div" style="overflow: scroll;">
+      <div id="patient_search_div" style="overflow: scroll;width: 98%;height: 10%;padding-top: 10px;">
         <!--<i class="fa fa-search" id="patient_search_icon" title="Search Patients"></i>-->
-        <div align="left">
-          <input id="village_patient_search_box" type="text" name="patient_search" size="25" onfocus="$('#patient_search_icon').hide();" onblur="$('#patient_search_icon').show();" placeholder="Search Patient..."/>
+        <div style="width:100%;border:0px solid;height: 40px;">
+          <div style="float: left;">
+            <input style="width: 100%;" id="village_patient_search_box" type="text" name="patient_search" size="25" onfocus="$('#patient_search_icon').hide();" onblur="$('#patient_search_icon').show();" placeholder="Search Patient..."/>
+          </div>
+
+          <div id='month_for_printing' title="Select Month for Printing" style='float:right;margin-right:10px;padding:0px;' class='custom_icons_print' id='custom_icons_R'>
+            Report for Month of : 
+            <%= select_month(Date.today.next_month,) %>
+          </div>
         </div>
 
         <div id="select_all_block">
