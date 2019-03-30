@@ -1,0 +1,18 @@
+<%all_ailments = get_all_ailments%>
+
+<div id="ailments_main_div" style="height: 90%;width:100%;padding-top: 10px;">
+	<%for each_ailment in all_ailments%>
+		<div id="ailments_main_div_level_1_<%=each_ailment.id%>" 
+				style="width: 90%;border: 0px solid black;height: 8%;padding-left: 10px;" align="center">
+
+			<div id="ailments_check_box_div_<%=each_ailment.id%>" style="float: left;padding-top: 3px;">
+				<input type="checkbox" id="ailments_check_box_id_<%=each_ailment.id%>" name="ailments_check_boxs"\>
+			</div>
+
+			<div id="ailment_<%=each_ailment.id%>" style="float: left;padding-left: 10px;padding-top: 5px;">
+				<%=each_ailment.name%>
+			</div>
+		</div>
+	<%end%>
+</div>
+
