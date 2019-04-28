@@ -1,37 +1,134 @@
-<script type="text/javascript">
-	function ailments_checkAndSubmit(){
-		 var ailments_filtered = "";
-		$('input[name="ailments_check_boxs"]:checked').each(function(index,e){ 
-			var selected_id = e.id;
-			var selected_ailment_array = selected_id.split("_");
-			ailments_filtered = 
-				ailments_filtered + "_" +
-				selected_ailment_array[selected_ailment_array.length-1];
+<% content_for :head do %>
+    <link href="assets/jqGrid.css" rel="stylesheet" />
 
-			var new_ailments_filtered = ailments_filtered.slice(1);
+    <style type="text/css">
+    </style>
+<% end %>
+
+<% content_for :scripts do %>
+    <script src="assets/jqGrid.js"></script>
+    <script src="assets/jszip.min.js"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+            $("#jqGrid").jqGrid({
+                mtype: "GET",
+                datatype: "local",
+                colModel: [
+                    { label: 'Patient Name', name: 'patient_name', width: 300, sortable: false },
+ 					{ label: 'Nodal Village', name: 'nodal_village', sortable: false},
+                    { label: 'DM Number', name: 'dm_number', sortable: false },
+                    { label: 'Ailment Details', name: 'ccd', width: 300, sortable: false }
+                ],
+				// loadonce:false, // just for demo purpose
+                // width: 785,
+                height: 355,
+                loadonce: true,
+                forceFit: true,
+                shrinkToFit: true,
+				loadComplete: function() {
+	                if ($('#jqGrid').getGridParam('records') === 0) {
+	                    $('#jqGrid tbody').html("<div style='padding:6px;background:#D8D8D8' align='center'>No records found</div>");
+
+	                    $('#jqGrid').jqGrid('hideCol',"nodal_village");
+	                }
+	             },
+             	viewrecords: true,
+                grouping: true,
+                groupingView: {
+                    groupField: ["nodal_village"],
+                    groupColumnShow: [true],
+                    groupText: ["<b>{0} - {1}</b>"],
+                    groupOrder: ["asc"],
+                    groupSummary: [true],
+                    groupCollapse: false
+                    
+                }
+            });
+
+			$("#export_div").on("click", function(){
+                if ($('#jqGrid').getGridParam('records') === 0) {
+                	alert("No Records to be exported");
+                	return false;
+                }
+
+				$("#jqGrid").jqGrid("exportToExcel",{
+					fileName : "ailments_export.xlsx",
+					mimetype : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+				})
+			})
+		
+        })
+
+		function build_ailment_level_patient_grid(
+			ailments_filtered) {
+
+			$("#jqGrid").jqGrid("clearGridData");
+			$("#jqGrid").trigger('reloadGrid');
+			$("#jqGrid")[0].grid.beginReq();
 
 		    $.ajax({
-		        url:'/filter_patients_ailments_level/'+new_ailments_filtered,
+		        url:'/filter_patients_ailments_level.json',
+		        data: {'filtered_ailments': ailments_filtered},
 		        method:"GET",
-		        success:function (dmDetailsForPatient) {
-		            console.log(dmDetailsForPatient);
-		        }
+		        success:function (filtered_patient_details) {
+					// set the new data
+					$("#jqGrid").jqGrid('setGridParam', { data: filtered_patient_details});
+					// hide the show message
+					$("#jqGrid")[0].grid.endReq();
+					// refresh the grid
+					$("#jqGrid").trigger('reloadGrid');
+		            $('#jqGrid').jqGrid('hideCol',"nodal_village");
+				}
 		    })
 
+			$("#jqGrid").jqGrid("navGrid","#jqGridPager",{add:false, edit:false, del:false});
 		}
-	  )	
-	}
-</script>
 
-<div id="ailments_list_and_submit_main_div" style="width: 100%;height: 85%;">
-	<div id="ailments_list_main_div" style="width: 100%;height: 95%;border: 0px solid black;overflow: auto;">
-		<%= render "ailments_list"%>
+		function ailments_checkAndSubmit(){
+			var ailments_filtered = new Object();
+
+			$('input[name="ailments_check_boxs"]:checked').each(
+				function(index,e){ 
+					var selected_id = e.id;
+					var selected_ailment_array = selected_id.split("_");
+					var selected_ailment_id = selected_ailment_array[selected_ailment_array.length-1];
+
+					ailments_filtered[selected_ailment_id] = 0;
+				}
+			)
+
+            build_ailment_level_patient_grid(ailments_filtered);
+		}
+
+	</script>
+<% end %>
+
+<div id="ailments_list_and_submit_main_div" style="width: 100%;">
+	<div id="main_results_block" style="width: 98%;border: 0px solid black;overflow: auto;padding-top: 10px;">
+		<div id="sub_ailments_and_parameter_block" style="width:25%;float: left;border: 1px solid slategray;border-radius: 5px;min-height: 430px;">
+			&nbsp;
+			<%= render "ailments_and_parameters"%>
+
+			<!-- Filter Button -->
+			<div id="submit_main_div" style="border: 0px solid black;padding-right: 10px;padding-bottom: 5px;">
+				<div id=submit_div style="float: right;">
+					<input type="button" value="Filter" class="sssmhms_button" onclick="ailments_checkAndSubmit();">
+			    </div>
+			</div>
+		</div>
+
+		<div id="filtered_patients_block" style="width:73%;float: left;border: 1px solid slategray;border-radius: 5px;height: 100%;min-height: 430px;">
+			&nbsp;
+				<table id="jqGrid"></table>
+				<div id="jqGridPager"></div>
+
+				<div id="export_to_exl_div" style="float: right;padding-right: 8px;padding-top: 2px;">
+					<input type="button" value="Export to Excel" class="sssmhms_button" id="export_div">
+				</div>
+		</div>
 	</div>
 
-	<div id="submit_main_div" style="border: 0px solid black;width:100%;height: 5%;">
-		<div id=submit_div style="float: right;">
-			<input type="button" value="Filter" class="sssmhms_button" onclick="ailments_checkAndSubmit();">
-	    </div>
-	</div>
 </div>
 

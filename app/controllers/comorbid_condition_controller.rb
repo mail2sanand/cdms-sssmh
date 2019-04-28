@@ -63,14 +63,16 @@ class ComorbidConditionController < ApplicationController
       )
 
       if(comorbid_condition)
-        comorbid_condition.update(:comorbid_condition_details => comorbid_condition_details.to_json)
+        # comorbid_condition.update(:comorbid_condition_details => comorbid_condition_details.to_json)
+        comorbid_condition.update(:comorbid_condition_details => comorbid_condition_details)
       else
         ComorbidCondition.create({
                :patient_id=>patient.id,
                :sub_ailment_id=>each_comorbid_condition,
-               :comorbid_condition_details => comorbid_condition_details.to_json
+               :comorbid_condition_details => comorbid_condition_details
            }
         )
+               # :comorbid_condition_details => comorbid_condition_details.to_json
       end
 
     end
@@ -85,7 +87,8 @@ class ComorbidConditionController < ApplicationController
       comorbid_condition_details = each_patientCMCDetail.comorbid_condition_details
       puts "comorbid_condition_details : #{comorbid_condition_details}"
 
-      comorbid_condition_details_json = JSON.parse(comorbid_condition_details) if comorbid_condition_details
+      # comorbid_condition_details_json = JSON.parse(comorbid_condition_details) if comorbid_condition_details
+      comorbid_condition_details_json = comorbid_condition_details
 
       if comorbid_condition_details_json["suffering_since"] != "0"
         # display_detail_1 = "Suffering"

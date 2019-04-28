@@ -173,27 +173,100 @@ class ReportsController < ApplicationController
   end
 
   def filter_patients_ailments_level
-      ailment_ids = params[:ailment_ids]
-      ailment_ids_array = ailment_ids.split("_")
-      
+    @ailment_ids = params[:filtered_ailments].keys.map(&:to_i)
+    all_sub_ailments = Ailment.all_sub_ailments.select(:id,:parent_ailment_id, :name)
+
+    having_grop_array = []
+    filter_query_first = "
+      select
+        p.id, p.name as patient_name, v.name as nodal_village, tmp2.ccd, pad.patient_ailment_details->>'dm_no' as dm_number
+          from patients p
+            join villages v on v.id = p.nodal_village_id
+            join patient_ailment_details pad on pad.patient_id = p.id
+            join ( 
+              select patient_id,json_agg(comorbid_condition_details)::jsonb ccd
+              from (
+    "
+    filter_queries_middle_array = []
+
+    params[:filtered_ailments].each do |key, value|
+      if sub_ailment=all_sub_ailments.find_by_id(key.to_i)
+        filter_queries_middle_array << "(
+            select sub_ailment_id,patient_id,comorbid_condition_details::jsonb as comorbid_condition_details
+                from comorbid_conditions 
+              where comorbid_condition_details->>'ailment_type' = '#{sub_ailment.name}' 
+              and (comorbid_condition_details->>'suffering_since')::int > #{value} 
+          )
+          union all"
+          having_grop_array << sub_ailment.parent_ailment_id
+      else
+        filter_queries_middle_array << "(
+            select sub_ailment_id,patient_id,
+              ('{\"ailment_type\":\"' || a.name || '\"}')::jsonb || comorbid_condition_details::jsonb as comorbid_condition_details
+                from comorbid_conditions cc
+              join ailments a on a.id = cc.sub_ailment_id
+              where sub_ailment_id = #{key.to_i} and (comorbid_condition_details->>'suffering_since')::int > #{value}
+          )
+          union all"
+          having_grop_array << key.to_i
+      end
+    end
+
+    having_grop_array.uniq!
+
+    filter_queries_middle_array.last.gsub!(/(.*)union all/,"")
+    filter_queries_middle = filter_queries_middle_array.join("")
+
+    filter_query_last = "
+            ) tmp group by patient_id
+            having count(*) = #{having_grop_array.count}
+          ) tmp2 on tmp2.patient_id = p.id
+    "
+
+    filter_query = filter_query_first + filter_queries_middle + filter_query_last
+
+    filtered_patients = ActiveRecord::Base.connection.execute(filter_query)
+    all_patients_filtered = []
+
+    filtered_patients.each do |each_patient|
+      each_patient_detail = {}
+      each_patient_detail["patient_name"] = each_patient["patient_name"]
+      each_patient_detail["patient_id"] = each_patient["id"]
+      each_patient_detail["nodal_village"] = each_patient["nodal_village"]
+      each_patient_detail["nodal_village"] = each_patient["nodal_village"]
+      each_patient_detail["dm_number"] = each_patient["dm_number"]
+      each_patient_detail["ccd"] = ""
+      JSON.parse(each_patient["ccd"]).each do |each_patient_ccd|
+        each_patient_detail["ccd"] += each_patient_ccd["ailment_type"]+" - Since "+each_patient_ccd["suffering_since"]+"</br>"
+      end
+
+      all_patients_filtered << each_patient_detail
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: all_patients_filtered}
+    end
+
+  end
+
+  private
+
+  def replace_sub_ailment_ids_with_parent_ailments
+    @sub_ailment_conditions = ""
+    all_sub_ailments = Ailment.all_sub_ailments.select(:id,:parent_ailment_id, :name)
+
+    all_sub_ailments.each do |each_sub_ailment|
+      if @ailment_ids.include? each_sub_ailment.id
+        @ailment_ids[@ailment_ids.index(each_sub_ailment.id)] = each_sub_ailment.parent_ailment_id
+        sub_ailment_conditions += "and comorbid_condition_details->>'ailment_type' = '#{each_sub_ailment.name}'"
+      end
+
+    end
+    @ailment_ids.uniq!
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

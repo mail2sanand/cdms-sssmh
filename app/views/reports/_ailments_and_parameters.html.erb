@@ -1,0 +1,38 @@
+<%main_ailments = get_all_ailments["main_ailments"]%>
+<%sub_ailments = get_all_ailments["sub_ailments"]%>
+
+
+<div id="ailments_main_div" style="width:100%;padding-top: 10px;">
+	<div id="main_ailments_block" style="">
+		<%for each_ailment in main_ailments%>
+			<div id="ailments_main_div_level_1_<%=each_ailment.id%>" 
+					style="border: 0px solid black;height: 25px;padding: 10px 10px 0 10px" 
+					align="left">
+
+				<span id="ailments_check_box_div_<%=each_ailment.id%>" style="padding-top: 3px;">
+					<input type="checkbox" id="ailments_check_box_id_<%=each_ailment.id%>" name="ailments_check_boxs"\>
+				</span>
+
+				<span id="ailment_<%=each_ailment.id%>" style="padding-left: 10px;padding-top: 5px;">
+					<%=each_ailment.name%>
+				</span>
+			</div>
+
+			<%if sub_ailments_array = sub_ailments[each_ailment.id]%>				
+				<%sub_ailments_array.each do |each_sub_ailment| %>
+					<div id="sub_ailments_block" align="left" style="padding-left: 10%;">
+						<span id="ailments_check_box_div_<%=each_sub_ailment.id%>" style="padding-top: 3px;">
+							<input type="checkbox" id="ailments_check_box_id_<%=each_sub_ailment.id%>" name="ailments_check_boxs"\>
+						</span>
+
+						<span id="ailment_<%=each_sub_ailment.id%>" style="padding-left: 10px;padding-top: 5px;">
+							<%=each_sub_ailment.name%>					
+						</span>
+					</div>
+				<%end%>
+			<%end%>
+
+		<%end%>
+	</div>
+</div>
+

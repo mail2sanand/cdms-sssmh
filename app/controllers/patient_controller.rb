@@ -340,7 +340,8 @@ class PatientController < ApplicationController
       # For Diabetes
       diabetes_details_json = {}
       if(patient_cmc_details_hash["diabetes"])
-        diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabetes"])
+        # diabetes_details_json = JSON.parse(patient_cmc_details_hash["diabetes"])
+        diabetes_details_json = patient_cmc_details_hash["diabetes"]
       end
 
       report_details[:history][:cmc][:ailment_identified_from] = diabetes_details_json["suffering_since"]
@@ -348,29 +349,36 @@ class PatientController < ApplicationController
       report_details[:history][:cmc][:under_sssmh_care_from] = report_details[:dm_details]["sssmh_care_from"]
 
       if(patient_cmc_details_hash["hypertension"])
-        cmc_htn = JSON.parse(patient_cmc_details_hash["hypertension"])["suffering_since"]
+        # cmc_htn = JSON.parse(patient_cmc_details_hash["hypertension"])["suffering_since"]
+        cmc_htn = patient_cmc_details_hash["hypertension"]["suffering_since"]
         report_details[:history][:cmc][:cmc_htn] = (cmc_htn == "0" ? "" : cmc_htn)
       end
 
       if(patient_cmc_details_hash["hyper_lipidemia"])
-        cmc_hyper_lipidemia = JSON.parse(patient_cmc_details_hash["hyper_lipidemia"])["suffering_since"]
+        # cmc_hyper_lipidemia = JSON.parse(patient_cmc_details_hash["hyper_lipidemia"])["suffering_since"]
+        cmc_hyper_lipidemia = patient_cmc_details_hash["hyper_lipidemia"]["suffering_since"]
         report_details[:history][:cmc][:cmc_hyper_lipidemia] = (cmc_hyper_lipidemia == "0" ? "" : cmc_hyper_lipidemia)
       end
 
       if(patient_cmc_details_hash["cardiac_ailment"])
-        cardiac_ailment = JSON.parse(patient_cmc_details_hash["cardiac_ailment"])["suffering_since"]
+        # cardiac_ailment = JSON.parse(patient_cmc_details_hash["cardiac_ailment"])["suffering_since"]
+        cardiac_ailment = patient_cmc_details_hash["cardiac_ailment"]["suffering_since"]
         report_details[:history][:cmc][:cmc_cad] = (cardiac_ailment == "0" ? "" : cardiac_ailment)
       end
 
       if(patient_cmc_details_hash["cva"])
-        cmc_cva = JSON.parse(patient_cmc_details_hash["cva"])["suffering_since"]
+        # cmc_cva = JSON.parse(patient_cmc_details_hash["cva"])["suffering_since"]
+        cmc_cva = patient_cmc_details_hash["cva"]["suffering_since"]
         report_details[:history][:cmc][:cmc_cva] = (cmc_cva == "0" ? "" : cmc_cva)
       end
 
       cmc_others = ""
-      cmc_thyroid = patient_cmc_details_hash["thyroid"] ? JSON.parse(patient_cmc_details_hash["thyroid"])["suffering_since"] : ""
-      cmc_asthma = patient_cmc_details_hash["asthma"] ? JSON.parse(patient_cmc_details_hash["asthma"])["suffering_since"] : ""
-      cmc_epilepsy = patient_cmc_details_hash["epilepsy"] ? JSON.parse(patient_cmc_details_hash["epilepsy"])["suffering_since"] : ""
+      # cmc_thyroid = patient_cmc_details_hash["thyroid"] ? JSON.parse(patient_cmc_details_hash["thyroid"])["suffering_since"] : ""
+      # cmc_asthma = patient_cmc_details_hash["asthma"] ? JSON.parse(patient_cmc_details_hash["asthma"])["suffering_since"] : ""
+      # cmc_epilepsy = patient_cmc_details_hash["epilepsy"] ? JSON.parse(patient_cmc_details_hash["epilepsy"])["suffering_since"] : ""
+      cmc_thyroid = patient_cmc_details_hash["thyroid"] ? patient_cmc_details_hash["thyroid"]["suffering_since"] : ""
+      cmc_asthma = patient_cmc_details_hash["asthma"] ? patient_cmc_details_hash["asthma"]["suffering_since"] : ""
+      cmc_epilepsy = patient_cmc_details_hash["epilepsy"] ? patient_cmc_details_hash["epilepsy"]["suffering_since"] : ""
 
       cmc_others = "#{cmc_others}#{Prawn::Text::NBSP*3}Thy : #{cmc_thyroid}" if (cmc_thyroid != "0" and cmc_thyroid != "")
       cmc_others = "#{cmc_others} |#{Prawn::Text::NBSP*3} Asth : #{cmc_asthma}" if (cmc_asthma != "0"  and cmc_asthma != "")
@@ -577,7 +585,8 @@ class PatientController < ApplicationController
       to_parse = (patient_cmc_details_for_each_ailment.length > 0 ? patient_cmc_details_for_each_ailment.first.comorbid_condition_details : nil)
 
       if(to_parse)
-          cmc_ailment_details = JSON.parse(to_parse)
+          # cmc_ailment_details = JSON.parse(to_parse)
+          cmc_ailment_details = to_parse
 
           if cmc_ailment_details["suffering_since"] != "0"
             display_detail_1 = ""
@@ -604,7 +613,8 @@ class PatientController < ApplicationController
     report_details[:cmc][:cad] = ""
     if(to_parse)
       cad_detail = ""
-      json_parsed_cad = JSON.parse(to_parse)
+      # json_parsed_cad = JSON.parse(to_parse)
+      json_parsed_cad = to_parse
       cad_detail += "Suffering since : #{json_parsed_cad['suffering_since']} - " if !json_parsed_cad["suffering_since"].to_s.empty? and json_parsed_cad['suffering_since'].to_i > 0
       cad_detail += json_parsed_cad["details"]
       report_details[:cmc][:cad] = cad_detail
