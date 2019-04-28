@@ -236,8 +236,9 @@ class ReportsController < ApplicationController
       each_patient_detail["nodal_village"] = each_patient["nodal_village"]
       each_patient_detail["dm_number"] = each_patient["dm_number"]
       each_patient_detail["ccd"] = ""
+
       JSON.parse(each_patient["ccd"]).each do |each_patient_ccd|
-        each_patient_detail["ccd"] += each_patient_ccd["ailment_type"]+" - Since "+each_patient_ccd["suffering_since"]+"</br>"
+        each_patient_detail["ccd"] += each_patient_ccd["ailment_type"]+" - Since "+each_patient_ccd["suffering_since"].to_s+"</br>"
       end
 
       all_patients_filtered << each_patient_detail

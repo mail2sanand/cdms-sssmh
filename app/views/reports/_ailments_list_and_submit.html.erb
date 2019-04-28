@@ -24,9 +24,11 @@
 				// loadonce:false, // just for demo purpose
                 // width: 785,
                 height: 355,
+                scroll : true,
                 loadonce: true,
                 forceFit: true,
                 shrinkToFit: true,
+                rowNum: 9999,
 				loadComplete: function() {
 	                if ($('#jqGrid').getGridParam('records') === 0) {
 	                    $('#jqGrid tbody').html("<div style='padding:6px;background:#D8D8D8' align='center'>No records found</div>");
@@ -42,7 +44,7 @@
                     groupText: ["<b>{0} - {1}</b>"],
                     groupOrder: ["asc"],
                     groupSummary: [true],
-                    groupCollapse: false
+                    groupCollapse: true
                     
                 }
             });
