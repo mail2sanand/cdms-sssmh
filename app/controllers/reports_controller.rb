@@ -201,12 +201,25 @@ class ReportsController < ApplicationController
           having_grop_array << sub_ailment.parent_ailment_id
       else
         filter_queries_middle_array << "(
-            select sub_ailment_id,patient_id,
-              ('{\"ailment_type\":\"' || a.name || '\"}')::jsonb || comorbid_condition_details::jsonb as comorbid_condition_details
-                from comorbid_conditions cc
-              join ailments a on a.id = cc.sub_ailment_id
-              where sub_ailment_id = #{key.to_i} and (comorbid_condition_details->>'suffering_since')::int > #{value}
-          )
+          select sub_ailment_id,patient_id,comorbid_condition_details
+            from (
+                select sub_ailment_id,patient_id,
+                  ('{\"ailment_type\":\"' || a.name || '\"}')::jsonb || comorbid_condition_details::jsonb as comorbid_condition_details,
+                      case 
+                        when comorbid_condition_details->>'suffering_since' = '' then '0'
+                        else comorbid_condition_details->>'suffering_since'
+                      end as formatted_suffering_since,
+                      case 
+                        when comorbid_condition_details->>'details' = '' then '--'
+                        else comorbid_condition_details->>'suffering_since'
+                      end as formatted_details
+                    from comorbid_conditions cc
+                  join ailments a on a.id = cc.sub_ailment_id
+                  where sub_ailment_id = #{key.to_i} 
+                    and (comorbid_condition_details::jsonb ? 'suffering_since') 
+                ) tmp
+                where formatted_suffering_since::int > #{value} or formatted_details != '--'
+              )
           union all"
           having_grop_array << key.to_i
       end
@@ -236,9 +249,13 @@ class ReportsController < ApplicationController
       each_patient_detail["nodal_village"] = each_patient["nodal_village"]
       each_patient_detail["dm_number"] = each_patient["dm_number"]
       each_patient_detail["ccd"] = ""
+      each_patient_detail["ccd_details"] = ""
 
       JSON.parse(each_patient["ccd"]).each do |each_patient_ccd|
-        each_patient_detail["ccd"] += each_patient_ccd["ailment_type"]+" - Since "+each_patient_ccd["suffering_since"].to_s+"</br>"
+        each_patient_detail["ccd"] += each_patient_ccd["ailment_type"]+" - Since "
+        each_patient_detail["ccd"] += each_patient_ccd["suffering_since"].to_s+"</br>" 
+        each_patient_detail["ccd_details"] += 
+          each_patient_ccd["ailment_type"]+" - "+each_patient_ccd["details"]+"</br>" unless each_patient_ccd["details"].empty?
       end
 
       all_patients_filtered << each_patient_detail
