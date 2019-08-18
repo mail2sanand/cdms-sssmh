@@ -174,6 +174,9 @@ class ReportsController < ApplicationController
 
   def filter_patients_ailments_level
     @ailment_ids = params[:filtered_ailments].keys.map(&:to_i)
+    include_expired = params[:include_expired]
+    exact_match = params[:exact_match]
+
     all_sub_ailments = Ailment.all_sub_ailments.select(:id,:parent_ailment_id, :name)
 
     having_grop_array = []
@@ -197,7 +200,8 @@ class ReportsController < ApplicationController
               where comorbid_condition_details->>'ailment_type' = '#{sub_ailment.name}' 
               and (comorbid_condition_details->>'suffering_since')::int > #{value} 
           )
-          union all"
+          union all
+          "
           having_grop_array << sub_ailment.parent_ailment_id
       else
         filter_queries_middle_array << "(
@@ -220,7 +224,8 @@ class ReportsController < ApplicationController
                 ) tmp
                 where formatted_suffering_since::int > #{value} or formatted_details != '--'
               )
-          union all"
+          union all
+          "
           having_grop_array << key.to_i
       end
     end
@@ -234,8 +239,9 @@ class ReportsController < ApplicationController
             ) tmp group by patient_id
             having count(*) = #{having_grop_array.count}
           ) tmp2 on tmp2.patient_id = p.id
+          where p.alive = 1
     "
-
+    
     filter_query = filter_query_first + filter_queries_middle + filter_query_last
 
     filtered_patients = ActiveRecord::Base.connection.execute(filter_query)
