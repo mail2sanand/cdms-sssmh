@@ -182,7 +182,17 @@ class ReportsController < ApplicationController
     having_grop_array = []
     filter_query_first = "
       select
-        p.id, p.name as patient_name, v.name as nodal_village, tmp2.ccd, pad.patient_ailment_details->>'dm_no' as dm_number
+        p.id, p.name as patient_name,
+        (
+          date_part('year', CURRENT_DATE) - date_part('year', \"dateOfBirth\")
+        ) as age, 
+        case 
+          when p.gender = 1 then 'Male'
+          else 'Female'
+        end as gender, 
+        contact,
+        (select name from villages where id = village_id) as village_name,
+        v.name as nodal_village, tmp2.ccd, pad.patient_ailment_details->>'dm_no' as dm_number
           from patients p
             join villages v on v.id = p.nodal_village_id
             join patient_ailment_details pad on pad.patient_id = p.id
@@ -253,8 +263,11 @@ class ReportsController < ApplicationController
       each_patient_detail["patient_name"] = each_patient["patient_name"]
       each_patient_detail["patient_id"] = each_patient["id"]
       each_patient_detail["nodal_village"] = each_patient["nodal_village"]
-      each_patient_detail["nodal_village"] = each_patient["nodal_village"]
       each_patient_detail["dm_number"] = each_patient["dm_number"]
+      each_patient_detail["age"] = each_patient["age"]
+      each_patient_detail["gender"] = each_patient["gender"]
+      each_patient_detail["contact"] = each_patient["contact"]
+      each_patient_detail["village_name"] = each_patient["village_name"]
       each_patient_detail["ccd"] = ""
       each_patient_detail["ccd_details"] = ""
 
