@@ -16,19 +16,19 @@
                 mtype: "GET",
                 datatype: "local",
                 colModel: [
-                    { label: 'Patient Name', name: 'patient_name', width: 240, sortable: false },
+                    { label: 'Patient Name', name: 'patient_name', width: 180, sortable: false },
  					{ label: 'Nodal Village', name: 'nodal_village', sortable: false},
                     { label: 'DM Number', name: 'dm_number',width: 80, sortable: false },
-                    { label: 'Ailments', name: 'ccd', width: 310, sortable: false },
-                    { label: 'Details', name: 'ccd_details', width: 370, sortable: false }
+                    { label: 'Diagnosis', name: 'ccd', width: 270, sortable: false },
+                    { label: 'Remarks', name: 'ccd_details', width: 270, sortable: false }
                 ],
 				// loadonce:false, // just for demo purpose
                 // width: 785,
                 height: 355,
                 scroll : true,
                 loadonce: true,
-                forceFit: true,
-                shrinkToFit: true,
+                forceFit: false,
+                shrinkToFit: false,
                 rowNum: 9999,
 				loadComplete: function() {
 	                if ($('#jqGrid').getGridParam('records') === 0) {
@@ -41,12 +41,11 @@
                 grouping: true,
                 groupingView: {
                     groupField: ["nodal_village"],
-                    groupColumnShow: [true],
+                    groupColumnShow: [false],
                     groupText: ["<b>{0} - {1}</b>"],
                     groupOrder: ["asc"],
                     groupSummary: [true],
                     groupCollapse: true
-                    
                 }
             });
 

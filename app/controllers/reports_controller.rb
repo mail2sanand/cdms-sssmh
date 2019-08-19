@@ -240,6 +240,7 @@ class ReportsController < ApplicationController
             having count(*) = #{having_grop_array.count}
           ) tmp2 on tmp2.patient_id = p.id
           where p.alive = 1
+          order by patient_name asc
     "
     
     filter_query = filter_query_first + filter_queries_middle + filter_query_last
