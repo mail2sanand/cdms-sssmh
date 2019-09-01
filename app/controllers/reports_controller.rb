@@ -1,6 +1,10 @@
+require 'report_sqls'
+
 class ReportsController < ApplicationController
   before_action :authenticate_user!
   protect_from_forgery with: :null_session, if: ->{request.format.json?}
+
+  include ReportSqls
 
   @@patientsController = PatientController.new
 
@@ -280,6 +284,56 @@ class ReportsController < ApplicationController
 
       all_patients_filtered << each_patient_detail
     end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: all_patients_filtered}
+    end
+
+  end
+
+  def filter_patients_investigation_details_level
+    @ailment_ids = params[:filtered_investigation_details].keys.map(&:to_i)
+    include_expired = params[:include_expired]
+    exact_match = params[:exact_match]
+
+    all_inv_details = []
+    all_patients_filtered = []
+
+    all_inv_detail_records = Investigation.select("id, name, code").find(@ailment_ids)
+
+    all_inv_detail_records.each do |each_inv_detail|
+      inv_detail_code = each_inv_detail.code
+      inv_det_query = send("get_filter_query_for_#{inv_detail_code}")
+      
+      filtered_patients = ActiveRecord::Base.connection.execute(inv_det_query)
+
+      filtered_patients.each do |each_patient|
+
+        each_patient_detail = {}
+        each_patient_detail["patient_name"] = each_patient["patient_name"]
+        each_patient_detail["patient_id"] = each_patient["patient_id"]
+        each_patient_detail["nodal_village"] = each_patient["nodal_village"]
+        each_patient_detail["dm_number"] = each_patient["dm_number"]
+        each_patient_detail["age"] = each_patient["age"]
+        each_patient_detail["gender"] = each_patient["gender"]
+        each_patient_detail["contact"] = each_patient["contact"]
+        each_patient_detail["village_name"] = each_patient["village_name"]
+
+        each_patient_detail["inv_specific_remark"] = each_patient["abnormal_usg_abdomen_details"]
+
+
+        each_patient_ccd = Patient.find(each_patient["patient_id"]).complete_diagnosis_and_remarks
+        each_patient_detail["diagnosis"] = each_patient_ccd[:diagnosis]
+
+        each_patient_detail["remarks"] = each_patient_ccd[:remarks]
+
+        all_patients_filtered << each_patient_detail
+      end
+
+    end
+
+
 
     respond_to do |format|
       format.html

@@ -12,8 +12,10 @@ module ReportsHelper
 			all_ailments_hash["sub_ailments"][each_sub_ailment.parent_ailment_id] << each_sub_ailment
 		end
 
-		puts "==========================================================================="
-		puts all_ailments_hash["sub_ailments"]
 		all_ailments_hash
+	end
+
+	def get_all_investigation_detail_parameters
+		Investigation.select(:id, :name, :code).where("show_filter = TRUE")
 	end
 end

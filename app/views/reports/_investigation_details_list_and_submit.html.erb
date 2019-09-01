@@ -12,19 +12,21 @@
 	<script type="text/javascript">
 
 		$(document).ready(function () {
-            $("#jqGrid").jqGrid({
+            $("#investigation_details_jqGrid").jqGrid({
                 mtype: "GET",
                 datatype: "local",
                 colModel: [
                     { label: 'Patient Name', name: 'patient_name', width: 180, sortable: false },
- 					{ label: 'Nodal Village', name: 'nodal_village', width: 100, sortable: false},
+ 					{ label: 'Nodal Village', name: 'nodal_village', width: 180, sortable: false},
                     { label: 'DM Number', name: 'dm_number',width: 50, sortable: false },
                     { label: 'Age', name: 'age',width: 20, sortable: false },
                     { label: 'Gender', name: 'gender',width: 40, sortable: false },
                     { label: 'Phone No.', name: 'contact',width: 40, sortable: false },
                     { label: 'Village', name: 'village_name',width: 60, sortable: false },
-                    { label: 'Diagnosis', name: 'ccd', width: 180, sortable: false },
-                    { label: 'Remarks', name: 'ccd_details', width: 180, sortable: false }
+                    { label: 'Diagnosis', name: 'diagnosis', width: 180, sortable: false },
+                    { label: 'Remarks', name: 'remarks', width: 180, sortable: false },
+                    { label: 'Inv. Details Specific Remark', 
+                    	name: 'inv_specific_remark', width: 180, sortable: false }
                 ],
 				// loadonce:false, // just for demo purpose
                 // width: 785,
@@ -35,10 +37,10 @@
                 shrinkToFit: false,
                 rowNum: 9999,
 				loadComplete: function() {
-	                if ($('#jqGrid').getGridParam('records') === 0) {
-	                    $('#jqGrid tbody').html("<div style='padding:6px;background:#D8D8D8' align='center'>No records found</div>");
+	                if ($('#investigation_details_jqGrid').getGridParam('records') === 0) {
+	                    $('#investigation_details_jqGrid tbody').html("<div style='padding:6px;background:#D8D8D8' align='center'>No records found</div>");
 
-	                    $('#jqGrid').jqGrid('hideCol',"nodal_village");
+	                    $('#investigation_details_jqGrid').jqGrid('hideCol',"nodal_village");
 	                }
 	             },
              	viewrecords: true,
@@ -53,15 +55,15 @@
                 }
             });
 
-			$("#export_div").on("click", function(){
-                if ($('#jqGrid').getGridParam('records') === 0) {
+			$("#inv_det_export_div").on("click", function(){
+                if ($('#investigation_details_jqGrid').getGridParam('records') === 0) {
                 	alert("No Records to be exported");
                 	return false;
                 }
 
-				$("#jqGrid").jqGrid("exportToExcel",{
+				$("#investigation_details_jqGrid").jqGrid("exportToExcel",{
 					includeLabels : true,
-					fileName : "ailments_export.xlsx",
+					fileName : "investigation_details_export.xlsx",
 					mimetype : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 					replaceStr: function(v){
 						v = v.replace(/<\/br>/g,", ");
@@ -73,83 +75,85 @@
 		
         })
 
-		function build_ailment_level_patient_grid(
-			ailments_filtered) {
+		function build_inv_det_level_patient_grid(
+			investigation_details_filtered) {
 
-			$("#jqGrid").jqGrid("clearGridData");
-			$("#jqGrid").trigger('reloadGrid');
-			$("#jqGrid")[0].grid.beginReq();
+			$("#investigation_details_jqGrid").jqGrid("clearGridData");
+			// $("#investigation_details_jqGrid").trigger('reloadGrid');
+			$("#investigation_details_jqGrid")[0].grid.beginReq();
 
 		    $.ajax({
-		        url:'/filter_patients_ailments_level.json',
+		        url:'/filter_patients_investigation_details_level.json',
 		        data: {
-		        	'filtered_ailments': ailments_filtered,
+		        	'filtered_investigation_details': investigation_details_filtered,
 		        	'exact_match':$('#exact_match').value,
 		        	'include_expired':$('#include_expired').value
 		    	},
 		        method:"GET",
 		        success:function (filtered_patient_details) {
 					// set the new data
-					$("#jqGrid").jqGrid('setGridParam', { data: filtered_patient_details});
+					$("#investigation_details_jqGrid").jqGrid('setGridParam', { data: filtered_patient_details});
 					// hide the show message
-					$("#jqGrid")[0].grid.endReq();
+					$("#investigation_details_jqGrid")[0].grid.endReq();
 					// refresh the grid
-					$("#jqGrid").trigger('reloadGrid');
-		            $('#jqGrid').jqGrid('hideCol',"nodal_village");
+					$("#investigation_details_jqGrid").trigger('reloadGrid');
+		            $('#investigation_details_jqGrid').jqGrid('hideCol',"nodal_village");
 				}
 		    })
 
-			$("#jqGrid").jqGrid("navGrid","#jqGridPager",{add:false, edit:false, del:false});
+			$("#investigation_details_jqGrid").jqGrid("navGrid","#investigation_details_jqGridPager",{add:false, edit:false, del:false});
 		}
 
-		function ailments_checkAndSubmit(){
-			var ailments_filtered = new Object();
+		function investigation_details_checkAndSubmit(){
+			var investigation_details_filtered = new Object();
 
-			$('input[name="ailments_check_boxs"]:checked').each(
+			$('input[name="inv_det_check_boxs"]:checked').each(
 				function(index,e){ 
 					var selected_id = e.id;
-					var selected_ailment_array = selected_id.split("_");
-					var selected_ailment_id = selected_ailment_array[selected_ailment_array.length-1];
+					var selected_inv_del_array = selected_id.split("_");
+					var selected_inv_del_id = selected_inv_del_array[selected_inv_del_array.length-1];
 
-					ailments_filtered[selected_ailment_id] = 0;
+					investigation_details_filtered[selected_inv_del_id] = 0;
 				}
 			)
 
-            build_ailment_level_patient_grid(ailments_filtered);
+            build_inv_det_level_patient_grid(investigation_details_filtered);
 		}
 
 	</script>
 <% end %>
 
-<div id="ailments_list_and_submit_main_div" style="width: 100%;">
+<div id="investigation_details_list_and_submit_main_div" style="width: 100%;overflow: auto;">
 	<div id="main_results_block" style="width: 98%;border: 0px solid black;overflow: auto;padding-top: 10px;">
-		<div id="sub_ailments_and_parameter_block" style="width:25%;float: left;border: 1px solid slategray;border-radius: 5px;min-height: 430px;">
+		<div id="investigation_details_and_parameter_block" style="width:25%;float: left;border: 1px solid slategray;border-radius: 5px;min-height: 430px;overflow-y: auto;">
 			&nbsp;
 			<div id="inv_detail_filter_title" style="font-size: 12px;font-weight: bold;">
-				Ailment Filters
+				Investigation Detail Filters
 			</div>
-<!-- 			<div id="submit_main_div" style="float: right;padding-right: 10px;padding-top: 5px;">
+<!-- 	
+	Exact Match and Inclusion of Expired Patients Functionality
+<div id="submit_main_div" style="float: right;padding-right: 10px;padding-top: 5px;">
 				<input type="checkbox" id="exact_match" checked="true" value="exact_match"> Exact Match
 				<input type="checkbox" id="include_expired" checked="true" value="include_expired"> Include Expired Patients
 			</div>
  -->
-			<%= render "ailments_and_parameters"%>
+			<%= render "investigation_details_and_parameters"%>
 
 			<!-- Filter Button -->
 			<div id="submit_main_div" style="border: 0px solid black;padding-right: 10px;padding-bottom: 5px;">
 				<div id=submit_div style="float: right;">
-					<input type="button" value="Filter" class="sssmhms_button" onclick="ailments_checkAndSubmit();">
+					<input type="button" value="Filter" class="sssmhms_button" onclick="investigation_details_checkAndSubmit();">
 			    </div>
 			</div>
 		</div>
 
 		<div id="filtered_patients_block" style="width:73%;float: left;border: 1px solid slategray;border-radius: 5px;height: 100%;min-height: 430px;">
 			&nbsp;
-				<table id="jqGrid"></table>
-				<div id="jqGridPager"></div>
+				<table id="investigation_details_jqGrid"></table>
+				<div id="investigation_details_jqGridPager"></div>
 
 				<div id="export_to_exl_div" style="float: right;padding-right: 8px;padding-top: 2px;">
-					<input type="button" value="Export to Excel" class="sssmhms_button" id="export_div">
+					<input type="button" value="Export to Excel" class="sssmhms_button" id="inv_det_export_div">
 				</div>
 		</div>
 	</div>

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     get 'print_village_report/:patient_ids/:village_id/:print/:ailment_id/:month',
         to: 'reports#print_village_report'
     get 'filter_patients_ailments_level',to: 'reports#filter_patients_ailments_level'
+    get 'filter_patients_investigation_details_level',to: 'reports#filter_patients_investigation_details_level'
 
     match 'get_all_patients_for_reports/:village_id/:nodal' => 'reports#get_all_patients_for_reports',
           :via => :get,

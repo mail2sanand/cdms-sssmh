@@ -40,6 +40,12 @@ gem 'combine_pdf'
 gem 'pry'
 gem 'roo'
 
+# For exporting Data into Excel Sheet
+gem 'rubyzip' 
+gem 'axlsx_rails'
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: '776037c0fc799bb09da8c9ea47980bd3bf296874'
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

@@ -39,12 +39,16 @@
       <ul>
         <li><a href="#village_reports">Village Reports</a></li>
         <li><a href="#ailment_reports">Ailment Reports</a></li>
+        <li><a href="#investigation_reports">Investigation Detail Reports</a></li>
       </ul>
       <div id="village_reports">
         <%= render "village_reports_template", :villages => @villages, :all_patient_details => @all_patient_details%>
       </div>
       <div id="ailment_reports">
         <%= render "ailment_reports_template"%>
+      </div>
+      <div id="investigation_reports">
+        <%= render "investigation_reports_template"%>
       </div>
     </div>
   </form>

@@ -44,4 +44,45 @@ class Patient < ApplicationRecord
 
   end
 
+  def complete_diagnosis_and_remarks
+    diagnosis = ""
+    remarks = ""
+
+    cmc_details_with_ailments = ComorbidCondition.joins(:ailment)
+      .where("patient_id = #{self.id} and comorbid_condition_details->>'suffering_since' != '' 
+        and (comorbid_condition_details->>'suffering_since')::int != 0")
+      .select("ailments.name as ailment_name, comorbid_condition_details")
+
+    cmc_details_with_ailments.each do |each_cmc_detail|
+      cmc_detail = each_cmc_detail.comorbid_condition_details
+      ailment_type = cmc_detail["ailment_type"]
+      suffering_since = cmc_detail["suffering_since"]
+      details = cmc_detail["details"]
+      ailment_name = each_cmc_detail.ailment_name
+
+      diagnosis +=  (ailment_type ? ailment_type : ailment_name )+ " - Since #{suffering_since}, "
+      remarks += (ailment_type ? ailment_type : ailment_name )+ " #{details}, " if !details.empty?
+    end
+
+    return {
+      diagnosis: diagnosis.chomp(", "),
+      remarks: remarks.chomp(", ")
+    }
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
