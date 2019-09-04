@@ -17,6 +17,7 @@ module ReportSqls
 			  from investigation_details inv_det
 			    join patients p on p.id = inv_det.patient_id
 				  where (investigation_details->>'usg_abdomen') != ''
+				    and p.alive = 1
 		) 
 	  select inv_det_id, p_id as patient_id, patient_name, inv_det_usg_abdomen as abnormal_usg_abdomen_details, 
 	  	age, gender, village_name, contact, v.name as nodal_village, 
