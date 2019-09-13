@@ -26,7 +26,9 @@ module ReportSqls
 		    join villages v on v.id = a_usg.nodal_village_id
 		    join patient_ailment_details pad on pad.patient_id = a_usg.p_id
 	      where rank = 1
-	        and lower(inv_det_usg_abdomen) not like '%normal%' and lower(inv_det_usg_abdomen) not like '%fatty liver%'"
-	end
+	        and lower(inv_det_usg_abdomen) not like '%normal%' and lower(inv_det_usg_abdomen) not like '%fatty liver%'
+		  order by patient_name asc
+	"
+	  	end
 
 end
