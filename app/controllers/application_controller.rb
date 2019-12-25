@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     year_month = Date.today
 
     if report_for_month_of
-        month = report_for_month_of 
-        year = year_month.year
+        month = report_for_month_of
+        year = (report_for_month_of == 1 ? year_month.year+1 : year_month.year)
     else
       if year_month.month == 12
         month = 1
