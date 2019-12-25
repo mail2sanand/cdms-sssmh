@@ -101,6 +101,7 @@ class ReportsController < ApplicationController
       village_date = ""
     else
       village_date_order = Village.find_by_name(village_name).displayOrder
+      
       village_date = calculate_next_month_village_date(village_date_order,month_for_printing)
     end
 
@@ -111,7 +112,8 @@ class ReportsController < ApplicationController
       # Select only those Patients whose details have been updated a month ago
       filtered_patients = []
 
-      to_date = Date.new(Date.today.year, month_for_printing, village_date_order)
+      # to_date = Date.new(Date.today.year, month_for_printing, village_date_order)
+      to_date = Date.parse(village_date)
       from_date = to_date.prev_month + 1
 
       filtered_patients_records =
