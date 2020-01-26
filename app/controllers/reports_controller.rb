@@ -114,7 +114,7 @@ class ReportsController < ApplicationController
 
       # to_date = Date.new(Date.today.year, month_for_printing, village_date_order)
       to_date = Date.parse(village_date)
-      from_date = to_date.prev_month + 1
+      from_date = to_date.prev_month
 
       filtered_patients_records =
           Patient.where("patients.id in (#{params[:patient_ids].gsub('_',',')}) and
