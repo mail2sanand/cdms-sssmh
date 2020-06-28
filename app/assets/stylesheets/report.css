@@ -46,3 +46,11 @@
   //padding: 5px;
   //vertical-align: middle;
 }
+
+.toggle_group_img_div img{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 1px solid;
+    padding: 2px;
+}

@@ -1,0 +1,20 @@
+<%ailment_patient_list_detail_parameters = get_all_ailment_patient_list_detail_parameters%>
+
+<div id="inv_det_main_div" style="width:100%;padding-top: 10px;overflow-y: auto;height: 360px;">
+	<div id="main_inv_det_block" style="">
+		<%for each_ailment_det in ailment_patient_list_detail_parameters%>
+			<div id="ailment_patient_list_main_div_level_1_<%=each_ailment_det.id%>" 
+					style="border: 0px solid black;height: 25px;padding: 10px 10px 0 10px" 
+					align="left">
+
+				<span id="ailment_patient_list_det_check_box_div_<%=each_ailment_det.id%>" style="padding-top: 3px;">
+					<input checked="true" type="checkbox" id="ailment_patient_list_det_check_box_id_<%=each_ailment_det.code%>" name="ailment_patient_list_det_check_boxs"\>
+				</span>
+
+				<span id="ailment_patient_list_det_<%=each_ailment_det.id%>" style="padding-left: 10px;padding-top: 5px;">
+					<%=each_ailment_det.name%>
+				</span>
+			</div>
+		<%end%>
+	</div>
+</div>

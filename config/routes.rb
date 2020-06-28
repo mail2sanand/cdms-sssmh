@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         to: 'reports#print_village_report'
     get 'filter_patients_ailments_level',to: 'reports#filter_patients_ailments_level'
     get 'filter_patients_investigation_details_level',to: 'reports#filter_patients_investigation_details_level'
+    get 'patients_list',to: 'reports#patients_list'
 
     match 'get_all_patients_for_reports/:village_id/:nodal' => 'reports#get_all_patients_for_reports',
           :via => :get,
