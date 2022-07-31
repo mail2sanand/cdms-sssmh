@@ -110,7 +110,7 @@ class VillagesController < ApplicationController
     if(params[:parent_village_id])
       to_be_modified_village_hash[:parent_village_id] = params[:parent_village_id]
 
-      if(@village_to_edit.parent_village_id != params[:parent_village_id])
+      if(@village_to_edit.parent_village_id != params[:parent_village_id].to_i)
         where_query_string = (@village_to_edit.parent_village_id == 0 ? "nodal_village_id" : "village_id")
         Patient.where("#{where_query_string} = #{@village_to_edit.id}").update_all("nodal_village_id = #{params[:parent_village_id]}")
         Village.where("parent_village_id = #{@village_to_edit.id}").update_all("parent_village_id = #{params[:parent_village_id]}")
