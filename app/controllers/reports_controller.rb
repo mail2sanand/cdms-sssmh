@@ -371,6 +371,7 @@ class ReportsController < ApplicationController
 
         each_patient_detail["aadharNo"] = each_patient.aadharNo
         each_patient_detail["sssmhIdNo"] = each_patient.sssmhIdNo
+        each_patient_detail["ref_no"] = each_patient.bmNo
         each_patient_detail["live_status"] = each_patient.live_status
 
         each_patient_ccd = each_patient.complete_diagnosis_and_remarks
