@@ -1,9 +1,12 @@
 class Patient < ApplicationRecord
   belongs_to :village
+  belongs_to :nodal_village
+  
   # belongs_to :ailment
 
   has_many :visits
   # has_one :patient_ailment_detail, :foreign_key => "patient_id"
+  # has_many :patient_ailment_details #, :foreign_key => "patient_id"
 
   attr_accessor :patient_photo,:patient_photo_thumb
 
@@ -41,7 +44,26 @@ class Patient < ApplicationRecord
     ")
 
     record.first
+  end
 
+  def live_status
+    alive == 0 ? "Expired" : (alive == 1 ? "Active" : "In Active")
+  end
+
+  def patient_nodal_village_name
+    nodal_village.name
+  end
+
+  def patient_village_name
+    village.name
+  end
+
+  def gender_string
+    gender == 1 ? "Male" : "Female"
+  end
+
+  def patient_ailment_detail_info
+    PatientAilmentDetail.find_by(patient_id:id)
   end
 
   def complete_diagnosis_and_remarks

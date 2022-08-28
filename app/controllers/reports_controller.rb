@@ -344,6 +344,51 @@ class ReportsController < ApplicationController
 
   end
 
+  def patients_list
+    patients_list_for = params[:patients_list_for]
+
+    all_patient_info = []  
+  
+    patient_records_sql = PatientAilmentDetail.joins(:patient).where(ailment_id: 9)
+      # .select(
+      #   'patients.name,patients.gender,"relationName","contact",
+      #   "dateOfBirth","aadharNo","sssmhIdNo","alive",patient_ailment_details,patient_id')
+
+      patient_records_sql.each do |each_pad|
+        each_patient = each_pad.patient
+        each_patient_detail = {}
+        each_patient_detail["dm_number"] = each_pad.patient_ailment_details["dm_no"]
+        each_patient_detail["serial_number"] = each_patient_detail["dm_number"].to_s.delete("^0-9").to_i
+        each_patient_detail["patient_name"] = each_patient.name
+        each_patient_detail["relation_name"] = each_patient.relationName
+        each_patient_detail["patient_id"] = each_patient.id
+        each_patient_detail["age"] = calculate_age_with_dob(each_patient.dateOfBirth)
+        each_patient_detail["gender"] = each_patient.gender_string
+        each_patient_detail["contact"] = each_patient.contact
+        each_patient_detail["village_name"] = each_patient.patient_village_name
+        each_patient_detail["nodal_village"] = each_patient.nodal_village.name
+        each_patient_detail["yob"] = each_patient.dateOfBirth.year
+
+        each_patient_detail["aadharNo"] = each_patient.aadharNo
+        each_patient_detail["sssmhIdNo"] = each_patient.sssmhIdNo
+        each_patient_detail["ref_no"] = each_patient.bmNo
+        each_patient_detail["live_status"] = each_patient.live_status
+
+        each_patient_ccd = each_patient.complete_diagnosis_and_remarks
+        each_patient_detail["diagnosis"] = each_patient_ccd[:diagnosis]
+
+        each_patient_detail["remarks"] = each_patient_ccd[:remarks]
+
+        all_patient_info << each_patient_detail
+      end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: all_patient_info}
+    end
+
+  end
+
   private
 
   def replace_sub_ailment_ids_with_parent_ailments

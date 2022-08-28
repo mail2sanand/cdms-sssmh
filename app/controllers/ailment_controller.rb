@@ -12,7 +12,7 @@ class AilmentController < ApplicationController
   end
 
   def get_all_ailments_for_combo
-    all_ailments = Ailment.all_ailments.select(:id,:name)
+    all_ailments = Ailment.all_ailments.select(:id,:name).order("id asc")
 
     respond_to do |format|
       format.html

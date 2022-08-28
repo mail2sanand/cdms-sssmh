@@ -1,0 +1,2 @@
+class NodalVillage < Village
+end

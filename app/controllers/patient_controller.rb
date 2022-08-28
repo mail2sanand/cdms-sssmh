@@ -517,7 +517,6 @@ class PatientController < ApplicationController
   end
 
   def generate_review_data_for_patient_report(patient_id,ailment,village_date)
-    puts "patient_id,ailment : #{patient_id} : #{ailment}"
     report_details = Hash.new
 
     # report_details[:dm_details] = PatientAilmentDetail.find_by(
@@ -531,7 +530,7 @@ class PatientController < ApplicationController
         :patient_id => patient_id,
         :ailment_id => ailment
     )
-    puts "patient_ailment : #{patient_ailment.inspect}"
+
     if(patient_ailment)
       if patient_ailment.patient_ailment_details
         report_details[:dm_details] = patient_ailment.patient_ailment_details
@@ -543,15 +542,11 @@ class PatientController < ApplicationController
     end
     # report_details[:dm_details] = (patient_ailment ? patient_ailment.patient_ailment_details : {})
 
-
     report_details[:ailment_details] = {
         :ailment_name => Ailment.find(ailment).botanical_name
     }
 
     report_details[:village_date] = village_date
-
-    # report_details[:pgd] =
-    #     Patient.joins(:village).where(:id => patient_id).select("patients.*,villages.name as village_name")
 
     report_details[:pgd] =
         Patient.joins("inner join villages v on v.id = patients.village_id").where(:id => patient_id)

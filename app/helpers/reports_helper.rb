@@ -18,4 +18,8 @@ module ReportsHelper
 	def get_all_investigation_detail_parameters
 		Investigation.select(:id, :name, :code).where("show_filter = TRUE")
 	end
+
+	def get_all_ailment_patient_list_detail_parameters
+		Ailment.where("reporting_details is not null")
+	end
 end

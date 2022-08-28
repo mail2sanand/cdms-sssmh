@@ -1,0 +1,217 @@
+<% content_for :head do %>
+    <link href="assets/jqGrid.css" rel="stylesheet" />
+
+    <style type="text/css">
+    </style>
+<% end %>
+
+<% content_for :scripts do %>
+    <script src="assets/jqGrid.js"></script>
+    <script src="assets/jszip.min.js"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+            $("#ailments_patients_list_jqGrid").jqGrid({
+                mtype: "GET",
+                datatype: "local",
+                colModel: [
+ 					{ label: 'S No.', name: 'serial_number', width: 30, 
+ 						sortable: true, sorttype: 'int'},
+ 					{ label: 'DM No.', name: 'dm_number', width: 180, sortable: false},
+                    { label: 'Patient Name', name: 'patient_name', width: 180, sortable: false },
+                    { label: 'Age', name: 'age',width: 20, sortable: false },
+                    { label: 'Gender', name: 'gender',width: 40, sortable: false },
+                    { label: 'Live Status', name: 'live_status',width: 40, sortable: false },
+
+ 					{ label: 'Nodal Village', name: 'nodal_village', width: 180, sortable: false},
+                    { label: 'Relation Name(S/O, W/O)', name: 'relation_name',width: 40, sortable: false },
+                    { label: 'Village', name: 'village_name',width: 60, sortable: false },
+                    { label: 'Phone No.', name: 'contact',width: 40, sortable: false },
+
+                    { label: 'YOB', name: 'yob', width: 180, sortable: false },
+                    { label: 'Aadhaar No.', name: 'aadharNo', width: 180, sortable: false },
+                    { label: 'SSSMH ID No.', name: 'sssmhIdNo', width: 180, sortable: false },
+										{ label: 'Ref No.', name: 'ref_no', width: 180, sortable: false },
+
+                    { label: 'Diagnosis', name: 'diagnosis', width: 180, sortable: false },
+                    { label: 'Remarks', name: 'remarks', width: 180, sortable: false },
+
+                    { label: 'Notes', name: 'notes', width: 180, sortable: false }
+                ],
+                height: 430,
+                scroll : true,
+                loadonce: true,
+                forceFit: false,
+                shrinkToFit: false,
+                rowNum: 9999,
+                viewrecords : true,
+                gridview: true, 
+                rownumbers: true,
+				loadComplete: function() {
+	                if ($('#ailments_patients_list_jqGrid').getGridParam('records') === 0) {
+	                    $('#ailments_patients_list_jqGrid tbody').html("<div style='padding:6px;background:#D8D8D8' align='center'>No records found</div>");
+	                }
+	             },
+                grouping: true,
+                groupingView: {
+                    groupField: ["nodal_village"],
+                    groupColumnShow: [false],
+                    groupText: ["<b>{0} - {1}</b>"],
+                    groupOrder: ["asc"],
+                    groupSummary: [true],
+                    groupCollapse: true
+                }
+            });
+
+			$("#ailment_patients_list_det_export_div").on("click", function(){
+                if ($('#ailments_patients_list_jqGrid').getGridParam('records') === 0) {
+                	alert("No Records to be exported");
+                	return false;
+                }
+
+				$("#ailments_patients_list_jqGrid").jqGrid("exportToExcel",{
+					includeLabels : true,
+					fileName : "dm_details_export.xlsx",
+					mimetype : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+					replaceStr: function(v){
+						v = v.replace(/<\/br>/g,", ");
+						return v;
+					}
+				})
+
+			})
+		
+        })
+
+		function patient_list_patient_grid(
+			ailment_patient_list_details_filtered) {
+
+			$("#ailments_patients_list_jqGrid").jqGrid("clearGridData");
+			$("#ailments_patients_list_jqGrid")[0].grid.beginReq();
+
+		    $.ajax({
+		        url:'/patients_list.json',
+		        data: {
+		        	'patients_list_for': 'dm_list'
+		    	},
+		        method:"GET",
+		        success:function (filtered_patient_details) {
+					// set the new data
+					$("#ailments_patients_list_jqGrid").jqGrid('setGridParam', { data: filtered_patient_details});
+
+		            // Sort Grid with Dm Number
+					$('#ailments_patients_list_jqGrid').jqGrid('sortGrid', 'serial_number');
+
+					// hide the show message
+					$("#ailments_patients_list_jqGrid")[0].grid.endReq();
+
+					// refresh the grid
+					$("#ailments_patients_list_jqGrid").trigger('reloadGrid');
+
+		            // $('#ailments_patients_list_jqGrid').jqGrid('hideCol',"nodal_village");
+
+				}
+		    })
+
+			$("#ailments_patients_list_jqGrid").jqGrid("navGrid","#ailments_patients_list_jqGridPager",{add:false, edit:false, del:false});
+		}
+
+		function ailment_list_checkAndSubmit(){
+			var ailment_patient_list_details_filtered = [];
+
+			$('input[name="ailment_patient_list_det_check_boxs"]:checked').each(
+				function(index,e){ 
+					var selected_id = e.id;
+					var selected_inv_del_array = selected_id.split("_");
+					var selected_inv_del_id = selected_inv_del_array[selected_inv_del_array.length-1];
+
+					ailment_patient_list_details_filtered[selected_inv_del_id] = 0;
+				}
+			)
+
+            patient_list_patient_grid(ailment_patient_list_details_filtered);
+		}
+
+		function show_group_ungroup(hide_img, show_img_id){
+			grid = $("#ailments_patients_list_jqGrid");
+
+			grid.trigger('reloadGrid');
+
+			$("#"+hide_img).hide();
+			$("#"+show_img_id).show();
+
+			// grid.beginReq();
+
+			if(show_img_id == 'ailment_patient_list_tree_id'){
+				grid.jqGrid('groupingRemove', true);
+                grid.jqGrid('showCol',"nodal_village");
+			}else{
+				grid.jqGrid(
+				    'groupingGroupBy',
+				    ['nodal_village'],
+				    { 
+				    	groupColumnShow: [false],
+	                    groupText: ["<b>{0} - {1}</b>"],
+	                    groupSummary: [true],
+	                    groupCollapse: true,
+	                    hideFirstGroupCol:true
+				    }
+				);			
+                grid.jqGrid('hideCol',"nodal_village");
+			}
+
+			// grid.endReq();
+
+			// refresh the grid
+			grid.trigger('reloadGrid');
+		}
+
+	</script>
+<% end %>
+
+<div id="investigation_details_list_and_submit_main_div" style="width: 100%;overflow: auto;">
+	<div id="main_results_block" style="width: 98%;border: 0px solid black;overflow: auto;padding-top: 10px;">
+
+		<div id="investigation_details_and_parameter_block" style="width:15%;float: left;border: 1px solid slategray;border-radius: 5px;min-height: 460px;overflow-y: auto;">
+
+			<div id="grouping_non_grouping_div" style="padding-top: 10px;">
+
+ 				<div class="toggle_group_img_div" style="float: right;padding-right: 6px;padding-top: 15px;">
+			    	 <img src="/assets/list.png" id="ailment_patient_list_id" title="Ungroup and List All Patients" onclick="show_group_ungroup(this.id, 'ailment_patient_list_tree_id')">
+
+				     <img src="/assets/list_tree.png" id="ailment_patient_list_tree_id" hidden="true"  title="Group Patients" onclick="show_group_ungroup(this.id,'ailment_patient_list_id')">
+				</div>		
+			</div>
+
+			<div id="inv_detail_filter_title" style="font-size: 12px;font-weight: bold;">
+				Patient Ailment Filters
+			</div>
+
+			<%= render "ailment_patients_list_and_parameters"%>
+
+			<!-- Filter Button -->
+			<div id="submit_main_div" style="border: 0px solid black;padding-right: 10px;padding-bottom: 15px;">
+				<div id=submit_div style="float: right;">
+					<input type="button" value="Filter" class="sssmhms_button" onclick="ailment_list_checkAndSubmit();">
+			    </div>
+			</div>
+		</div>
+
+		<div id="filtered_patients_block" style="width:83%;float: left;border: 0px solid slategray;border-radius: 5px;height: 100%;min-height: 430px;">
+
+			<div id=grid_table_and_pager style="overflow: auto;padding-left: 10px;">
+				<table id="ailments_patients_list_jqGrid"></table>
+				<div id="ailments_patients_list_jqGridPager"></div>
+			</div>
+
+			<div id=export_button>
+				<div id="export_to_exl_div" style="float: right;padding-right: 8px;padding-top: 20px;">
+					<input type="button" value="Export to Excel" class="sssmhms_button" id="ailment_patients_list_det_export_div">
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+

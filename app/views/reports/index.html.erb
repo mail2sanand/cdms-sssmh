@@ -14,18 +14,10 @@
 <% end %>
 
 <% content_for :scripts do %>
-    <!--<script src="assets/jsgrid.min.js"></script>-->
-    <!--<script src="assets/jsgrid-date.js"></script>-->
     <script>
         $( "#reports_main" ).tabs();
 
         $(document).ready(function(){
-//            loadVillages();
-//            loadAilments();
-//            loadCoMorbidConditions();
-//            loadHabits();
-//            loadNonEditEmptyTemplates();
-////            setDialogueDiv();
         })
 
     </script>
@@ -39,7 +31,12 @@
       <ul>
         <li><a href="#village_reports">Village Reports</a></li>
         <li><a href="#ailment_reports">Ailment Reports</a></li>
-        <li><a href="#investigation_reports">Investigation Detail Reports</a></li>
+        <li>
+          <a href="#investigation_reports">Investigation Detail Reports</a>
+        </li>
+         <li>
+          <a href="#ailment_patients_list_reports">Ailment Patients List Reports</a>
+        </li>
       </ul>
       <div id="village_reports">
         <%= render "village_reports_template", :villages => @villages, :all_patient_details => @all_patient_details%>
@@ -49,6 +46,9 @@
       </div>
       <div id="investigation_reports">
         <%= render "investigation_reports_template"%>
+      </div>
+      <div id="ailment_patients_list_reports">
+        <%= render "ailment_patients_list_reports_template"%>
       </div>
     </div>
   </form>

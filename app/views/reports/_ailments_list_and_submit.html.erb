@@ -28,7 +28,7 @@
                 ],
 				// loadonce:false, // just for demo purpose
                 // width: 785,
-                height: 355,
+                height: 430,
                 scroll : true,
                 loadonce: true,
                 forceFit: false,
@@ -123,7 +123,7 @@
 
 <div id="ailments_list_and_submit_main_div" style="width: 100%;">
 	<div id="main_results_block" style="width: 98%;border: 0px solid black;overflow: auto;padding-top: 10px;">
-		<div id="sub_ailments_and_parameter_block" style="width:25%;float: left;border: 1px solid slategray;border-radius: 5px;min-height: 430px;">
+		<div id="sub_ailments_and_parameter_block" style="width:25%;float: left;border: 1px solid slategray;border-radius: 5px;min-height: 460px;">
 			&nbsp;
 			<div id="inv_detail_filter_title" style="font-size: 12px;font-weight: bold;">
 				Ailment Filters
@@ -137,20 +137,23 @@
 
 			<!-- Filter Button -->
 			<div id="submit_main_div" style="border: 0px solid black;padding-right: 10px;padding-bottom: 5px;">
-				<div id=submit_div style="float: right;">
+				<div id=submit_div style="float: right;padding-bottom: 15px;">
 					<input type="button" value="Filter" class="sssmhms_button" onclick="ailments_checkAndSubmit();">
 			    </div>
 			</div>
 		</div>
 
-		<div id="filtered_patients_block" style="width:73%;float: left;border: 1px solid slategray;border-radius: 5px;height: 100%;min-height: 430px;">
-			&nbsp;
+		<div id="filtered_patients_block" style="width:73%;float: left;border: 0px solid slategray;border-radius: 5px;height: 100%;min-height: 430px;">
+			<div id=grid_table_and_pager style="overflow: auto;padding-left: 10px;">
 				<table id="jqGrid"></table>
 				<div id="jqGridPager"></div>
+			</div>
 
-				<div id="export_to_exl_div" style="float: right;padding-right: 8px;padding-top: 2px;">
+			<div id=export_button>
+				<div id="export_to_exl_div" style="float: right;padding-right: 8px;padding-top: 20px;">
 					<input type="button" value="Export to Excel" class="sssmhms_button" id="export_div">
 				</div>
+			</div>
 		</div>
 	</div>
 
